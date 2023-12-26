@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * @author zouzhangpeng
  */
-public class MdcUtils {
+public class MdcUtil {
     public static final String TRACE_ID = "TRACE_ID";
 
     public static void init() {

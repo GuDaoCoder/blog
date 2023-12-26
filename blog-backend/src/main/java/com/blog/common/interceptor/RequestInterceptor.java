@@ -1,12 +1,13 @@
 package com.blog.common.interceptor;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.blog.common.context.RequestContext;
-import com.blog.common.util.ServletUtils;
+import com.blog.common.util.ServletUtil;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -22,7 +23,7 @@ public class RequestInterceptor implements HandlerInterceptor {
         RequestContext.Info requestInfo = new RequestContext.Info();
 
         // 请求ID
-        requestInfo.setRequestId(ServletUtils.getRequestId(request));
+        requestInfo.setRequestId(ServletUtil.getRequestId(request));
 
         RequestContext.set(requestInfo);
         return true;

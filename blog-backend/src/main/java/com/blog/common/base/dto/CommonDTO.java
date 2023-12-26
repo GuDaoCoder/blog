@@ -1,4 +1,4 @@
-package com.blog.common.model.dto;
+package com.blog.common.base.dto;
 
 import lombok.Data;
 
@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 /**
  * @author zouzhangpeng
+ * @desc  请求入参实体基类
  */
 @Data
 public class CommonDTO implements Serializable {

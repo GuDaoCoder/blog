@@ -1,14 +1,16 @@
 package com.blog.common.interceptor;
 
-import com.blog.common.util.MdcUtils;
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.util.StopWatch;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.alibaba.ttl.TransmittableThreadLocal;
+import com.blog.common.util.MdcUtil;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+
 
 /**
  * 日志拦截器
@@ -27,7 +29,7 @@ public class LogInterceptor implements HandlerInterceptor {
         stopWatchLocal.set(stopWatch);
         stopWatch.start();
 
-        MdcUtils.init();
+        MdcUtil.init();
         return true;
     }
 
@@ -41,6 +43,6 @@ public class LogInterceptor implements HandlerInterceptor {
         }
         stopWatchLocal.remove();
 
-        MdcUtils.clear();
+        MdcUtil.clear();
     }
 }

@@ -17,7 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // 请求时间拦截器
+        // 请求拦截器
         registry.addInterceptor(new RequestInterceptor()).addPathPatterns("/**");
     }
 

@@ -1,14 +1,15 @@
 package com.blog.common.util;
 
-import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author zouzhangpeng
  */
-public class ServletUtils {
+public class ServletUtil {
 
     public static final String REQUEST_ID = "RequestId";
 
