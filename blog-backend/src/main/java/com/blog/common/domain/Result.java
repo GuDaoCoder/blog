@@ -1,6 +1,5 @@
-package com.blog.common.model;
+package com.blog.common.domain;
 
-import com.blog.common.base.IBaseErrorCode;
 import com.blog.common.util.DateTimeUtil;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,37 +18,29 @@ public class Result<T> {
     @Schema(description = "时间戳")
     private Long timestamp;
 
-    @Schema(description = "是否成功")
-    private Boolean success;
-
-    @Schema(description = "错误码")
-    private String errorCode;
-
     @Schema(description = "错误信息")
     private String errorMsg;
 
     @Schema(description = "返回数据")
     private T data;
 
-    public Result(Boolean success, T data, String errorCode, String errorMsg) {
+    public Result(T data, String errorMsg) {
         // todo: 从threadLocal中获取
         this.requestId = null;
         this.timestamp = DateTimeUtil.timestamp();
-        this.success = success;
         this.data = data;
-        this.errorCode = errorCode;
         this.errorMsg = errorMsg;
     }
 
     public static <T> Result<T> success(T data) {
-        return new Result<>(Boolean.TRUE, data, null, null);
+        return new Result<>(data, null);
     }
 
     public static <T> Result<T> success() {
         return success(null);
     }
 
-    public static <T> Result<T> fail(IBaseErrorCode baseErrorCode) {
-        return new Result<>(Boolean.FALSE, null, baseErrorCode.code(), baseErrorCode.message());
+    public static <T> Result<T> fail(String errorMsg) {
+        return new Result<>(null, errorMsg);
     }
 }

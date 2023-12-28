@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 @ConfigurationProperties(prefix = "project",ignoreInvalidFields = true)
-public class ProjectProperties {
+public class ProjectProperty {
 
     /**
      * 项目名称
