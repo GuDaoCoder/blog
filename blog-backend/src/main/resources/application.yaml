@@ -8,9 +8,9 @@ spring:
     name: blog
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://47.103.84.29:29231/blog?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://127.0.0.1:3306/blog?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
-    password: 136415Zzp
+    password: root
     type: com.alibaba.druid.pool.DruidDataSource
     # 数据源连接池配置
     druid:
@@ -67,13 +67,13 @@ spring:
   # redis单机配置
   redis:
     # 地址
-    host: 47.103.84.29
+    host: 127.0.0.1
     # 端口
     port: 6379
     # 数据库索引
     database: 0
     # 密码
-    password: 136415Zzp
+    password: pass
     # 超时时间
     timeout: 10s
     # 是否开启ssl
