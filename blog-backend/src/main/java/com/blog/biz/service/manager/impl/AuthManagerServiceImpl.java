@@ -1,16 +1,16 @@
 package com.blog.biz.service.manager.impl;
 
-import com.blog.biz.convert.UserConverter;
-import com.blog.common.domain.UserDetail;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import com.blog.biz.convert.UserConverter;
 import com.blog.biz.event.publish.LoginSuccessEventPublisher;
 import com.blog.biz.model.entity.UserEntity;
 import com.blog.biz.model.request.LoginRequest;
 import com.blog.biz.model.response.LoginResponse;
 import com.blog.biz.service.crud.UserCrudService;
 import com.blog.biz.service.manager.AuthManagerService;
+import com.blog.common.domain.UserDetail;
 import com.blog.common.exception.InvalidCredentialsException;
 import com.blog.common.property.SecurityProperty;
 
@@ -37,7 +37,7 @@ public class AuthManagerServiceImpl implements AuthManagerService {
         UserEntity userEntity =
             userCrudService.findByUsername(request.getUsername()).orElseThrow(() -> new InvalidCredentialsException());
         if (matchPassword(request.getPassword(), userEntity.getPassword())) {
-            StpUtil.login(userEntity.getUserId());
+            StpUtil.login(userEntity.getUsername());
         } else {
             throw new InvalidCredentialsException();
         }

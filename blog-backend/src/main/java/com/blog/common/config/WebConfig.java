@@ -1,6 +1,9 @@
 package com.blog.common.config;
 
-import com.blog.common.interceptor.RequestInterceptor;
+import com.blog.common.interceptor.RequestIdInterceptor;
+import com.blog.common.interceptor.UserInterceptor;
+import com.blog.common.property.SecurityProperty;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
@@ -9,16 +12,28 @@ import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.stream.Collectors;
+
 /**
  * @author zouzhangpeng
  */
+@RequiredArgsConstructor
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
+    private final SecurityProperty securityProperty;
+
+    private final RequestIdInterceptor requestIdInterceptor;
+
+    private final UserInterceptor userInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 请求拦截器
-        registry.addInterceptor(new RequestInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(requestIdInterceptor).addPathPatterns("/**");
+        // 用户拦截器
+        registry.addInterceptor(userInterceptor).addPathPatterns("/**")
+            .excludePathPatterns(securityProperty.getWhiteUrls().stream().collect(Collectors.toList()));
     }
 
     /**
