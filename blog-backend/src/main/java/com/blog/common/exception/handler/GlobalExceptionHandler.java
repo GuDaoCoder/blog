@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.blog.common.domain.Result;
+import com.blog.common.exception.InvalidCredentialsException;
 
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
@@ -22,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class GlobalExceptionHandler {
 
     /**
-     * 认证失败异常
+     * 用户未登录或登录信息失效异常
      * 
      * @param request HttpServletRequest
      * @param ex NotLoginException
@@ -33,6 +34,21 @@ public class GlobalExceptionHandler {
     public Result<Void> exceptionHandler(HttpServletRequest request, NotLoginException ex) {
         log.warn(">>>>>>>>>>>>[{}]-[{}] occurred a not login error", request.getMethod(), request.getRequestURI(), ex);
         return Result.fail("当前用户未登录或登录信息已失效");
+    }
+
+    /**
+     * 认证失败异常
+     * 
+     * @param request HttpServletRequest
+     * @param ex InvalidCredentialsException
+     * @return com.blog.common.domain.Result<java.lang.Void>
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public Result<Void> exceptionHandler(HttpServletRequest request, InvalidCredentialsException ex) {
+        log.warn(">>>>>>>>>>>>[{}]-[{}] occurred a invalid credentials error", request.getMethod(),
+            request.getRequestURI(), ex);
+        return Result.fail("用户名或密码错误");
     }
 
     /**

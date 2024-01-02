@@ -154,7 +154,7 @@ sa-token:
   # token 名称（同时也是 cookie 名称）
   token-name: Authorization
   # token 有效期（单位：秒） 默认30天，-1 代表永久有效
-  timeout: 2592000
+  timeout: 7200
   # token 最低活跃频率（单位：秒），如果 token 超过此时间没有访问系统就会被冻结，默认-1 代表不限制，永不冻结
   active-timeout: -1
   # 是否允许同一账号多地同时登录 （为 true 时允许一起登录, 为 false 时新登录挤掉旧登录）
@@ -173,7 +173,13 @@ project:
   description: 个人博客系统
   website: www.road4code.com
 
-config:
+security:
+  # rsa加密
+  rsa:
+    # 私钥
+    private-key: MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAL/DZjj0EFpoJNIedPEh0jQwauHBPEVva42IcOMfD/DhuFcTLVfxZw+iqo3CqUdZm+sia9KmuHc61RLgZxZP/pQpAP9UDWIeFnebXFD8IRGmK9mE5dHOdYoZ2m58Khh2MVk7tuqbi0bPI+Q0aNuUhBNGZasbqUTCYTvgQZWX/2r5AgMBAAECgYAEpctZlEW8sTM6Qfl22ilecTF39v9bVfXa/Gxy/r7byVa2yozR6bSEHx7H2IjShUAXiPIozPhh0GPXZSeudWIfwafAAN9PnKg4kb2q/F/AEWGJrzLNCLXch8BX4aFD7xHgIFi7q0dg4NC1K16P3dAofzPZIcLyl/yCucWWHR0PMQJBAON8mjj2iDzypr7T0p6z2+YBCtMKxikG4EH7SGexZHAR7t+VJ0Chmb4H6ggXez5UrCcNbQ0Bpato7bbrMq00NNECQQDXzIif0sduNixKtzypLeEN5SF1UXLVidzQx8cYGCbIuiX3qhdSxBkPe9YO8oyy72NbfIhW4wlKurQtb/NQdv2pAkAOSJ2aZAhr40SLCNvZsStmhrw6QhvtKYxdODz0ndPToZyhF0luqnbv0qlkNq07Xa+tiA9H2MmhOKZsbNoyu+txAkAN9804GxqRhawkQewJP1D750LdJyJ5s+y5DtVSN+36vCHNABN2Zf8BQ5C9cvGse1ZBC7R/ez6UubUD4+Up5inRAkEA1xoLyeynHlq1wWgULAR1lSM0RjHWAtJNAqG/eccG5MNf1ZCB09aokZETQs4xEFjjobbKcNDofEn3b/qRfq0+sg==
+    # 公钥
+    public-key: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC/w2Y49BBaaCTSHnTxIdI0MGrhwTxFb2uNiHDjHw/w4bhXEy1X8WcPoqqNwqlHWZvrImvSprh3OtUS4GcWT/6UKQD/VA1iHhZ3m1xQ/CERpivZhOXRznWKGdpufCoYdjFZO7bqm4tGzyPkNGjblIQTRmWrG6lEwmE74EGVl/9q+QIDAQAB
   # 白名单
   white-urls:
     - /login

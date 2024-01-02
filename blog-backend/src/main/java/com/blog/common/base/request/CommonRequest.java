@@ -1,4 +1,4 @@
-package com.blog.common.base.dto;
+package com.blog.common.base.request;
 
 import lombok.Data;
 
@@ -7,13 +7,12 @@ import java.io.Serializable;
 
 /**
  * @author zouzhangpeng
- * @desc  请求入参实体基类
+ * @desc 请求入参实体基类
  */
 @Data
-public class CommonDTO implements Serializable {
+public class CommonRequest implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 4910802190284215606L;
 
-    private String requestId;
 }

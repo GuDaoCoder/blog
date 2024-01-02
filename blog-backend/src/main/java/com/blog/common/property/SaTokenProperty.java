@@ -1,34 +1,30 @@
 package com.blog.common.property;
 
-import java.util.Set;
-
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import lombok.Data;
-
 /**
  * @author zouzhangpeng
- * @desc 项目配置信息
+ * @desc
  */
 @Data
 @Component
-@ConfigurationProperties(prefix = "config",ignoreInvalidFields = true)
-public class ConfigProperty {
+@ConfigurationProperties(prefix = "sa-token", ignoreInvalidFields = true)
+public class SaTokenProperty {
 
     /**
-     * token名称
+     * token 名称
      */
     private String tokenName;
 
     /**
-     * jwt加密盐
+     * token 有效期
      */
-    private String jwtSalt;
+    private Integer timeout;
 
     /**
-     * 白名单
+     * token 最低活跃频率
      */
-    private Set<String> whiteUrls;
-
+    private Integer activeTimeout;
 }

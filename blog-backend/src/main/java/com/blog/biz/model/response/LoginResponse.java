@@ -1,4 +1,4 @@
-package com.blog.biz.model.vo;
+package com.blog.biz.model.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import lombok.Data;
  */
 @AllArgsConstructor
 @Data
-public class LoginVO {
+public class LoginResponse {
 
     private String token;
 }

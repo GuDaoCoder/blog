@@ -1,4 +1,4 @@
-package com.blog.common.base.vo;
+package com.blog.common.base.response;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -10,7 +10,7 @@ import lombok.Data;
  * @desc 返回出参实体基类
  */
 @Data
-public class CommonVO implements Serializable {
+public class CommonResponse implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 5031608270970621589L;

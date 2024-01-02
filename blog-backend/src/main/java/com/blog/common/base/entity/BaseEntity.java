@@ -26,7 +26,7 @@ public class BaseEntity implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createDateTime;
+    private LocalDateTime createTime;
 
     /**
      * 更新用户Id
@@ -36,15 +36,15 @@ public class BaseEntity implements Serializable {
     /**
      * 更新时间
      */
-    private LocalDateTime updateDateTime;
+    private LocalDateTime updateTime;
 
     /**
      * 新增数据时填充数据
      */
     @PrePersist
     public void preSave() {
-        this.createDateTime = LocalDateTime.now();
-        this.updateDateTime = LocalDateTime.now();
+        this.createTime = LocalDateTime.now();
+        this.updateTime = LocalDateTime.now();
     }
 
     /**
@@ -52,6 +52,6 @@ public class BaseEntity implements Serializable {
      */
     @PreUpdate
     public void preUpdate() {
-        this.updateDateTime = LocalDateTime.now();
+        this.updateTime = LocalDateTime.now();
     }
 }
