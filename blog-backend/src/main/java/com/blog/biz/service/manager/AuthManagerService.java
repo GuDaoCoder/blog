@@ -16,4 +16,11 @@ public interface AuthManagerService {
      * @return com.blog.biz.model.vo.LoginResponse
      */
     LoginResponse login(LoginRequest request);
+
+    /**
+     * 登出
+     * 
+     * @param
+     */
+    void logout();
 }

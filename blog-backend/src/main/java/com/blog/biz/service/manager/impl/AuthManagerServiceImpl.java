@@ -1,5 +1,7 @@
 package com.blog.biz.service.manager.impl;
 
+import com.blog.biz.event.publish.LogoutSuccessEventPublisher;
+import com.blog.common.context.UserContext;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +34,8 @@ public class AuthManagerServiceImpl implements AuthManagerService {
 
     private final LoginSuccessEventPublisher loginSuccessEventPublisher;
 
+    private final LogoutSuccessEventPublisher logoutSuccessEventPublisher;
+
     @Override
     public LoginResponse login(LoginRequest request) {
         UserEntity userEntity =
@@ -41,10 +45,19 @@ public class AuthManagerServiceImpl implements AuthManagerService {
         } else {
             throw new InvalidCredentialsException();
         }
-        // 发送用户登录事件
+        // 用户登录成功事件
         UserDetail userDetail = UserConverter.INSTANCE.toUserDetail(userEntity);
         loginSuccessEventPublisher.publish(userDetail);
         return new LoginResponse(StpUtil.getTokenValue());
+    }
+
+    @Override
+    public void logout() {
+        UserDetail userDetail = UserContext.get();
+        // 登出
+        StpUtil.logout(userDetail.getUsername());
+        // 用户登出成功事件2
+        logoutSuccessEventPublisher.publish(userDetail);
     }
 
     /**

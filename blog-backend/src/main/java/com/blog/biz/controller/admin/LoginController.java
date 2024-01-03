@@ -30,4 +30,11 @@ public class LoginController {
         return Result.success(authManagerService.login(request));
     }
 
+    @Operation(summary = "登出")
+    @PostMapping("/logout")
+    public Result<Void> logout() {
+        authManagerService.logout();
+        return Result.success();
+    }
+
 }

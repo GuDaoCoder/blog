@@ -3,8 +3,6 @@ package com.blog.common.context;
 import com.alibaba.ttl.TransmittableThreadLocal;
 import com.blog.common.domain.UserDetail;
 
-import java.util.Optional;
-
 /**
  * @author zouzhangpeng
  * @desc
@@ -17,8 +15,8 @@ public class UserContext {
         local.set(userDetail);
     }
 
-    public static Optional<UserDetail> get() {
-        return Optional.ofNullable(local.get());
+    public static UserDetail get() {
+        return local.get();
     }
 
     public static void remove() {
