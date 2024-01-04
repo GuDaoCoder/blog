@@ -195,5 +195,10 @@ security:
     - /webjars/**
     - /favicon.ico
 
-
+# 雪花算法配置
+snowflake:
+  # 工作Id
+  worker-id: 1
+  # 数据中心Id
+  datacenter-id: 1
 

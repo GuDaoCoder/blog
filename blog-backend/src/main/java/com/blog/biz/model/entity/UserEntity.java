@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import com.blog.biz.enums.Gender;
 import com.blog.common.base.entity.BaseEntity;
 
@@ -24,7 +26,8 @@ public class UserEntity extends BaseEntity {
      * 用户Id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GenericGenerator(name = "snowflakeId", strategy = "com.blog.common.jpa.config.IdGeneratorConfig")
+    @GeneratedValue(generator = "snowflakeId")
     private Long userId;
 
     /**
