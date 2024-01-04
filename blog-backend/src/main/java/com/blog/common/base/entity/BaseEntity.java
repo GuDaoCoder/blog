@@ -1,18 +1,25 @@
 package com.blog.common.base.entity;
 
-import lombok.Data;
-
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
+import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+
+import com.blog.common.context.UserContext;
+
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * @author zouzhangpeng
  * @desc 数据库实体基类
  */
+@Accessors(chain = true)
 @Data
+@MappedSuperclass
 public class BaseEntity implements Serializable {
 
     @Serial
@@ -21,7 +28,7 @@ public class BaseEntity implements Serializable {
     /**
      * 创建用户Id
      */
-    private Long createUserId;
+    private Long createBy;
 
     /**
      * 创建时间
@@ -31,7 +38,7 @@ public class BaseEntity implements Serializable {
     /**
      * 更新用户Id
      */
-    private Long updateUserId;
+    private Long updateBy;
 
     /**
      * 更新时间
@@ -45,6 +52,8 @@ public class BaseEntity implements Serializable {
     public void preSave() {
         this.createTime = LocalDateTime.now();
         this.updateTime = LocalDateTime.now();
+        this.createBy = UserContext.get().getUserId();
+        this.updateBy = UserContext.get().getUserId();
     }
 
     /**
@@ -53,5 +62,6 @@ public class BaseEntity implements Serializable {
     @PreUpdate
     public void preUpdate() {
         this.updateTime = LocalDateTime.now();
+        this.updateBy = UserContext.get().getUserId();
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.blog.common.domain.Result;
+import com.blog.common.exception.BusinessException;
 import com.blog.common.exception.InvalidCredentialsException;
 
 import cn.dev33.satoken.exception.NotLoginException;
@@ -21,6 +22,20 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    /**
+     * 业务异常
+     * 
+     * @param request HttpServletRequest
+     * @param ex BusinessException
+     * @return com.blog.common.domain.Result<java.lang.Void>
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BusinessException.class)
+    public Result<Void> exceptionHandler(HttpServletRequest request, BusinessException ex) {
+        log.warn(">>>>>>>>>>>>[{}]-[{}] occurred a business error", request.getMethod(), request.getRequestURI(), ex);
+        return Result.fail(ex.getMessage());
+    }
 
     /**
      * 用户未登录或登录信息失效异常

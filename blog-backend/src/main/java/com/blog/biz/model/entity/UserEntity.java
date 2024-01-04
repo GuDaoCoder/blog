@@ -24,6 +24,7 @@ public class UserEntity extends BaseEntity {
      * 用户Id
      */
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
     /**

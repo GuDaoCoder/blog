@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @desc 请求入参实体基类
  */
 @Data
-public class CommonRequest implements Serializable {
+public abstract class CommonRequest implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 4910802190284215606L;

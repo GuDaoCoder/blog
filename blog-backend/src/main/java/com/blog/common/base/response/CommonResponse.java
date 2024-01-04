@@ -10,10 +10,9 @@ import lombok.Data;
  * @desc 返回出参实体基类
  */
 @Data
-public class CommonResponse implements Serializable {
+public abstract class CommonResponse implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 5031608270970621589L;
 
-    private String requestId;
 }
