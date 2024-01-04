@@ -2,7 +2,7 @@ package com.blog.common.config;
 
 import com.blog.common.interceptor.RequestIdInterceptor;
 import com.blog.common.interceptor.UserInterceptor;
-import com.blog.common.property.SecurityProperty;
+import com.blog.common.properties.SecurityProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    private final SecurityProperty securityProperty;
+    private final SecurityProperties securityProperties;
 
     private final RequestIdInterceptor requestIdInterceptor;
 
@@ -33,7 +33,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(requestIdInterceptor).addPathPatterns("/**");
         // 用户拦截器
         registry.addInterceptor(userInterceptor).addPathPatterns("/**")
-            .excludePathPatterns(securityProperty.getWhiteUrls().stream().collect(Collectors.toList()));
+            .excludePathPatterns(securityProperties.getWhiteUrls().stream().collect(Collectors.toList()));
     }
 
     /**

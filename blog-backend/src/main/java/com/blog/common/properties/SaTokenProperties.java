@@ -1,17 +1,16 @@
-package com.blog.common.property;
+package com.blog.common.properties;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 /**
  * @author zouzhangpeng
  * @desc
  */
 @Data
-@Component
 @ConfigurationProperties(prefix = "sa-token", ignoreInvalidFields = true)
-public class SaTokenProperty {
+public class SaTokenProperties {
 
     /**
      * token 名称

@@ -14,7 +14,7 @@ import com.blog.biz.service.crud.UserCrudService;
 import com.blog.biz.service.manager.AuthManagerService;
 import com.blog.common.domain.UserDetail;
 import com.blog.common.exception.InvalidCredentialsException;
-import com.blog.common.property.SecurityProperty;
+import com.blog.common.properties.SecurityProperties;
 
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
@@ -30,7 +30,7 @@ public class AuthManagerServiceImpl implements AuthManagerService {
 
     private final UserCrudService userCrudService;
 
-    private final SecurityProperty securityProperty;
+    private final SecurityProperties securityProperties;
 
     private final LoginSuccessEventPublisher loginSuccessEventPublisher;
 
@@ -69,6 +69,6 @@ public class AuthManagerServiceImpl implements AuthManagerService {
      */
     private boolean matchPassword(String password, String encodePassword) {
         return StringUtils.equals(password,
-            SaSecureUtil.rsaDecryptByPrivate(securityProperty.getRsa().getPrivateKey(), encodePassword));
+            SaSecureUtil.rsaDecryptByPrivate(securityProperties.getRsa().getPrivateKey(), encodePassword));
     }
 }

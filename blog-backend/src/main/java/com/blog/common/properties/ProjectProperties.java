@@ -1,17 +1,16 @@
-package com.blog.common.property;
+package com.blog.common.properties;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 /**
  * @author zouzhangpeng
  * @desc 项目属性
  */
 @Data
-@Component
 @ConfigurationProperties(prefix = "project",ignoreInvalidFields = true)
-public class ProjectProperty {
+public class ProjectProperties {
 
     /**
      * 项目名称

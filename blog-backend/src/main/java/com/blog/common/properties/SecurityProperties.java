@@ -1,9 +1,8 @@
-package com.blog.common.property;
+package com.blog.common.properties;
 
 import java.util.Set;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 import lombok.Data;
 
@@ -12,9 +11,8 @@ import lombok.Data;
  * @desc 安全相关配置信息
  */
 @Data
-@Component
 @ConfigurationProperties(prefix = "security", ignoreInvalidFields = true)
-public class SecurityProperty {
+public class SecurityProperties {
 
     /**
      * rsa配置信息
