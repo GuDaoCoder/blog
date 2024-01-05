@@ -1,6 +1,8 @@
 package com.blog.biz.model.entity;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import com.blog.common.base.entity.BaseEntity;
 
@@ -13,7 +15,6 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-@Access(AccessType.FIELD)
 @Entity
 @Table(name = "t_category")
 public class CategoryEntity extends BaseEntity {
