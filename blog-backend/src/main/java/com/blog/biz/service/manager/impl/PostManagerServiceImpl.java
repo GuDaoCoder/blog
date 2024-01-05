@@ -1,6 +1,15 @@
 package com.blog.biz.service.manager.impl;
 
-import cn.dev33.satoken.secure.SaSecureUtil;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
+
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+
 import com.blog.biz.convert.PostConverter;
 import com.blog.biz.enums.PostSource;
 import com.blog.biz.enums.PostStatus;
@@ -16,16 +25,10 @@ import com.blog.biz.service.crud.TagCrudService;
 import com.blog.biz.service.manager.PostManagerService;
 import com.blog.common.exception.BusinessException;
 import com.blog.common.properties.SecurityProperties;
+
+import cn.dev33.satoken.secure.SaSecureUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author zouzhangpeng
@@ -50,21 +53,16 @@ public class PostManagerServiceImpl implements PostManagerService {
     @Override
     public CreatePostResponse create(CreatePostRequest request) {
         PostEntity entity = PostConverter.INSTANCE.toEntity(request);
-        entity.setSource(PostSource.ADD);
-        entity.setStatus(entity.getPublish() ? PostStatus.PUBLISHED : PostStatus.DRAFT);
-        if (entity.getPublish()) {
-            entity.setPublishTime(LocalDateTime.now());
-        }
-        if (entity.getEncrypt()) {
-            if (StringUtils.isBlank(entity.getPassword())) {
-                throw new BusinessException("设置加密访问时密码不能为空");
-            }
+        entity.setSource(PostSource.ADD).setStatus(request.getPublish() ? PostStatus.PUBLISHED : PostStatus.DRAFT)
+            .setPublishTime(request.getPublish() ? LocalDateTime.now() : null)
+            // todo: 统计markdown文章字数
+            .setWordCount(0);;
+
+        if (StringUtils.isNotBlank(entity.getPassword())) {
             // 密码加密
             entity.setPassword(
                 SaSecureUtil.rsaEncryptByPublic(securityProperties.getRsa().getPublicKey(), entity.getPassword()));
         }
-        // todo: 统计markdown文章字数
-        entity.setWordCount(0);
 
         // 校验分类信息是否存在
         categoryCrudService.findOneById(entity.getCategoryId())
@@ -87,5 +85,19 @@ public class PostManagerServiceImpl implements PostManagerService {
             postTagRelaCrudService.saveAll(postTagRelaEntities);
         }
         return new CreatePostResponse(entity.getPostId());
+    }
+
+    @Override
+    public void publish(Long postId) {
+        PostEntity entity = postCrudService.findOneByIdOrThrow(postId);
+        entity.setStatus(PostStatus.PUBLISHED).setPublishTime(LocalDateTime.now());
+        postCrudService.save(entity);
+    }
+
+    @Override
+    public void unpublish(Long postId) {
+        PostEntity entity = postCrudService.findOneByIdOrThrow(postId);
+        entity.setStatus(PostStatus.UNPUBLISHED);
+        postCrudService.save(entity);
     }
 }

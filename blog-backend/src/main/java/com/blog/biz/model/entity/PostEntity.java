@@ -65,12 +65,6 @@ public class PostEntity extends BaseEntity {
     private Long categoryId;
 
     /**
-     * 是否发布
-     */
-    @Column(name = "is_publish")
-    private Boolean publish;
-
-    /**
      * 发布时间
      */
     private LocalDateTime publishTime;
@@ -86,12 +80,6 @@ public class PostEntity extends BaseEntity {
      */
     @Column(name = "is_enable_comment")
     private Boolean enableComment;
-
-    /**
-     * 是否设置加密访问
-     */
-    @Column(name = "is_encrypt")
-    private Boolean encrypt;
 
     /**
      * 访问密码

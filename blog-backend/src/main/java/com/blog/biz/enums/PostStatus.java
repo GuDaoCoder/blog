@@ -15,6 +15,8 @@ public enum PostStatus {
 
     PUBLISHED("已发布"),
 
+    UNPUBLISHED("取消发布"),
+
     DELETED("已删除"),
 
     ;

@@ -16,4 +16,18 @@ public interface PostManagerService {
      * @return com.blog.biz.model.response.CreatePostResponse
      */
     CreatePostResponse create(CreatePostRequest request);
+
+    /**
+     * 发布文章
+     * 
+     * @param postId Long
+     */
+    void publish(Long postId);
+
+    /**
+     * 取消发布文章
+     * 
+     * @param postId Long
+     */
+    void unpublish(Long postId);
 }

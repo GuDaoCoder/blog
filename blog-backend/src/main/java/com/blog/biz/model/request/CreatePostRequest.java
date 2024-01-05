@@ -39,10 +39,6 @@ public class CreatePostRequest extends CommonRequest {
     @Schema(description = "是否开启评论")
     private Boolean enableComment;
 
-    @NotNull(message = "是否设置加密访问不能为空")
-    @Schema(description = "是否设置加密访问")
-    private Boolean encrypt;
-
     @Schema(description = "访问密码")
     private String password;
 
