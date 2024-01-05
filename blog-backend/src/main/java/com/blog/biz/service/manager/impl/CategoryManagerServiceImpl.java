@@ -1,5 +1,6 @@
 package com.blog.biz.service.manager.impl;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -20,6 +21,7 @@ import com.blog.biz.service.crud.CategoryCrudService;
 import com.blog.biz.service.manager.CategoryManagerService;
 import com.blog.common.base.response.NodeResponse;
 import com.blog.common.exception.BusinessException;
+import com.blog.common.util.SnowflakeUtil;
 import com.blog.common.util.TreeUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -47,16 +49,20 @@ public class CategoryManagerServiceImpl implements CategoryManagerService {
 
         CategoryEntity entity = CategoryConverter.INSTANCE.toEntity(request);
 
-        // 上级分类
-        CategoryEntity parentEntity = null;
+        // 手动设置主键，方便设置fullId
+        entity.setCategoryId((Long)SnowflakeUtil.getId());
+
         if (Objects.nonNull(request.getParentId())) {
-            parentEntity = categoryCrudService.findOneById(request.getParentId())
+            // 上级分类
+            CategoryEntity parentEntity = categoryCrudService.findOneById(request.getParentId())
                 .orElseThrow(() -> new BusinessException("上级分类信息不存在"));
             entity.setParentId(parentEntity.getCategoryId());
             entity.setLevel(parentEntity.getLevel() + 1);
+            entity.setFullId(parentEntity.getFullId() + entity.getCategoryId());
         } else {
             entity.setParentId(BizConstant.ROOT_ID);
             entity.setLevel(BizConstant.FIRST_LEVEL);
+            entity.setFullId(String.valueOf(entity.getCategoryId()));
         }
 
         // 查询同一层级下最新的分类
@@ -65,18 +71,13 @@ public class CategoryManagerServiceImpl implements CategoryManagerService {
         entity.setOrderNo(Objects.nonNull(latestEntity) ? latestEntity.getOrderNo() + 1 : 1);
 
         categoryCrudService.save(entity);
-
-        // todo: 如何在新增时就设置fullId？
-        entity.setFullId(Objects.nonNull(parentEntity) ? parentEntity.getFullId() + "-" + entity.getCategoryId()
-            : String.valueOf(entity.getCategoryId()));
-        categoryCrudService.save(entity);
         return new CreateCategoryResponse(entity.getCategoryId());
     }
 
     @Override
     public List<NodeResponse<CategoryResponse>> tree() {
         List<CategoryResponse> data = categoryCrudService.findAll().stream().map(CategoryConverter.INSTANCE::toResponse)
-            .collect(Collectors.toList());
+            .sorted(Comparator.comparing(CategoryResponse::getOrderNo)).collect(Collectors.toList());
         return TreeUtil.build(data, BizConstant.ROOT_ID, CategoryResponse::getCategoryId,
             CategoryResponse::getCategoryName, CategoryResponse::getParentId);
     }

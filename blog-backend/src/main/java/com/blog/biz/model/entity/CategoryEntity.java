@@ -2,8 +2,6 @@ package com.blog.biz.model.entity;
 
 import javax.persistence.*;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import com.blog.common.base.entity.BaseEntity;
 
 import lombok.Data;
@@ -21,8 +19,6 @@ import lombok.experimental.Accessors;
 public class CategoryEntity extends BaseEntity {
 
     @Id
-    @GenericGenerator(name = "snowflakeId", strategy = "com.blog.common.jpa.config.IdGeneratorConfig")
-    @GeneratedValue(generator = "snowflakeId")
     private Long categoryId;
 
     /**
