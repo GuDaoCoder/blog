@@ -36,7 +36,7 @@ public class TagManagerServiceImpl implements TagManagerService {
     private final TagCrudService tagCrudService;
 
     @Override
-    public CreateTagResponse add(CreateTagRequest request) {
+    public CreateTagResponse create(CreateTagRequest request) {
         TagEntity entity = TagConverter.INSTANCE.toEntity(request);
         TagEntity latestTagEntity = tagCrudService.findLatest().orElse(null);
         if (Objects.nonNull(latestTagEntity)) {
@@ -49,7 +49,8 @@ public class TagManagerServiceImpl implements TagManagerService {
         } else {
             entity.setOrderNo(1);
         }
-        return new CreateTagResponse(tagCrudService.saveOrUpdate(entity));
+        tagCrudService.save(entity);
+        return new CreateTagResponse(entity.getTagId());
     }
 
     @Override
@@ -62,7 +63,7 @@ public class TagManagerServiceImpl implements TagManagerService {
             }
         }
         entity.setTagName(request.getTagName());
-        tagCrudService.saveOrUpdate(entity);
+        tagCrudService.save(entity);
     }
 
     @Override
@@ -78,10 +79,10 @@ public class TagManagerServiceImpl implements TagManagerService {
         Integer currentOrderNo = entity.getOrderNo();
         tagCrudService.findPrevious(currentOrderNo).ifPresent(previousEntity -> {
             entity.setOrderNo(previousEntity.getOrderNo());
-            tagCrudService.saveOrUpdate(entity);
+            tagCrudService.save(entity);
 
             previousEntity.setOrderNo(currentOrderNo);
-            tagCrudService.saveOrUpdate(previousEntity);
+            tagCrudService.save(previousEntity);
         });
     }
 
@@ -92,10 +93,10 @@ public class TagManagerServiceImpl implements TagManagerService {
         Integer currentOrderNo = entity.getOrderNo();
         tagCrudService.findLatter(currentOrderNo).ifPresent(latterEntity -> {
             entity.setOrderNo(latterEntity.getOrderNo());
-            tagCrudService.saveOrUpdate(entity);
+            tagCrudService.save(entity);
 
             latterEntity.setOrderNo(currentOrderNo);
-            tagCrudService.saveOrUpdate(latterEntity);
+            tagCrudService.save(latterEntity);
         });
     }
 }

@@ -23,14 +23,6 @@ public interface TagCrudService extends BaseCrudService<TagEntity> {
     Optional<TagEntity> findLatest();
 
     /**
-     * 新增或更新标签
-     * 
-     * @param entity TagEntity
-     * @return java.lang.Long
-     */
-    Long saveOrUpdate(TagEntity entity);
-
-    /**
      * 根据名称查询标签
      * 
      * @param tagName String

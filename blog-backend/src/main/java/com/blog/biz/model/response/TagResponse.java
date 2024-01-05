@@ -2,15 +2,19 @@ package com.blog.biz.model.response;
 
 import java.io.Serial;
 
+import com.blog.common.base.response.CommonResponse;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author zouzhangpeng
  * @desc
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class TagResponse {
+public class TagResponse extends CommonResponse {
 
     @Serial
     private static final long serialVersionUID = 5843521204175924852L;

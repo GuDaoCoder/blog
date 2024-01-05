@@ -19,7 +19,7 @@ public interface TagManagerService {
      * @param request CreateTagRequest
      * @return com.blog.biz.model.response.CreateTagResponse
      */
-    CreateTagResponse add(CreateTagRequest request);
+    CreateTagResponse create(CreateTagRequest request);
 
     /**
      * 编辑标签

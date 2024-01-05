@@ -259,6 +259,17 @@ public class QueryWrapper<Entity> {
     }
 
     /**
+     * limit ?
+     * 
+     * @param limit long
+     * @return com.blog.common.jpa.wrapper.QueryWrapper<Entity>
+     */
+    public QueryWrapper<Entity> limit(long limit) {
+        this.query.limit(limit);
+        return this;
+    }
+
+    /**
      * 查询数量
      * 
      * @param
@@ -275,7 +286,7 @@ public class QueryWrapper<Entity> {
      * @return Entity
      */
     public Optional<Entity> fetchOne() {
-        return Optional.ofNullable(this.query.limit(1).fetchOne());
+        return Optional.ofNullable(this.query.fetchOne());
     }
 
     /**

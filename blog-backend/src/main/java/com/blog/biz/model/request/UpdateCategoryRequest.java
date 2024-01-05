@@ -1,6 +1,7 @@
 package com.blog.biz.model.request;
 
 import com.blog.common.base.request.CommonRequest;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,16 +15,13 @@ import java.io.Serial;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class LoginRequest extends CommonRequest {
+public class UpdateCategoryRequest extends CommonRequest {
 
     @Serial
-    private static final long serialVersionUID = -8615257892969950742L;
+    private static final long serialVersionUID = -2801296631270703763L;
 
-    @NotBlank(message = "用户名不能为空")
-    @Schema(description = "用户名")
-    private String username;
+    @NotBlank(message = "分类名称不能为空")
+    @Schema(description = "分类名称")
+    private String categoryName;
 
-    @NotBlank(message = "密码不能为空")
-    @Schema(description = "密码")
-    private String password;
 }

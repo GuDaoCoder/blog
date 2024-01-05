@@ -1,11 +1,13 @@
 package com.blog.biz.model.entity;
 
-import com.blog.common.base.entity.BaseEntity;
-import lombok.Data;
-import lombok.experimental.Accessors;
+import javax.persistence.*;
+
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
+import com.blog.common.base.entity.BaseEntity;
+
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * @author zouzhangpeng
@@ -13,6 +15,7 @@ import javax.persistence.*;
  */
 @Data
 @Accessors(chain = true)
+@Access(AccessType.FIELD)
 @Entity
 @Table(name = "t_category")
 public class CategoryEntity extends BaseEntity {
@@ -42,4 +45,13 @@ public class CategoryEntity extends BaseEntity {
      */
     private Integer orderNo;
 
+    /**
+     * 级别
+     */
+    private Integer level;
+
+    @Override
+    public Long primaryId() {
+        return this.categoryId;
+    }
 }

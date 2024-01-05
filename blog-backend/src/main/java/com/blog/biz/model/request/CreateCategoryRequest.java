@@ -14,16 +14,16 @@ import java.io.Serial;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class LoginRequest extends CommonRequest {
+public class CreateCategoryRequest extends CommonRequest {
 
     @Serial
-    private static final long serialVersionUID = -8615257892969950742L;
+    private static final long serialVersionUID = 6089701855940646688L;
 
-    @NotBlank(message = "用户名不能为空")
-    @Schema(description = "用户名")
-    private String username;
+    @NotBlank(message = "分类名称不能为空")
+    @Schema(description = "分类名称")
+    private String categoryName;
 
-    @NotBlank(message = "密码不能为空")
-    @Schema(description = "密码")
-    private String password;
+    @Schema(description = "上级分类")
+    private Long parentId;
+
 }

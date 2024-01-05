@@ -1,6 +1,7 @@
 package com.blog.common.base.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,5 +43,20 @@ public class BaseCrudServiceImpl<Entity extends BaseEntity, Repository extends J
         List<Entity> list = new ArrayList<>();
         repository.findAllById(ids).forEach(list::add);
         return list;
+    }
+
+    @Override
+    public void save(Entity entity) {
+        repository.save(entity);
+    }
+
+    @Override
+    public void saveAll(Collection<Entity> entities) {
+        repository.saveAll(entities);
+    }
+
+    @Override
+    public List<Entity> findAll() {
+        return repository.findAll();
     }
 }

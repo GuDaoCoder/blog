@@ -3,6 +3,7 @@ package com.blog.biz.model.request;
 import com.blog.common.base.request.PageRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 
@@ -10,6 +11,7 @@ import java.io.Serial;
  * @author zouzhangpeng
  * @desc
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class PageTagRequest extends PageRequest {
     @Serial

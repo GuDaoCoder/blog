@@ -34,11 +34,6 @@ public class TagCrudServiceImpl extends BaseCrudServiceImpl<TagEntity, TagReposi
     }
 
     @Override
-    public Long saveOrUpdate(TagEntity entity) {
-        return repository.save(entity).getTagId();
-    }
-
-    @Override
     public Optional<TagEntity> findByTagName(String tagName) {
         return JpaUtil.query(QTagEntity.tagEntity).eq(QTagEntity.tagEntity.tagName, tagName).fetchOne();
     }
@@ -53,12 +48,12 @@ public class TagCrudServiceImpl extends BaseCrudServiceImpl<TagEntity, TagReposi
     @Override
     public Optional<TagEntity> findPrevious(Integer orderNo) {
         return JpaUtil.query(QTagEntity.tagEntity).gt(QTagEntity.tagEntity.orderNo, orderNo)
-            .order(QTagEntity.tagEntity.orderNo.asc()).fetchOne();
+            .order(QTagEntity.tagEntity.orderNo.asc()).limit(1L).fetchOne();
     }
 
     @Override
     public Optional<TagEntity> findLatter(Integer orderNo) {
         return JpaUtil.query(QTagEntity.tagEntity).lt(QTagEntity.tagEntity.orderNo, orderNo)
-            .order(QTagEntity.tagEntity.orderNo.desc()).fetchOne();
+            .order(QTagEntity.tagEntity.orderNo.desc()).limit(1L).fetchOne();
     }
 }

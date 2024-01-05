@@ -1,9 +1,10 @@
 package com.blog.biz.controller.admin;
 
+import com.blog.biz.model.request.CreateTagRequest;
 import org.springdoc.api.annotations.ParameterObject;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import com.blog.biz.model.request.CreateTagRequest;
 import com.blog.biz.model.request.PageTagRequest;
 import com.blog.biz.model.request.UpdateTagRequest;
 import com.blog.biz.model.response.CreateTagResponse;
@@ -33,14 +34,14 @@ public class TagController {
 
     @Operation(summary = "新增标签")
     @PostMapping
-    public Result<CreateTagResponse> add(@RequestBody CreateTagRequest request) {
-        return Result.success(tagManagerService.add(request));
+    public Result<CreateTagResponse> create(@Validated @RequestBody CreateTagRequest request) {
+        return Result.success(tagManagerService.create(request));
     }
 
     @Operation(summary = "编辑标签")
     @PutMapping("/{tagId}")
-    public Result<Void> add(@Parameter(description = "标签Id") @PathVariable Long tagId,
-        @RequestBody UpdateTagRequest request) {
+    public Result<Void> update(@Parameter(description = "标签Id") @PathVariable Long tagId,
+        @Validated @RequestBody UpdateTagRequest request) {
         tagManagerService.update(tagId, request);
         return Result.success();
     }

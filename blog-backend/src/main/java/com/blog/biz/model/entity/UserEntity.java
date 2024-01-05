@@ -76,4 +76,8 @@ public class UserEntity extends BaseEntity {
      */
     private LocalDateTime lastLoginTime;
 
+    @Override
+    public Long primaryId() {
+        return this.userId;
+    }
 }

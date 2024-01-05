@@ -20,7 +20,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Data
 @MappedSuperclass
-public class BaseEntity implements Serializable {
+public abstract class BaseEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -3102393059220666166L;
@@ -54,6 +54,7 @@ public class BaseEntity implements Serializable {
         this.updateTime = LocalDateTime.now();
         this.createBy = UserContext.get().getUserId();
         this.updateBy = UserContext.get().getUserId();
+        this.preSaveProcessor();
     }
 
     /**
@@ -63,5 +64,16 @@ public class BaseEntity implements Serializable {
     public void preUpdate() {
         this.updateTime = LocalDateTime.now();
         this.updateBy = UserContext.get().getUserId();
+        this.preUpdateProcessor();
+    }
+
+    public abstract Long primaryId();
+
+    protected void preSaveProcessor() {
+
+    }
+
+    protected void preUpdateProcessor() {
+
     }
 }

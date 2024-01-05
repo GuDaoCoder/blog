@@ -40,4 +40,8 @@ public class TagEntity extends BaseEntity {
      */
     private Integer orderNo;
 
+    @Override
+    public Long primaryId() {
+        return this.tagId;
+    }
 }

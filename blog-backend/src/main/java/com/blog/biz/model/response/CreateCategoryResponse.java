@@ -12,14 +12,14 @@ import java.io.Serial;
  * @author zouzhangpeng
  * @desc
  */
-@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class LoginResponse extends CommonResponse {
+public class CreateCategoryResponse extends CommonResponse {
 
     @Serial
-    private static final long serialVersionUID = 2576053190868440582L;
+    private static final long serialVersionUID = 9116953955110935038L;
 
-    @Schema(description = "token")
-    private String token;
+    @Schema(description = "分类Id")
+    private Long categoryId;
 }

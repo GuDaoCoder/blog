@@ -1,5 +1,6 @@
 package com.blog.biz.controller.admin;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +27,7 @@ public class LoginController {
 
     @Operation(summary = "登录")
     @PostMapping("/login")
-    public Result<LoginResponse> login(@RequestBody LoginRequest request) {
+    public Result<LoginResponse> login(@Validated @RequestBody LoginRequest request) {
         return Result.success(authManagerService.login(request));
     }
 
