@@ -30,7 +30,6 @@ public class RedisUtilTest {
         UserDetail userDetail = new UserDetail();
         userDetail.setUserId(1L);
         userDetail.setUsername("zouzhangpeng");
-        userDetail.setEnabled(true);
         RedisUtil.setCacheObject("userDetail",userDetail);
     }
 

@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -41,8 +42,24 @@ public class GlobalExceptionHandler {
     public Result<Void> exceptionHandler(HttpServletRequest request, MethodArgumentNotValidException ex) {
         String exceptionStr = Optional.ofNullable(ex).map(MethodArgumentNotValidException::getBindingResult)
             .map(BindingResult::getFieldErrors).map(CollUtil::getFirst).map(FieldError::getDefaultMessage).orElse(null);
-        log.warn(">>>>>>>>>>>>[{}]-[{}] occurred a argument not valid error", request.getMethod(), request.getRequestURL(), ex);
+        log.warn(">>>>>>>>>>>>[{}]-[{}] occurred a argument not valid error", request.getMethod(),
+            request.getRequestURL(), ex);
         return Result.fail(exceptionStr);
+    }
+
+    /**
+     * 参数转换错误异常
+     * 
+     * @param request HttpServletRequest
+     * @param ex MethodArgumentTypeMismatchException
+     * @return com.blog.common.domain.Result<java.lang.Void>
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    public Result<Void> exceptionHandler(HttpServletRequest request, HttpMessageNotReadableException ex) {
+        log.warn(">>>>>>>>>>>>[{}]-[{}] occurred a param convert error", request.getMethod(), request.getRequestURL(),
+            ex);
+        return Result.fail("参数转换错误");
     }
 
     /**
