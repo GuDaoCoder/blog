@@ -1,8 +1,13 @@
 package com.blog.common.exception.handler;
 
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -13,6 +18,7 @@ import com.blog.common.exception.InvalidCredentialsException;
 
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
+import cn.hutool.core.collection.CollUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -22,6 +28,22 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    /**
+     * 参数校验异常
+     * 
+     * @param request HttpServletRequest
+     * @param ex MethodArgumentNotValidException
+     * @return com.blog.common.domain.Result<java.lang.Void>
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public Result<Void> exceptionHandler(HttpServletRequest request, MethodArgumentNotValidException ex) {
+        String exceptionStr = Optional.ofNullable(ex).map(MethodArgumentNotValidException::getBindingResult)
+            .map(BindingResult::getFieldErrors).map(CollUtil::getFirst).map(FieldError::getDefaultMessage).orElse(null);
+        log.warn(">>>>>>>>>>>>[{}]-[{}] occurred a argument not valid error", request.getMethod(), request.getRequestURL(), ex);
+        return Result.fail(exceptionStr);
+    }
 
     /**
      * 业务异常
@@ -91,7 +113,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public Result<Void> exceptionHandler(HttpServletRequest request, Exception ex) {
-        log.warn(">>>>>>>>>>>>[{}]-[{}] occurred a unknown error", request.getMethod(), request.getRequestURI(), ex);
+        log.error(">>>>>>>>>>>>[{}]-[{}] occurred a unknown error", request.getMethod(), request.getRequestURI(), ex);
         return Result.fail("服务器异常");
     }
 }
