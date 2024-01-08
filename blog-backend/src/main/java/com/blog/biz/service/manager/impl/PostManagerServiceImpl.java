@@ -13,16 +13,17 @@ import org.springframework.stereotype.Service;
 import com.blog.biz.convert.PostConverter;
 import com.blog.biz.enums.PostSource;
 import com.blog.biz.enums.PostStatus;
+import com.blog.biz.model.entity.PostContentEntity;
 import com.blog.biz.model.entity.PostEntity;
 import com.blog.biz.model.entity.PostTagRelaEntity;
 import com.blog.biz.model.entity.TagEntity;
 import com.blog.biz.model.request.CreatePostRequest;
+import com.blog.biz.model.request.PagePostRequest;
 import com.blog.biz.model.response.CreatePostResponse;
-import com.blog.biz.service.crud.CategoryCrudService;
-import com.blog.biz.service.crud.PostCrudService;
-import com.blog.biz.service.crud.PostTagRelaCrudService;
-import com.blog.biz.service.crud.TagCrudService;
+import com.blog.biz.model.response.PagePostResponse;
+import com.blog.biz.service.crud.*;
 import com.blog.biz.service.manager.PostManagerService;
+import com.blog.common.base.response.PageResponse;
 import com.blog.common.exception.BusinessException;
 import com.blog.common.properties.SecurityProperties;
 
@@ -49,7 +50,9 @@ public class PostManagerServiceImpl implements PostManagerService {
 
     private final TagCrudService tagCrudService;
 
-    @Transactional(rollbackOn = RuntimeException.class)
+    private final PostContentCrudService postContentCrudService;
+
+    @Transactional(rollbackOn = Exception.class)
     @Override
     public CreatePostResponse create(CreatePostRequest request) {
         PostEntity entity = PostConverter.INSTANCE.toEntity(request);
@@ -68,8 +71,13 @@ public class PostManagerServiceImpl implements PostManagerService {
         categoryCrudService.findOneById(entity.getCategoryId())
             .orElseThrow(() -> new BusinessException("分类信息不存在或已被删除"));
 
-        // 保存文章
+        // 保存文章基本信息
         postCrudService.save(entity);
+
+        // 保存文章内容
+        PostContentEntity postContentEntity = new PostContentEntity();
+        postContentEntity.setContent(request.getContent());
+        postContentCrudService.save(postContentEntity);
 
         if (CollectionUtils.isNotEmpty(request.getTagIds())) {
             List<TagEntity> tagEntities = tagCrudService.findAllByIds(request.getTagIds());
@@ -85,6 +93,11 @@ public class PostManagerServiceImpl implements PostManagerService {
             postTagRelaCrudService.saveAll(postTagRelaEntities);
         }
         return new CreatePostResponse(entity.getPostId());
+    }
+
+    @Override
+    public PageResponse<PagePostResponse> page(PagePostRequest request) {
+        return null;
     }
 
     @Override

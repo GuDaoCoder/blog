@@ -1,7 +1,10 @@
 package com.blog.biz.service.manager;
 
 import com.blog.biz.model.request.CreatePostRequest;
+import com.blog.biz.model.request.PagePostRequest;
 import com.blog.biz.model.response.CreatePostResponse;
+import com.blog.biz.model.response.PagePostResponse;
+import com.blog.common.base.response.PageResponse;
 
 /**
  * @author zouzhangpeng
@@ -16,6 +19,14 @@ public interface PostManagerService {
      * @return com.blog.biz.model.response.CreatePostResponse
      */
     CreatePostResponse create(CreatePostRequest request);
+
+    /**
+     * 查询文章列表
+     * 
+     * @param request PagePostRequest
+     * @return PageResponse<PagePostResponse>
+     */
+    PageResponse<PagePostResponse> page(PagePostRequest request);
 
     /**
      * 发布文章
