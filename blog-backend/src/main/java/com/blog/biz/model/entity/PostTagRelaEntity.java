@@ -1,14 +1,12 @@
 package com.blog.biz.model.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.blog.common.base.entity.BaseEntity;
+
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 /**
  * @author zouzhangpeng
@@ -16,16 +14,13 @@ import javax.persistence.Table;
  */
 @Data
 @Accessors(chain = true)
-@Entity
-@Table(name = "t_post_tag_rela")
+@TableName("t_post_tag_rela")
 public class PostTagRelaEntity extends BaseEntity {
 
     /**
      * 主键
      */
-    @Id
-    @GenericGenerator(name = "snowflakeId", strategy = "com.blog.common.jpa.config.IdGeneratorConfig")
-    @GeneratedValue(generator = "snowflakeId")
+    @TableId(type = IdType.ASSIGN_ID)
     private Long postTagRelaId;
 
     /**
@@ -38,8 +33,4 @@ public class PostTagRelaEntity extends BaseEntity {
      */
     private Long tagId;
 
-    @Override
-    public Long primaryId() {
-        return this.postTagRelaId;
-    }
 }

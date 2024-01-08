@@ -4,12 +4,12 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.blog.biz.mapper.CategoryMapper;
 import com.blog.biz.model.entity.CategoryEntity;
-import com.blog.biz.model.entity.QCategoryEntity;
-import com.blog.biz.repository.CategoryRepository;
 import com.blog.biz.service.crud.CategoryCrudService;
 import com.blog.common.base.service.impl.BaseCrudServiceImpl;
-import com.blog.common.util.JpaUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,21 +19,20 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Service
-public class CategoryCrudServiceImpl extends BaseCrudServiceImpl<CategoryEntity, CategoryRepository>
+public class CategoryCrudServiceImpl extends BaseCrudServiceImpl<CategoryMapper, CategoryEntity>
     implements CategoryCrudService {
-    public CategoryCrudServiceImpl(CategoryRepository repository) {
-        super(repository);
-    }
 
     @Override
     public Optional<CategoryEntity> findByCategoryName(String categoryName) {
-        return JpaUtil.query(QCategoryEntity.categoryEntity)
-            .eq(QCategoryEntity.categoryEntity.categoryName, categoryName).fetchOne();
+        LambdaQueryWrapper<CategoryEntity> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(CategoryEntity::getCategoryName, categoryName);
+        return Optional.ofNullable(baseMapper.selectOne(queryWrapper));
     }
 
     @Override
     public Optional<CategoryEntity> findLatest(Long parentId) {
-        return JpaUtil.query(QCategoryEntity.categoryEntity).eq(QCategoryEntity.categoryEntity.parentId, parentId)
-            .order(QCategoryEntity.categoryEntity.orderNo.desc()).limit(1L).fetchOne();
+        LambdaQueryWrapper<CategoryEntity> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(CategoryEntity::getParentId, parentId).orderByDesc(CategoryEntity::getOrderNo);
+        return Optional.ofNullable(baseMapper.selectOne(queryWrapper));
     }
 }

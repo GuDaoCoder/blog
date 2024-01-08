@@ -1,9 +1,8 @@
 package com.blog.biz.model.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.blog.common.base.entity.BaseEntity;
 
 import lombok.Data;
@@ -15,11 +14,10 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-@Entity
-@Table(name = "t_category")
+@TableName("t_category")
 public class CategoryEntity extends BaseEntity {
 
-    @Id
+    @TableId(type = IdType.ASSIGN_ID)
     private Long categoryId;
 
     /**
@@ -47,8 +45,4 @@ public class CategoryEntity extends BaseEntity {
      */
     private Integer level;
 
-    @Override
-    public Long primaryId() {
-        return this.categoryId;
-    }
 }

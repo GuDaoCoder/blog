@@ -2,10 +2,10 @@ package com.blog.biz.model.entity;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.*;
-
-import org.hibernate.annotations.GenericGenerator;
-
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.blog.biz.enums.PostSource;
 import com.blog.biz.enums.PostStatus;
 import com.blog.common.base.entity.BaseEntity;
@@ -15,16 +15,13 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-@Entity
-@Table(name = "t_post")
+@TableName("t_post")
 public class PostEntity extends BaseEntity {
 
     /**
      * 主键
      */
-    @Id
-    @GenericGenerator(name = "snowflakeId", strategy = "com.blog.common.jpa.config.IdGeneratorConfig")
-    @GeneratedValue(generator = "snowflakeId")
+    @TableId(type = IdType.ASSIGN_ID)
     private Long postId;
 
     /**
@@ -50,13 +47,11 @@ public class PostEntity extends BaseEntity {
     /**
      * 状态
      */
-    @Enumerated(EnumType.STRING)
     private PostStatus status;
 
     /**
      * 文章来源
      */
-    @Enumerated(EnumType.STRING)
     private PostSource source;
 
     /**
@@ -72,13 +67,13 @@ public class PostEntity extends BaseEntity {
     /**
      * 是否置顶
      */
-    @Column(name = "is_top")
+    @TableField("is_top")
     private Boolean top;
 
     /**
      * 是否开启评论
      */
-    @Column(name = "is_enable_comment")
+    @TableField("is_enable_comment")
     private Boolean enableComment;
 
     /**
@@ -86,8 +81,4 @@ public class PostEntity extends BaseEntity {
      */
     private String password;
 
-    @Override
-    public Long primaryId() {
-        return this.postId;
-    }
 }

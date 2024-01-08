@@ -19,10 +19,10 @@ public class PageResponse<Response> extends CommonResponse {
     private static final long serialVersionUID = 7162988863813899849L;
 
     @Schema(description = "页码")
-    private Integer pageNumber;
+    private Long pageNumber;
 
     @Schema(description = "每页数量")
-    private Integer pageSize;
+    private Long pageSize;
 
     @Schema(description = "总数")
     private Long total;

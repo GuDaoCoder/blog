@@ -1,7 +1,7 @@
 package com.blog.biz.service.crud;
 
 import com.blog.biz.model.entity.CategoryEntity;
-import com.blog.common.base.service.BaseCrudService;
+import com.blog.common.base.service.IBaseCrudService;
 
 import java.util.Optional;
 
@@ -9,7 +9,7 @@ import java.util.Optional;
  * @author zouzhangpeng
  * @desc
  */
-public interface CategoryCrudService extends BaseCrudService<CategoryEntity> {
+public interface CategoryCrudService extends IBaseCrudService<CategoryEntity> {
 
     /**
      * 根据名称查询分类

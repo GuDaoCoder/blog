@@ -3,16 +3,15 @@ package com.blog.biz.service.crud.impl;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.blog.biz.model.entity.QTagEntity;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.blog.biz.mapper.TagMapper;
 import com.blog.biz.model.entity.TagEntity;
-import com.blog.biz.repository.TagRepository;
 import com.blog.biz.service.crud.TagCrudService;
 import com.blog.common.base.service.impl.BaseCrudServiceImpl;
-import com.blog.common.util.JpaUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,38 +21,42 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Service
-public class TagCrudServiceImpl extends BaseCrudServiceImpl<TagEntity, TagRepository> implements TagCrudService {
-
-    public TagCrudServiceImpl(TagRepository repository) {
-        super(repository);
-    }
+public class TagCrudServiceImpl extends BaseCrudServiceImpl<TagMapper, TagEntity> implements TagCrudService {
 
     @Override
     public Optional<TagEntity> findLatest() {
-        return JpaUtil.query(QTagEntity.tagEntity).order(QTagEntity.tagEntity.orderNo.desc()).fetchOne();
+        LambdaQueryWrapper<TagEntity> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.orderByDesc(TagEntity::getOrderNo).last(limitOneExpression());
+        return Optional.ofNullable(baseMapper.selectOne(queryWrapper));
     }
 
     @Override
     public Optional<TagEntity> findByTagName(String tagName) {
-        return JpaUtil.query(QTagEntity.tagEntity).eq(QTagEntity.tagEntity.tagName, tagName).fetchOne();
+        LambdaQueryWrapper<TagEntity> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(TagEntity::getTagName, tagName);
+        return Optional.ofNullable(baseMapper.selectOne(queryWrapper));
     }
 
     @Override
-    public Page<TagEntity> page(String tagName, Pageable pageable) {
-        return JpaUtil.query(QTagEntity.tagEntity)
-            .like(StringUtils.isNotBlank(tagName), QTagEntity.tagEntity.tagName, tagName)
-            .order(QTagEntity.tagEntity.orderNo.desc()).page(pageable);
+    public IPage<TagEntity> page(String tagName, IPage<TagEntity> pageable) {
+        LambdaQueryWrapper<TagEntity> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.like(StringUtils.isNotBlank(tagName), TagEntity::getTagName, tagName)
+            .orderByDesc(TagEntity::getOrderNo);
+        return baseMapper.selectPage(pageable, queryWrapper);
     }
 
     @Override
     public Optional<TagEntity> findPrevious(Integer orderNo) {
-        return JpaUtil.query(QTagEntity.tagEntity).gt(QTagEntity.tagEntity.orderNo, orderNo)
-            .order(QTagEntity.tagEntity.orderNo.asc()).limit(1L).fetchOne();
+        LambdaQueryWrapper<TagEntity> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.ge(TagEntity::getOrderNo, orderNo).orderByAsc(TagEntity::getOrderNo).last(limitOneExpression());
+        return Optional.ofNullable(baseMapper.selectOne(queryWrapper));
     }
 
     @Override
+
     public Optional<TagEntity> findLatter(Integer orderNo) {
-        return JpaUtil.query(QTagEntity.tagEntity).lt(QTagEntity.tagEntity.orderNo, orderNo)
-            .order(QTagEntity.tagEntity.orderNo.desc()).limit(1L).fetchOne();
+        LambdaQueryWrapper<TagEntity> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.le(TagEntity::getOrderNo, orderNo).orderByDesc(TagEntity::getOrderNo).last(limitOneExpression());
+        return Optional.ofNullable(baseMapper.selectOne(queryWrapper));
     }
 }

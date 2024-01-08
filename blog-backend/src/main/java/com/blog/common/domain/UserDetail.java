@@ -1,7 +1,5 @@
 package com.blog.common.domain;
 
-import javax.persistence.Id;
-
 import com.blog.biz.enums.Gender;
 
 import lombok.Data;
@@ -16,7 +14,6 @@ public class UserDetail {
     /**
      * 用户Id
      */
-    @Id
     private Long userId;
 
     /**

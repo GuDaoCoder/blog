@@ -2,17 +2,15 @@ package com.blog.biz.service.crud;
 
 import java.util.Optional;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.blog.biz.model.entity.TagEntity;
-import com.blog.common.base.service.BaseCrudService;
+import com.blog.common.base.service.IBaseCrudService;
 
 /**
  * @author zouzhangpeng
  * @desc
  */
-public interface TagCrudService extends BaseCrudService<TagEntity> {
+public interface TagCrudService extends IBaseCrudService<TagEntity> {
 
     /**
      * 查询最新的一个标签
@@ -34,10 +32,10 @@ public interface TagCrudService extends BaseCrudService<TagEntity> {
      * 分页查询标签
      * 
      * @param tagName String
-     * @param pageable Pageable
-     * @return org.springframework.data.domain.Page<com.blog.biz.model.entity.TagEntity>
+     * @param pageable IPage<TagEntity>
+     * @return IPage<TagEntity>
      */
-    Page<TagEntity> page(String tagName, Pageable pageable);
+    IPage<TagEntity> page(String tagName, IPage<TagEntity> pageable);
 
     /**
      * 根据顺序编号查询前一个标签

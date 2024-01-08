@@ -1,24 +1,22 @@
 package com.blog.biz.service.crud;
 
-import org.springframework.data.domain.Page;
-
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.blog.biz.model.entity.PostEntity;
-import com.blog.common.base.service.BaseCrudService;
-import org.springframework.data.domain.Pageable;
+import com.blog.common.base.service.IBaseCrudService;
 
 /**
  * @author zouzhangpeng
  * @desc
  */
-public interface PostCrudService extends BaseCrudService<PostEntity> {
+public interface PostCrudService extends IBaseCrudService<PostEntity> {
 
     /**
      * 分页查询文章
      * 
      * @param postEntity PostEntity
      * @param encrypt Boolean
-     * @param pageable Pageable
-     * @return org.springframework.data.domain.Page<com.blog.biz.model.entity.PostEntity>
+     * @param page PostEntity>
+     * @return com.baomidou.mybatisplus.core.metadata.IPage<com.blog.biz.model.entity.PostEntity>
      */
-    Page<PostEntity> page(PostEntity postEntity, Boolean encrypt, Pageable pageable);
+    IPage<PostEntity> page(PostEntity postEntity, Boolean encrypt, IPage<PostEntity> page);
 }

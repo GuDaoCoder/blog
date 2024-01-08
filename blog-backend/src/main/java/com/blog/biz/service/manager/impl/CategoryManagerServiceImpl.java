@@ -5,10 +5,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.blog.biz.constant.BizConstant;
 import com.blog.biz.convert.CategoryConverter;
@@ -38,7 +37,7 @@ public class CategoryManagerServiceImpl implements CategoryManagerService {
 
     private final CategoryCrudService categoryCrudService;
 
-    @Transactional(rollbackOn = RuntimeException.class)
+    @Transactional(rollbackFor = RuntimeException.class)
     @Override
     public CreateCategoryResponse create(CreateCategoryRequest request) {
         // 校验名称重复
@@ -54,7 +53,7 @@ public class CategoryManagerServiceImpl implements CategoryManagerService {
 
         if (Objects.nonNull(request.getParentId())) {
             // 上级分类
-            CategoryEntity parentEntity = categoryCrudService.findOneById(request.getParentId())
+            CategoryEntity parentEntity = categoryCrudService.getOptById(request.getParentId())
                 .orElseThrow(() -> new BusinessException("上级分类信息不存在"));
             entity.setParentId(parentEntity.getCategoryId());
             entity.setLevel(parentEntity.getLevel() + 1);
@@ -76,7 +75,7 @@ public class CategoryManagerServiceImpl implements CategoryManagerService {
 
     @Override
     public List<NodeResponse<CategoryResponse>> tree() {
-        List<CategoryResponse> data = categoryCrudService.findAll().stream().map(CategoryConverter.INSTANCE::toResponse)
+        List<CategoryResponse> data = categoryCrudService.list().stream().map(CategoryConverter.INSTANCE::toResponse)
             .sorted(Comparator.comparing(CategoryResponse::getOrderNo)).collect(Collectors.toList());
         return TreeUtil.build(data, BizConstant.ROOT_ID, CategoryResponse::getCategoryId,
             CategoryResponse::getCategoryName, CategoryResponse::getParentId);
@@ -84,7 +83,7 @@ public class CategoryManagerServiceImpl implements CategoryManagerService {
 
     @Override
     public void update(Long categoryId, UpdateCategoryRequest request) {
-        CategoryEntity entity = categoryCrudService.findOneByIdOrThrow(categoryId);
+        CategoryEntity entity = categoryCrudService.getById(categoryId);
         if (!StringUtils.equals(request.getCategoryName(), entity.getCategoryName())) {
             // 校验名称重复
             CategoryEntity existsEntity =
@@ -94,7 +93,7 @@ public class CategoryManagerServiceImpl implements CategoryManagerService {
             }
         }
         entity.setCategoryName(request.getCategoryName());
-        categoryCrudService.save(entity);
+        categoryCrudService.updateById(entity);
     }
 
 }

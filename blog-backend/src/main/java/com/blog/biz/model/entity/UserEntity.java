@@ -2,10 +2,9 @@ package com.blog.biz.model.entity;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.*;
-
-import org.hibernate.annotations.GenericGenerator;
-
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.blog.biz.enums.Gender;
 import com.blog.common.base.entity.BaseEntity;
 
@@ -18,16 +17,13 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-@Entity
-@Table(name = "t_user")
+@TableName("t_user")
 public class UserEntity extends BaseEntity {
 
     /**
      * 用户Id
      */
-    @Id
-    @GenericGenerator(name = "snowflakeId", strategy = "com.blog.common.jpa.config.IdGeneratorConfig")
-    @GeneratedValue(generator = "snowflakeId")
+    @TableId(type = IdType.ASSIGN_ID)
     private Long userId;
 
     /**
@@ -58,7 +54,6 @@ public class UserEntity extends BaseEntity {
     /**
      * 用户性别
      */
-    @Enumerated(EnumType.STRING)
     private Gender sex;
 
     /**
@@ -76,8 +71,4 @@ public class UserEntity extends BaseEntity {
      */
     private LocalDateTime lastLoginTime;
 
-    @Override
-    public Long primaryId() {
-        return this.userId;
-    }
 }

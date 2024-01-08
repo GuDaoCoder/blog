@@ -112,24 +112,18 @@ redisson:
     # 发布和订阅连接池大小
     subscriptionConnectionPoolSize: 50
 
-  jpa:
-    hibernate:
-      ddl-auto: none
-    database: mysql
-    show-sql: true
-    open-in-view: false
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
+mybatis-plus:
+  configuration:
+    # 是否开启自动驼峰命名规则映射:从数据库列名到Java属性驼峰命名的类似映射
+    map-underscore-to-camel-case: true
+    # 如果查询结果中包含空值的列，则 MyBatis 在映射的时候，不会映射这个字段
+    call-setters-on-nulls: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 logging:
   config: classpath:logback-spring.xml
   level:
     com.blog: debug
-    org.hibernate.SQL: debug
-    org.hibernate.engine.QueryParameters: debug
-    org.hibernate.engine.query.HQLQueryPlan: debug
-    org.hibernate.type.descriptor.sql.BasicBinder: trace
 
 tlog:
   pattern: [ $traceId ]

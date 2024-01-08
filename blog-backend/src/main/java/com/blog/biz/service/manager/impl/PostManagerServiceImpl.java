@@ -4,11 +4,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.blog.biz.convert.PostConverter;
 import com.blog.biz.enums.PostSource;
@@ -52,7 +51,7 @@ public class PostManagerServiceImpl implements PostManagerService {
 
     private final PostContentCrudService postContentCrudService;
 
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public CreatePostResponse create(CreatePostRequest request) {
         PostEntity entity = PostConverter.INSTANCE.toEntity(request);
@@ -68,7 +67,7 @@ public class PostManagerServiceImpl implements PostManagerService {
         }
 
         // 校验分类信息是否存在
-        categoryCrudService.findOneById(entity.getCategoryId())
+        categoryCrudService.getOptById(entity.getCategoryId())
             .orElseThrow(() -> new BusinessException("分类信息不存在或已被删除"));
 
         // 保存文章基本信息
@@ -80,7 +79,7 @@ public class PostManagerServiceImpl implements PostManagerService {
         postContentCrudService.save(postContentEntity);
 
         if (CollectionUtils.isNotEmpty(request.getTagIds())) {
-            List<TagEntity> tagEntities = tagCrudService.findAllByIds(request.getTagIds());
+            List<TagEntity> tagEntities = tagCrudService.listByIds(request.getTagIds());
             if (CollectionUtils.isEmpty(tagEntities) || request.getTagIds().size() != tagEntities.size()) {
                 throw new BusinessException("存在未知的标签，请检查");
             }
@@ -90,7 +89,7 @@ public class PostManagerServiceImpl implements PostManagerService {
                 return postTagRelaEntity;
             }).collect(Collectors.toList());
             // 保存文章标签关系
-            postTagRelaCrudService.saveAll(postTagRelaEntities);
+            postTagRelaCrudService.saveBatch(postTagRelaEntities);
         }
         return new CreatePostResponse(entity.getPostId());
     }
@@ -102,15 +101,15 @@ public class PostManagerServiceImpl implements PostManagerService {
 
     @Override
     public void publish(Long postId) {
-        PostEntity entity = postCrudService.findOneByIdOrThrow(postId);
+        PostEntity entity = postCrudService.getOneOrThrow(postId);
         entity.setStatus(PostStatus.PUBLISHED).setPublishTime(LocalDateTime.now());
-        postCrudService.save(entity);
+        postCrudService.updateById(entity);
     }
 
     @Override
     public void unpublish(Long postId) {
-        PostEntity entity = postCrudService.findOneByIdOrThrow(postId);
+        PostEntity entity = postCrudService.getOneOrThrow(postId);
         entity.setStatus(PostStatus.UNPUBLISHED);
-        postCrudService.save(entity);
+        postCrudService.updateById(entity);
     }
 }

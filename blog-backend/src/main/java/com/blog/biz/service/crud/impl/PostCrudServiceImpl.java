@@ -1,16 +1,17 @@
 package com.blog.biz.service.crud.impl;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.blog.biz.mapper.PostMapper;
 import com.blog.biz.model.entity.PostEntity;
-import com.blog.biz.model.entity.QPostEntity;
-import com.blog.biz.repository.PostRepository;
 import com.blog.biz.service.crud.PostCrudService;
 import com.blog.common.base.service.impl.BaseCrudServiceImpl;
-import com.blog.common.util.JpaUtil;
+
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 /**
  * @author zouzhangpeng
@@ -18,17 +19,15 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-public class PostCrudServiceImpl extends BaseCrudServiceImpl<PostEntity, PostRepository> implements PostCrudService {
-    public PostCrudServiceImpl(PostRepository repository) {
-        super(repository);
-    }
+public class PostCrudServiceImpl extends BaseCrudServiceImpl<PostMapper, PostEntity> implements PostCrudService {
 
     @Override
-    public Page<PostEntity> page(PostEntity postEntity, Boolean encrypt, Pageable pageable) {
-        return JpaUtil.query(QPostEntity.postEntity)
-            .like(StringUtils.isNotBlank(postEntity.getTitle()), QPostEntity.postEntity.title, postEntity.getTitle())
-            .eq(postEntity.getCategoryId() != null, QPostEntity.postEntity.postId, postEntity.getPostId())
-            .page(pageable);
+    public IPage<PostEntity> page(PostEntity postEntity, Boolean encrypt, IPage<PostEntity> page) {
+        LambdaQueryWrapper<PostEntity> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.like(StringUtils.isNotBlank(postEntity.getTitle()), PostEntity::getTitle, postEntity.getTitle())
+            .eq(postEntity.getCategoryId() != null, PostEntity::getCategoryId, postEntity.getCategoryId())
+            .isNotNull(encrypt, PostEntity::getPassword).orderByDesc(PostEntity::getCreateTime);
+        return baseMapper.selectPage(page, queryWrapper);
     }
 
 }

@@ -1,62 +1,36 @@
 package com.blog.common.base.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.data.jpa.repository.JpaRepository;
-
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.blog.common.base.entity.BaseEntity;
-import com.blog.common.base.service.BaseCrudService;
+import com.blog.common.base.request.PageRequest;
+import com.blog.common.base.service.IBaseCrudService;
 import com.blog.common.exception.DataNotFoundException;
 
 /**
  * @author zouzhangpeng
  * @desc
  */
-public class BaseCrudServiceImpl<Entity extends BaseEntity, Repository extends JpaRepository<Entity, Long>>
-    implements BaseCrudService<Entity> {
-
-    protected final Repository repository;
-
-    public BaseCrudServiceImpl(Repository repository) {
-        this.repository = repository;
-    }
+public class BaseCrudServiceImpl<Mapper extends BaseMapper<Entity>, Entity extends BaseEntity>
+    extends ServiceImpl<Mapper, Entity> implements IBaseCrudService<Entity> {
 
     @Override
-    public Optional<Entity> findOneById(Long id) {
-        return repository.findById(id);
+    public Entity getOneOrThrow(Long id) {
+        return this.getOptById(id).orElseThrow(() -> new DataNotFoundException());
     }
 
-    @Override
-    public Entity findOneByIdOrThrow(Long id) {
-        return findOneById(id).orElseThrow(() -> new DataNotFoundException());
+    protected String limitOneExpression() {
+        return "limit 1";
     }
 
-    @Override
-    public List<Entity> findAllByIds(List<Long> ids) {
-        if (CollectionUtils.isEmpty(ids)) {
-            return new ArrayList<>();
-        }
-        List<Entity> list = new ArrayList<>();
-        repository.findAllById(ids).forEach(list::add);
-        return list;
+    protected IPage<Entity> pageable(PageRequest pageRequest) {
+        IPage<Entity> pageable = new Page<>();
+        pageable.setCurrent(pageRequest.getPageNumber());
+        pageable.setSize(pageRequest.getPageSize());
+        return pageable;
     }
 
-    @Override
-    public void save(Entity entity) {
-        repository.save(entity);
-    }
 
-    @Override
-    public void saveAll(Collection<Entity> entities) {
-        repository.saveAll(entities);
-    }
-
-    @Override
-    public List<Entity> findAll() {
-        return repository.findAll();
-    }
 }

@@ -1,11 +1,13 @@
 package com.blog.biz.service.crud.impl;
 
+import org.springframework.stereotype.Service;
+
+import com.blog.biz.mapper.PostContentMapper;
 import com.blog.biz.model.entity.PostContentEntity;
-import com.blog.biz.repository.PostContentRepository;
 import com.blog.biz.service.crud.PostContentCrudService;
 import com.blog.common.base.service.impl.BaseCrudServiceImpl;
+
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 /**
  * @author zouzhangpeng
@@ -13,8 +15,5 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-public class PostContentCrudServiceImpl extends BaseCrudServiceImpl<PostContentEntity, PostContentRepository> implements PostContentCrudService {
-    public PostContentCrudServiceImpl(PostContentRepository repository) {
-        super(repository);
-    }
+public class PostContentCrudServiceImpl extends BaseCrudServiceImpl<PostContentMapper, PostContentEntity> implements PostContentCrudService {
 }

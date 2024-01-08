@@ -2,12 +2,11 @@ package com.blog.biz.service.manager.impl;
 
 import java.util.Objects;
 
-import javax.transaction.Transactional;
-
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.blog.biz.convert.TagConverter;
 import com.blog.biz.model.entity.TagEntity;
 import com.blog.biz.model.request.CreateTagRequest;
@@ -19,7 +18,7 @@ import com.blog.biz.service.crud.TagCrudService;
 import com.blog.biz.service.manager.TagManagerService;
 import com.blog.common.base.response.PageResponse;
 import com.blog.common.exception.BusinessException;
-import com.blog.common.util.JpaUtil;
+import com.blog.common.util.PageUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +54,7 @@ public class TagManagerServiceImpl implements TagManagerService {
 
     @Override
     public void update(Long tagId, UpdateTagRequest request) {
-        TagEntity entity = tagCrudService.findOneByIdOrThrow(tagId);
+        TagEntity entity = tagCrudService.getOneOrThrow(tagId);
         if (!StringUtils.equals(request.getTagName(), entity.getTagName())) {
             TagEntity existsTagEntity = tagCrudService.findByTagName(request.getTagName()).orElse(null);
             if (Objects.nonNull(existsTagEntity)) {
@@ -63,40 +62,40 @@ public class TagManagerServiceImpl implements TagManagerService {
             }
         }
         entity.setTagName(request.getTagName());
-        tagCrudService.save(entity);
+        tagCrudService.updateById(entity);
     }
 
     @Override
     public PageResponse<TagResponse> page(PageTagRequest request) {
-        Page<TagEntity> page = tagCrudService.page(request.getTagName(), request.pageable());
-        return JpaUtil.toPageResult(page, TagConverter.INSTANCE::toResponse);
+        IPage<TagEntity> page = tagCrudService.page(request.getTagName(), PageUtil.pageable(request));
+        return PageUtil.toResult(page, TagConverter.INSTANCE::toResponse);
     }
 
-    @Transactional(rollbackOn = RuntimeException.class)
+    @Transactional(rollbackFor = RuntimeException.class)
     @Override
     public void moveUp(Long tagId) {
-        TagEntity entity = tagCrudService.findOneByIdOrThrow(tagId);
+        TagEntity entity = tagCrudService.getOneOrThrow(tagId);
         Integer currentOrderNo = entity.getOrderNo();
         tagCrudService.findPrevious(currentOrderNo).ifPresent(previousEntity -> {
             entity.setOrderNo(previousEntity.getOrderNo());
-            tagCrudService.save(entity);
+            tagCrudService.updateById(entity);
 
             previousEntity.setOrderNo(currentOrderNo);
-            tagCrudService.save(previousEntity);
+            tagCrudService.updateById(previousEntity);
         });
     }
 
-    @Transactional(rollbackOn = RuntimeException.class)
+    @Transactional(rollbackFor = RuntimeException.class)
     @Override
     public void moveDown(Long tagId) {
-        TagEntity entity = tagCrudService.findOneByIdOrThrow(tagId);
+        TagEntity entity = tagCrudService.getOneOrThrow(tagId);
         Integer currentOrderNo = entity.getOrderNo();
         tagCrudService.findLatter(currentOrderNo).ifPresent(latterEntity -> {
             entity.setOrderNo(latterEntity.getOrderNo());
-            tagCrudService.save(entity);
+            tagCrudService.updateById(entity);
 
             latterEntity.setOrderNo(currentOrderNo);
-            tagCrudService.save(latterEntity);
+            tagCrudService.updateById(latterEntity);
         });
     }
 }

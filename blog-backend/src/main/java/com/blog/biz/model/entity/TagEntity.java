@@ -1,12 +1,8 @@
 package com.blog.biz.model.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
-
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.blog.common.base.entity.BaseEntity;
 
 import lombok.Data;
@@ -18,16 +14,13 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-@Entity
-@Table(name = "t_tag")
+@TableName("t_tag")
 public class TagEntity extends BaseEntity {
 
     /**
      * 用户Id
      */
-    @Id
-    @GenericGenerator(name = "snowflakeId", strategy = "com.blog.common.jpa.config.IdGeneratorConfig")
-    @GeneratedValue(generator = "snowflakeId")
+    @TableId(type = IdType.ASSIGN_ID)
     private Long tagId;
 
     /**
@@ -40,8 +33,4 @@ public class TagEntity extends BaseEntity {
      */
     private Integer orderNo;
 
-    @Override
-    public Long primaryId() {
-        return this.tagId;
-    }
 }
