@@ -1,8 +1,6 @@
 package com.blog.biz.model.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.blog.common.base.entity.BaseEntity;
 
 import lombok.Data;
@@ -24,8 +22,14 @@ public class PostContentEntity extends BaseEntity {
     private Long postContentId;
 
     /**
+     * 文章Id
+     */
+    private Long postId;
+
+    /**
      * 文章内容
      */
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String content;
 
 }

@@ -17,9 +17,14 @@ public enum PostStatus {
 
     UNPUBLISHED("取消发布"),
 
-    DELETED("已删除"),
+    RECYCLE_BIN("位于回收站"),
 
     ;
 
     private String label;
+
+    @Override
+    public String toString(){
+        return this.name()+"-"+this.label;
+    }
 }

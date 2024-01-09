@@ -2,10 +2,7 @@ package com.blog.biz.model.entity;
 
 import java.time.LocalDateTime;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.blog.biz.enums.PostSource;
 import com.blog.biz.enums.PostStatus;
 import com.blog.common.base.entity.BaseEntity;
@@ -32,11 +29,13 @@ public class PostEntity extends BaseEntity {
     /**
      * 摘要
      */
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String summary;
 
     /**
      * 封面图片链接
      */
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String coverPictureUrl;
 
     /**
@@ -79,6 +78,7 @@ public class PostEntity extends BaseEntity {
     /**
      * 访问密码
      */
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String password;
 
 }

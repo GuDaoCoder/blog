@@ -1,11 +1,18 @@
 package com.blog.common.base.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.apache.commons.collections4.CollectionUtils;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.blog.common.base.entity.BaseEntity;
-import com.blog.common.base.request.PageRequest;
 import com.blog.common.base.service.IBaseCrudService;
 import com.blog.common.exception.DataNotFoundException;
 
@@ -21,16 +28,32 @@ public class BaseCrudServiceImpl<Mapper extends BaseMapper<Entity>, Entity exten
         return this.getOptById(id).orElseThrow(() -> new DataNotFoundException());
     }
 
+    @Override
+    public <T> Optional<Entity> getByField(SFunction<Entity, T> function, T value) {
+        LambdaQueryWrapper<Entity> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(function, value);
+        return Optional.ofNullable(baseMapper.selectOne(queryWrapper));
+    }
+
+    @Override
+    public <T> void removeByField(SFunction<Entity, T> function, T value) {
+        LambdaUpdateWrapper<Entity> updateWrapper = Wrappers.lambdaUpdate();
+        updateWrapper.eq(function, value);
+        baseMapper.delete(updateWrapper);
+    }
+
+    @Override
+    public <T> List<Entity> listByFields(SFunction<Entity, T> function, List<T> values) {
+        if (CollectionUtils.isEmpty(values)) {
+            return new ArrayList<>();
+        }
+        LambdaQueryWrapper<Entity> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.in(function, values);
+        return baseMapper.selectList(queryWrapper);
+    }
+
     protected String limitOneExpression() {
         return "limit 1";
     }
-
-    protected IPage<Entity> pageable(PageRequest pageRequest) {
-        IPage<Entity> pageable = new Page<>();
-        pageable.setCurrent(pageRequest.getPageNumber());
-        pageable.setSize(pageRequest.getPageSize());
-        return pageable;
-    }
-
 
 }

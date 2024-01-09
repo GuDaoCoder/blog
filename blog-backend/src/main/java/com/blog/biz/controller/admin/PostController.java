@@ -1,17 +1,20 @@
 package com.blog.biz.controller.admin;
 
 import com.blog.biz.model.request.CreatePostRequest;
+import com.blog.biz.model.request.PagePostRequest;
+import com.blog.biz.model.request.UpdatePostRequest;
 import com.blog.biz.model.response.CreatePostResponse;
+import com.blog.biz.model.response.PagePostResponse;
 import com.blog.biz.service.manager.PostManagerService;
+import com.blog.common.base.response.PageResponse;
 import com.blog.common.domain.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springdoc.api.annotations.ParameterObject;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author zouzhangpeng
@@ -28,7 +31,48 @@ public class PostController {
 
     @Operation(summary = "新增文章")
     @PostMapping
-    public Result<CreatePostResponse> create(@RequestBody CreatePostRequest request) {
+    public Result<CreatePostResponse> create(@Validated @RequestBody CreatePostRequest request) {
         return Result.success(postManagerService.create(request));
+    }
+
+    @Operation(summary = "查询文章列表")
+    @GetMapping
+    public Result<PageResponse<PagePostResponse>> page(@ParameterObject @Validated PagePostRequest request) {
+        return Result.success(postManagerService.page(request));
+    }
+
+    @Operation(summary = "更新文章")
+    @PutMapping("/{postId}")
+    public Result<Void> update(@PathVariable Long postId, @Validated @RequestBody UpdatePostRequest request) {
+        postManagerService.update(postId, request);
+        return Result.success();
+    }
+
+    @Operation(summary = "删除文章")
+    @DeleteMapping("/{postId}")
+    public Result<Void> delete(@PathVariable Long postId) {
+        postManagerService.delete(postId);
+        return Result.success();
+    }
+
+    @Operation(summary = "移到回收站")
+    @PutMapping("/{postId}/moveRecycleBin")
+    public Result<Void> moveRecycleBin(@PathVariable Long postId) {
+        postManagerService.moveRecycleBin(postId);
+        return Result.success();
+    }
+
+    @Operation(summary = "发布文章")
+    @PutMapping("/{postId}/publish")
+    public Result<Void> publish(@PathVariable Long postId) {
+        postManagerService.publish(postId);
+        return Result.success();
+    }
+
+    @Operation(summary = "取消发布文章")
+    @PutMapping("/{postId}/unpublished")
+    public Result<Void> unpublished(@PathVariable Long postId) {
+        postManagerService.unpublished(postId);
+        return Result.success();
     }
 }

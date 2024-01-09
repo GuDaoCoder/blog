@@ -20,4 +20,9 @@ public enum Gender {
     ;
 
     private String label;
+
+    @Override
+    public String toString(){
+        return this.name()+"-"+this.label;
+    }
 }

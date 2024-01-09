@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import com.blog.biz.enums.PostSource;
 import com.blog.biz.enums.PostStatus;
-import com.blog.common.base.request.CommonRequest;
+import com.blog.common.base.request.PageRequest;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -14,7 +14,7 @@ import lombok.Data;
  * @desc
  */
 @Data
-public class PagePostRequest extends CommonRequest {
+public class PagePostRequest extends PageRequest {
 
     @Schema(description = "标题")
     private String title;

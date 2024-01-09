@@ -13,9 +13,14 @@ public enum PostSource {
 
     ADD("正常新增"),
 
-    IMPORT_MD("markdown文档导入"),
+    IMPORT_MD("markdown导入"),
 
     ;
 
     private String label;
+
+    @Override
+    public String toString(){
+        return this.name()+"-"+this.label;
+    }
 }
