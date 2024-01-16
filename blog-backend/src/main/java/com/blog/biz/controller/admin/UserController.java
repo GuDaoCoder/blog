@@ -18,7 +18,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/admin/user")
 public class UserController {
 
-
     @Operation(summary = "新增用户")
     @PostMapping
     public Result<Void> create() {

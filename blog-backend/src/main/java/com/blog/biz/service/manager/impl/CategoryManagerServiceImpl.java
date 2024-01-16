@@ -104,7 +104,7 @@ public class CategoryManagerServiceImpl implements CategoryManagerService {
         categoryCrudService.getOneOrThrow(categoryId);
 
         if (postCrudService.categoryUsed(categoryId)) {
-            throw new BusinessException("分类已经被文章使用，无法删除");
+            throw new BusinessException("分类已经被使用，无法删除");
         }
 
         categoryCrudService.removeById(categoryId);

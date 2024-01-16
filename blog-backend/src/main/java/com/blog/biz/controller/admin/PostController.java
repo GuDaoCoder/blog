@@ -9,6 +9,7 @@ import com.blog.biz.service.manager.PostManagerService;
 import com.blog.common.base.response.PageResponse;
 import com.blog.common.domain.Result;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,35 +44,36 @@ public class PostController {
 
     @Operation(summary = "更新文章")
     @PutMapping("/{postId}")
-    public Result<Void> update(@PathVariable Long postId, @Validated @RequestBody UpdatePostRequest request) {
+    public Result<Void> update(@Parameter(description = "文章Id") @PathVariable Long postId,
+        @Validated @RequestBody UpdatePostRequest request) {
         postManagerService.update(postId, request);
         return Result.success();
     }
 
     @Operation(summary = "删除文章")
     @DeleteMapping("/{postId}")
-    public Result<Void> delete(@PathVariable Long postId) {
+    public Result<Void> delete(@Parameter(description = "文章Id") @PathVariable Long postId) {
         postManagerService.delete(postId);
         return Result.success();
     }
 
     @Operation(summary = "移到回收站")
     @PutMapping("/{postId}/moveRecycleBin")
-    public Result<Void> moveRecycleBin(@PathVariable Long postId) {
+    public Result<Void> moveRecycleBin(@Parameter(description = "文章Id") @PathVariable Long postId) {
         postManagerService.moveRecycleBin(postId);
         return Result.success();
     }
 
     @Operation(summary = "发布文章")
     @PutMapping("/{postId}/publish")
-    public Result<Void> publish(@PathVariable Long postId) {
+    public Result<Void> publish(@Parameter(description = "文章Id") @PathVariable Long postId) {
         postManagerService.publish(postId);
         return Result.success();
     }
 
     @Operation(summary = "取消发布文章")
     @PutMapping("/{postId}/unpublished")
-    public Result<Void> unpublished(@PathVariable Long postId) {
+    public Result<Void> unpublished(@Parameter(description = "文章Id") @PathVariable Long postId) {
         postManagerService.unpublished(postId);
         return Result.success();
     }

@@ -4,6 +4,7 @@ import com.blog.biz.model.request.UpdateCategoryRequest;
 import com.blog.biz.model.response.CategoryResponse;
 import com.blog.common.base.response.NodeResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +40,8 @@ public class CategoryController {
 
     @Operation(summary = "编辑分类")
     @PutMapping("/{categoryId}")
-    public Result<Void> update(@PathVariable Long categoryId, @Validated @RequestBody UpdateCategoryRequest request) {
+    public Result<Void> update(@Parameter(description = "分类Id") @PathVariable Long categoryId,
+        @Validated @RequestBody UpdateCategoryRequest request) {
         categoryManagerService.update(categoryId, request);
         return Result.success();
     }
@@ -52,7 +54,7 @@ public class CategoryController {
 
     @Operation(summary = "删除分类")
     @DeleteMapping("/{categoryId}")
-    public Result<Void> delete(@PathVariable Long categoryId){
+    public Result<Void> delete(@Parameter(description = "分类Id") @PathVariable Long categoryId) {
         categoryManagerService.delete(categoryId);
         return Result.success();
     }

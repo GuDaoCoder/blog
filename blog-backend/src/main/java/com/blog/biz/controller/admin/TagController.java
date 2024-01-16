@@ -54,7 +54,7 @@ public class TagController {
 
     @Operation(summary = "删除标签")
     @DeleteMapping("/{tagId}")
-    public Result<Void> delete(@PathVariable Long tagId) {
+    public Result<Void> delete(@Parameter(description = "标签Id") @PathVariable Long tagId) {
         tagManagerService.delete(tagId);
         return Result.success();
     }
