@@ -17,6 +17,7 @@ import com.blog.biz.model.request.UpdateCategoryRequest;
 import com.blog.biz.model.response.CategoryResponse;
 import com.blog.biz.model.response.CreateCategoryResponse;
 import com.blog.biz.service.crud.CategoryCrudService;
+import com.blog.biz.service.crud.PostCrudService;
 import com.blog.biz.service.manager.CategoryManagerService;
 import com.blog.common.base.response.NodeResponse;
 import com.blog.common.exception.BusinessException;
@@ -36,6 +37,8 @@ import lombok.extern.slf4j.Slf4j;
 public class CategoryManagerServiceImpl implements CategoryManagerService {
 
     private final CategoryCrudService categoryCrudService;
+
+    private final PostCrudService postCrudService;
 
     @Transactional(rollbackFor = RuntimeException.class)
     @Override
@@ -94,6 +97,18 @@ public class CategoryManagerServiceImpl implements CategoryManagerService {
         }
         entity.setCategoryName(request.getCategoryName());
         categoryCrudService.updateById(entity);
+    }
+
+    @Override
+    public void delete(Long categoryId) {
+        categoryCrudService.getOneOrThrow(categoryId);
+
+        if (postCrudService.categoryUsed(categoryId)) {
+            throw new BusinessException("分类已经被文章使用，无法删除");
+        }
+
+        categoryCrudService.removeById(categoryId);
+
     }
 
 }

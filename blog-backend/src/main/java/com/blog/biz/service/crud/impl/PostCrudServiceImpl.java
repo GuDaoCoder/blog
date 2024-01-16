@@ -40,4 +40,11 @@ public class PostCrudServiceImpl extends BaseCrudServiceImpl<PostMapper, PostEnt
         return baseMapper.selectPage(context.getPageable(), queryWrapper);
     }
 
+    @Override
+    public boolean categoryUsed(Long categoryId) {
+        LambdaQueryWrapper<PostEntity> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(PostEntity::getCategoryId, categoryId);
+        return baseMapper.selectCount(queryWrapper) > 0;
+    }
+
 }

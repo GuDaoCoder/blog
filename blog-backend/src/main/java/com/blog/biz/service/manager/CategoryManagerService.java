@@ -37,4 +37,11 @@ public interface CategoryManagerService {
      * @param request UpdateCategoryRequest
      */
     void update(Long categoryId, UpdateCategoryRequest request);
+
+    /**
+     * 删除分类
+     *
+     * @param categoryId Long
+     */
+    void delete(Long categoryId);
 }

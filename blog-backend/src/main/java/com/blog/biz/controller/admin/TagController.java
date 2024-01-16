@@ -52,6 +52,13 @@ public class TagController {
         return Result.success(tagManagerService.page(request));
     }
 
+    @Operation(summary = "删除标签")
+    @DeleteMapping("/{tagId}")
+    public Result<Void> delete(@PathVariable Long tagId) {
+        tagManagerService.delete(tagId);
+        return Result.success();
+    }
+
     @Operation(summary = "向上移动标签顺序")
     @PutMapping("/{tagId}/moveUp")
     public Result<Void> moveUp(@Parameter(description = "标签Id") @PathVariable Long tagId) {

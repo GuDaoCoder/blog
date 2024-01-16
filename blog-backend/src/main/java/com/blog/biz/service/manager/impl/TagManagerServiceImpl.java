@@ -14,6 +14,7 @@ import com.blog.biz.model.request.PageTagRequest;
 import com.blog.biz.model.request.UpdateTagRequest;
 import com.blog.biz.model.response.CreateTagResponse;
 import com.blog.biz.model.response.TagResponse;
+import com.blog.biz.service.crud.PostTagRelaCrudService;
 import com.blog.biz.service.crud.TagCrudService;
 import com.blog.biz.service.manager.TagManagerService;
 import com.blog.common.base.response.PageResponse;
@@ -33,6 +34,8 @@ import lombok.extern.slf4j.Slf4j;
 public class TagManagerServiceImpl implements TagManagerService {
 
     private final TagCrudService tagCrudService;
+
+    private final PostTagRelaCrudService postTagRelaCrudService;
 
     @Override
     public CreateTagResponse create(CreateTagRequest request) {
@@ -69,6 +72,18 @@ public class TagManagerServiceImpl implements TagManagerService {
     public PageResponse<TagResponse> page(PageTagRequest request) {
         IPage<TagEntity> page = tagCrudService.page(request.getTagName(), PageUtil.pageable(request));
         return PageUtil.toResult(page, TagConverter.INSTANCE::toResponse);
+    }
+
+    @Override
+    public void delete(Long tagId) {
+        tagCrudService.getOneOrThrow(tagId);
+
+        if (postTagRelaCrudService.tagUsed(tagId)){
+            throw new BusinessException("标签已被使用，无法删除");
+        }
+
+        tagCrudService.removeById(tagId);
+
     }
 
     @Transactional(rollbackFor = RuntimeException.class)

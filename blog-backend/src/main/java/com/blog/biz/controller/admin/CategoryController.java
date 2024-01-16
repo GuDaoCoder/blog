@@ -49,4 +49,11 @@ public class CategoryController {
     public Result<List<NodeResponse<CategoryResponse>>> tree() {
         return Result.success(categoryManagerService.tree());
     }
+
+    @Operation(summary = "删除分类")
+    @DeleteMapping("/{categoryId}")
+    public Result<Void> delete(@PathVariable Long categoryId){
+        categoryManagerService.delete(categoryId);
+        return Result.success();
+    }
 }

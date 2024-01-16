@@ -18,4 +18,14 @@ public interface PostCrudService extends IBaseCrudService<PostEntity> {
      * @return com.baomidou.mybatisplus.core.metadata.IPage<com.blog.biz.model.entity.PostEntity>
      */
     IPage<PostEntity> page(PagePostContext context);
+
+    /**
+     *
+     * 查询分类是否被使用
+     * 
+     * @param categoryId Long
+     * @return boolean
+     */
+    boolean categoryUsed(Long categoryId);
+
 }

@@ -38,6 +38,13 @@ public interface TagManagerService {
     PageResponse<TagResponse> page(PageTagRequest request);
 
     /**
+     * 删除标签
+     *
+     * @param tagId Long
+     */
+    void delete(Long tagId);
+
+    /**
      * 向上移动标签顺序
      * 
      * @param tagId Long
