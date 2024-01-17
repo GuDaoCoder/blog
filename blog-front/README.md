@@ -38,3 +38,12 @@ npm run dev
 ```sh
 npm run build
 ```
+
+
+## 引入组件
+
+### 引入scss
+增加 -D 参数，在开发环境中才使用 sass，因为生产环境，scss 文件会被编译成 css 文件，这个插件是用不到的
+```bash
+npm install sass -D
+```
