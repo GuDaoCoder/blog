@@ -58,3 +58,8 @@ npm install autoprefixer -D
 ```bash
 npm i pinia
 ```
+
+### 引入vue-router
+```bash
+npm i vue-router
+```
