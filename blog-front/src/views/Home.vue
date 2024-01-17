@@ -1,5 +1,5 @@
 <template>
-  <h1>test</h1>
+  <a-button type="primary">Primary</a-button>
 </template>
 
 <script setup>

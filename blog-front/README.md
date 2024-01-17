@@ -63,3 +63,8 @@ npm i pinia
 ```bash
 npm i vue-router
 ```
+
+### 引入arco-design
+```bash
+ npm i --save-dev @arco-design/web-vue
+```
