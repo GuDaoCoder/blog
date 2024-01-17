@@ -53,3 +53,8 @@ autoprefixer 是 postcss 的功能插件，给 web 项目自动增加 css 前缀
 ```bash
 npm install autoprefixer -D
 ```
+
+### 引入pinia
+```bash
+npm i pinia
+```
