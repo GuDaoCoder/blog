@@ -47,3 +47,9 @@ npm run build
 ```bash
 npm install sass -D
 ```
+
+### 引入autoprefiexer
+autoprefixer 是 postcss 的功能插件，给 web 项目自动增加 css 前缀，兼容各种浏览器
+```bash
+npm install autoprefixer -D
+```
