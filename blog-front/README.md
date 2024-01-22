@@ -68,3 +68,9 @@ npm i vue-router
 ```bash
  npm i --save-dev @arco-design/web-vue
 ```
+
+### 引入svg图标
+```bash
+npm install vite-plugin-svg-icons -D
+npm install fast-glob -D
+```
