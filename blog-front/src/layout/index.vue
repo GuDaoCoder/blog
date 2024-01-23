@@ -80,6 +80,7 @@ import Menu from '@/components/Menu/index.vue'
 
 .layout-content {
   min-height: 100vh;
+  padding-left: 200px;
   overflow-y: hidden;
   background-color: rgb(242, 243, 245);
   transition: padding 0.2s cubic-bezier(0.34, 0.69, 0.1, 1);
