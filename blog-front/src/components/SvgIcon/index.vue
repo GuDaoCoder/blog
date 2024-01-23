@@ -14,6 +14,6 @@ const props = withDefaults(defineProps<{
       size?: number
     }>(),
     {
-      size: () => 32
+      size: () => 16
     });
 </script>
