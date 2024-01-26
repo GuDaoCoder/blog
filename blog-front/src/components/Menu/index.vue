@@ -58,14 +58,7 @@ const menuData = reactive<Array<Menu>>([{
 /**
  * 菜单是否折叠
  */
-const collapsed = computed({
-  get() {
-    return appStore.menuCollapse
-  },
-  set(val: boolean) {
-
-  }
-})
+const collapsed = computed(() => appStore.menuCollapse)
 
 /**
  * 设置菜单是否折叠
