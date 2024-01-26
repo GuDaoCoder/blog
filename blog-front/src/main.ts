@@ -1,6 +1,6 @@
 import {createApp} from 'vue'
-import {createPinia} from 'pinia'
 import router from "@/router";
+import store from "@/store";
 import App from '@/App.vue'
 import '@/style/reset.scss'
 // arco-design组件
@@ -12,8 +12,8 @@ import 'virtual:svg-icons-register'
 import globalComponent from '@/components'
 
 createApp(App)
-    .use(createPinia())
     .use(router)
+    .use(store)
     .use(ArcoVue)
     .use(globalComponent)
     .mount('#app')

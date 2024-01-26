@@ -7,11 +7,13 @@
     <a-layout>
       <a-layout>
         <!-- Sider -->
-        <a-layout-sider class="layout-sider">
-          <Menu/>
+        <a-layout-sider class="layout-sider" :width="menuWidth">
+          <div class="menu-wrapper">
+            <Menu/>
+          </div>
         </a-layout-sider>
 
-        <a-layout class="layout-content">
+        <a-layout class="layout-content" :style="{paddingLeft: menuWidth+'px'}">
           <!-- TabBar -->
           <TabBar/>
 
@@ -34,6 +36,15 @@ import TabBar from '@/layout/components/TarBar/index.vue'
 import Footer from '@/layout/components/Footer/index.vue'
 import Content from '@/layout/components/Content/index.vue'
 import Menu from '@/components/Menu/index.vue'
+
+import {computed} from 'vue'
+import {useAppStore} from '@/store'
+
+const appStore = useAppStore()
+
+const menuWidth = computed(() => {
+  return appStore.menuCollapse ? 48 : appStore.menuWidth;
+});
 </script>
 
 <style lang="scss" scoped>
@@ -78,9 +89,33 @@ import Menu from '@/components/Menu/index.vue'
   }
 }
 
+.menu-wrapper {
+  height: 100%;
+  overflow: auto;
+  overflow-x: hidden;
+
+  :deep(.arco-menu) {
+    ::-webkit-scrollbar {
+      width: 12px;
+      height: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      border: 4px solid transparent;
+      background-clip: padding-box;
+      border-radius: 7px;
+      background-color: rgb(201, 205, 212);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: rgb(229, 230, 235);
+    }
+  }
+}
+
+
 .layout-content {
   min-height: 100vh;
-  padding-left: 200px;
   overflow-y: hidden;
   background-color: rgb(242, 243, 245);
   transition: padding 0.2s cubic-bezier(0.34, 0.69, 0.1, 1);

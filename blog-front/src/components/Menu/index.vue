@@ -2,6 +2,8 @@
   <a-menu
       :style="{ width: '100%', height: '100%' }"
       show-collapse-button
+      :collapsed="collapsed"
+      @collapse="setCollapse"
   >
     <menu-item :data="menuData"/>
   </a-menu>
@@ -9,8 +11,11 @@
 
 <script setup lang="ts">
 import MenuItem from '@/components/MenuItem/index.vue'
-import {reactive} from 'vue'
+import {reactive, computed} from 'vue'
 import type {Menu} from './type'
+import {useAppStore} from '@/store'
+
+const appStore = useAppStore();
 
 const menuData = reactive<Array<Menu>>([{
   code: "home",
@@ -28,7 +33,7 @@ const menuData = reactive<Array<Menu>>([{
       name: "分类管理",
       url: "/category-manage",
       icon: "",
-      children:[{
+      children: [{
         code: "category-manage1",
         name: "分类管理1",
         url: "/category-manage",
@@ -49,6 +54,26 @@ const menuData = reactive<Array<Menu>>([{
     }
   ]
 }]);
+
+/**
+ * 菜单是否折叠
+ */
+const collapsed = computed({
+  get() {
+    return appStore.menuCollapse
+  },
+  set(val: boolean) {
+
+  }
+})
+
+/**
+ * 设置菜单是否折叠
+ * @param val
+ */
+const setCollapse = (val: boolean) => {
+  appStore.updateSettings({menuCollapse: val})
+}
 </script>
 
 <style scoped>
