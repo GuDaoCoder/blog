@@ -1,16 +1,14 @@
 <template>
   <div class="container">
-    <div>
-      <a-breadcrumb class="container-breadcrumb">
-        <a-breadcrumb-item>
-          <svg-icon name="apps"/>
-        </a-breadcrumb-item>
-        <a-breadcrumb-item v-for="item in items" :key="item">
-          {{ item }}
-        </a-breadcrumb-item>
-      </a-breadcrumb>
-    </div>
-    <div>
+    <a-breadcrumb class="container-breadcrumb">
+      <a-breadcrumb-item>
+        <svg-icon name="apps"/>
+      </a-breadcrumb-item>
+      <a-breadcrumb-item v-for="item in items" :key="item">
+        {{ item }}
+      </a-breadcrumb-item>
+    </a-breadcrumb>
+    <div class="content">
       <slot/>
     </div>
   </div>
@@ -42,5 +40,11 @@ const items = computed(() => {
       color: rgb(78, 89, 105);
     }
   }
+}
+
+.content {
+  border: none;
+  border-radius: 4px;
+  background: #FFFFFF;
 }
 </style>
