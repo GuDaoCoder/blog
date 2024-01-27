@@ -2,7 +2,8 @@
   <div class="container">
     <a-breadcrumb class="container-breadcrumb">
       <a-breadcrumb-item>
-        <svg-icon name="apps"/>
+<!--        <svg-icon name="apps" :size.number="14"/>-->
+        <icon-apps />
       </a-breadcrumb-item>
       <a-breadcrumb-item v-for="item in items" :key="item">
         {{ item }}
