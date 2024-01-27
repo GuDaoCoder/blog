@@ -4,13 +4,13 @@
       <template #icon v-if="item.icon">
         <svg-icon :name="item.icon"/>
       </template>
-      {{ item.name }}
+      {{ item.title }}
     </a-menu-item>
     <a-sub-menu :key="item.code" v-if="item.children">
       <template #icon v-if="item.icon">
         <svg-icon :name="item.icon"/>
       </template>
-      <template #title> {{ item.name }}</template>
+      <template #title> {{ item.title }}</template>
       <menu-item :data="item.children"/>
     </a-sub-menu>
   </template>

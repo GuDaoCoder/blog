@@ -15,32 +15,32 @@
 import MenuItem from '@/components/MenuItem/index.vue'
 import {reactive, computed} from 'vue'
 import {useAppStore} from '@/store'
-import {useRouter} from 'vue-router'
+import {useRoute, useRouter} from 'vue-router'
 import type {Menu} from './type'
 
 const appStore = useAppStore();
 const router = useRouter();
-
+useRoute();
 const menuData = reactive<Array<Menu>>([{
   code: "admin-home",
-  name: "主页",
+  title: "主页",
   icon: "home"
 }, {
   code: "admin-blog-manage",
-  name: "博客管理",
+  title: "博客管理",
   icon: "blog",
   children: [
     {
       code: "admin-category-manage",
-      name: "分类管理"
+      title: "分类管理"
     },
     {
       code: "admin-tag-manage",
-      name: "标签管理"
+      title: "标签管理"
     },
     {
       code: "admin-post-manage",
-      name: "文章管理"
+      title: "文章管理"
     }
   ]
 }]);
@@ -68,7 +68,7 @@ const clickMenuItem = (code: string) => {
 </script>
 
 <style scoped lang="scss">
-.menu{
+.menu {
   width: 100%;
   height: 100%;
 }

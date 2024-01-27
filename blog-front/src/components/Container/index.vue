@@ -20,7 +20,7 @@ import {computed} from "vue";
 
 const route = useRoute()
 const items = computed(() => {
-  return [...new Set(route.matched.map(obj => obj.meta.title).filter(obj => obj !== undefined))];
+  return [...new Set(route.matched.filter(obj => !obj.meta.hideMenu && obj.meta.title).map(obj => obj.meta.title))];
 })
 
 </script>

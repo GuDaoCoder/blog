@@ -1,7 +1,6 @@
 export interface Menu {
     code: string,
-    name: string,
-    url?: string,
+    title: string,
     icon?: string,
     children?: Array<Menu>
 }
