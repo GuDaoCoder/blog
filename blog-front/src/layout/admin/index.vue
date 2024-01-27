@@ -72,7 +72,7 @@ const contentStyle = computed(() => {
   z-index: 100;
   width: 100%;
   height: 60px;
-  background: aqua;
+  background-color: #FFFFFF;
 }
 
 .layout-sider {

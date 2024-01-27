@@ -1,7 +1,8 @@
 <template>
   <a-menu
-      :style="{ width: '100%', height: '100%' }"
+      class="menu"
       show-collapse-button
+      level-indent="40"
       :collapsed="collapsed"
       @collapse="setCollapse"
       @menu-item-click="clickMenuItem"
@@ -66,6 +67,9 @@ const clickMenuItem = (code: string) => {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.menu{
+  width: 100%;
+  height: 100%;
+}
 </style>
