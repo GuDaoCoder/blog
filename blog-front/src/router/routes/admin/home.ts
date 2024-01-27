@@ -1,6 +1,7 @@
 import {ADMIN_LAYOUT} from '../base'
+import type {RouteRaw} from "@/router/routes/type";
 
-const HOME = {
+const HOME: RouteRaw = {
     path: '/admin',
     component: ADMIN_LAYOUT,
     redirect: '/admin/home',
@@ -8,7 +9,11 @@ const HOME = {
         {
             name: 'admin-home',
             path: "/admin/home",
-            component: () => import(/* webpackChunkName: "home" */ "@/views/admin/home/index.vue")
+            component: () => import(/* webpackChunkName: "home" */ "@/views/admin/home/index.vue"),
+            meta: {
+                icon: 'home',
+                title: '主页'
+            },
         }]
 }
 

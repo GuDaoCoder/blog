@@ -1,6 +1,6 @@
 <template>
   <Container>
-    <h1>主页</h1>
+    <span>主页</span>
   </Container>
 </template>
 
