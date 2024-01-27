@@ -2,7 +2,7 @@
   <a-menu
       class="menu"
       show-collapse-button
-      level-indent="40"
+      level-indent.number="40"
       :collapsed="collapsed"
       @collapse="setCollapse"
       @menu-item-click="clickMenuItem"
