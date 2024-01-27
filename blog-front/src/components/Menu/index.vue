@@ -4,6 +4,7 @@
       show-collapse-button
       :collapsed="collapsed"
       @collapse="setCollapse"
+      @menu-item-click="clickMenuItem"
   >
     <menu-item :data="menuData"/>
   </a-menu>
@@ -12,45 +13,33 @@
 <script setup lang="ts">
 import MenuItem from '@/components/MenuItem/index.vue'
 import {reactive, computed} from 'vue'
-import type {Menu} from './type'
 import {useAppStore} from '@/store'
+import {useRouter} from 'vue-router'
+import type {Menu} from './type'
 
 const appStore = useAppStore();
+const router = useRouter();
 
 const menuData = reactive<Array<Menu>>([{
-  code: "home",
+  code: "admin-home",
   name: "主页",
-  url: "/home",
   icon: "home"
 }, {
-  code: "blog-manage",
+  code: "admin-blog-manage",
   name: "博客管理",
-  url: "",
   icon: "blog",
   children: [
     {
-      code: "category-manage",
-      name: "分类管理",
-      url: "/category-manage",
-      icon: "",
-      children: [{
-        code: "category-manage1",
-        name: "分类管理1",
-        url: "/category-manage",
-        icon: ""
-      }]
+      code: "admin-category-manage",
+      name: "分类管理"
     },
     {
-      code: "post-manage",
-      name: "文章管理",
-      url: "/post-manage",
-      icon: ""
+      code: "admin-tag-manage",
+      name: "标签管理"
     },
     {
-      code: "tag-manage",
-      name: "标签管理",
-      url: "/tag-manage",
-      icon: ""
+      code: "admin-post-manage",
+      name: "文章管理"
     }
   ]
 }]);
@@ -66,6 +55,14 @@ const collapsed = computed(() => appStore.menuCollapse)
  */
 const setCollapse = (val: boolean) => {
   appStore.updateSettings({menuCollapse: val})
+}
+
+/**
+ * 点击菜单项
+ * @param code
+ */
+const clickMenuItem = (code: string) => {
+  router.push({name: code})
 }
 </script>
 

@@ -13,10 +13,9 @@
           </div>
         </a-layout-sider>
 
-        <a-layout class="layout-content" :style="{paddingLeft: menuWidth+'px'}">
+        <a-layout class="layout-content" :style="contentStyle">
           <!-- TabBar -->
-          <TabBar/>
-
+          <!--          <TabBar/>-->
           <!-- Content -->
           <a-layout-content>
             <Content/>
@@ -31,10 +30,9 @@
 </template>
 
 <script setup lang="ts">
-import NavBar from '@/layout/components/NavBar/index.vue'
-import TabBar from '@/layout/components/TarBar/index.vue'
-import Footer from '@/layout/components/Footer/index.vue'
-import Content from '@/layout/components/Content/index.vue'
+import NavBar from '@/layout/admin/components/NavBar/index.vue'
+import Footer from '@/layout/admin/components/Footer/index.vue'
+import Content from '@/layout/admin/components/Content/index.vue'
 import Menu from '@/components/Menu/index.vue'
 
 import {computed} from 'vue'
@@ -42,9 +40,22 @@ import {useAppStore} from '@/store'
 
 const appStore = useAppStore()
 
+/**
+ * 菜单栏宽度
+ */
 const menuWidth = computed(() => {
   return appStore.menuCollapse ? 48 : appStore.menuWidth;
 });
+
+/**
+ * 内容区样式
+ */
+const contentStyle = computed(() => {
+  const paddingLeft = {paddingLeft: `${menuWidth.value}px`}
+  // todo：适配tabBar
+  const paddingTop = {paddingTop: '60px'}
+  return {...paddingLeft, ...paddingTop}
+})
 </script>
 
 <style lang="scss" scoped>
