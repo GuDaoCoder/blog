@@ -3,6 +3,7 @@ import type {RouteRaw} from "@/router/routes/type";
 
 const BLOG_MANGE: RouteRaw = {
     path: '/admin/blog-manage',
+    name: 'admin-blog-manage',
     component: ADMIN_LAYOUT,
     redirect: '/admin/category-manage',
     meta: {

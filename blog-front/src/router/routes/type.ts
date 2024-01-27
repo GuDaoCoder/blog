@@ -13,7 +13,7 @@ export interface RouteMeta {
 export interface RouteRaw {
     path: string,
     component: Component | string,
-    name?: string,
+    name: string,
     redirect?: string,
     children?: Array<RouteRaw>
     meta?: RouteMeta

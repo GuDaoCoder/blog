@@ -3,6 +3,7 @@ import type {RouteRaw} from "@/router/routes/type";
 
 const HOME: RouteRaw = {
     path: '/admin',
+    name: 'admin',
     component: ADMIN_LAYOUT,
     redirect: '/admin/home',
     children: [

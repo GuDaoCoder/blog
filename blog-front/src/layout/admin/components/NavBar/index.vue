@@ -44,7 +44,7 @@
               </a-space>
             </a-doption>
             <a-doption>
-              <a-space>
+              <a-space @click="handleLogout">
                 <svg-icon name="logout"/>
                 <span>
                   登出
@@ -59,9 +59,15 @@
 </template>
 <script setup lang="ts">
 import {ref} from "vue";
+import {useRouter} from "vue-router";
+
+const router = useRouter()
 
 const avatar = ref('https://img.touxiangwu.com/zb_users/upload/2023/06/202306191687149562582619.jpg')
 
+const handleLogout = () => {
+  router.push({name: "login"})
+}
 </script>
 <style scoped lang="scss">
 .navbar {
