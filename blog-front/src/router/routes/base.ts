@@ -1,0 +1,1 @@
+export const ADMIN_LAYOUT = () => import("@/layout/admin/index.vue");
