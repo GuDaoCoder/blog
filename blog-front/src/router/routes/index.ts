@@ -1,4 +1,16 @@
-import type {RouteRaw} from "@/router/routes/type";
+import type {RouteRecordNormalized} from "vue-router";
 
-const modules = import.meta.glob('./admin/*.ts', {eager: true});
-export const adminRoutes:Array<RouteRaw> = Object.keys(modules).map(key => modules[key].default);
+const modules = import.meta.glob('./admin/*.ts', { eager: true });
+
+function formatModules(_modules: any, result: RouteRecordNormalized[]) {
+    Object.keys(_modules).forEach((key) => {
+        const defaultModule = _modules[key].default;
+        if (!defaultModule) return;
+        const moduleList = Array.isArray(defaultModule)
+            ? [...defaultModule]
+            : [defaultModule];
+        result.push(...moduleList);
+    });
+    return result;
+}
+export const adminRoutes:RouteRecordNormalized[] = formatModules(modules, []);
