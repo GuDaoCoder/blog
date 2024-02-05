@@ -1,15 +1,12 @@
+import axios from 'axios';
 import type {AxiosResponse, InternalAxiosRequestConfig} from "axios";
-import axios from "axios";
 import {Notification} from '@arco-design/web-vue';
 
-const service = axios.create({
-    baseURL: '/api',
-    timeout: 50000,
-    headers: {"Content-Type": "application/json;charset=utf-8"},
-});
+axios.defaults.baseURL = '/api'
+axios.defaults.timeout = 5000
 
 // 请求拦截器
-service.interceptors.request.use(
+axios.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
         return config;
     },
@@ -19,7 +16,7 @@ service.interceptors.request.use(
 );
 
 // 响应拦截器
-service.interceptors.response.use(
+axios.interceptors.response.use(
     (response: AxiosResponse) => {
         // 响应数据为二进制流处理(Excel导出)
         if (response.data instanceof ArrayBuffer) {
@@ -29,7 +26,6 @@ service.interceptors.response.use(
     },
     (error: any) => {
         if (error.response) {
-            debugger
             switch (error.response.status) {
                 case 500:
                     Notification.error("服务器异常")
@@ -47,5 +43,3 @@ service.interceptors.response.use(
     }
 );
 
-// 导出 axios 实例
-export default service;

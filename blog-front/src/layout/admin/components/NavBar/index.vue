@@ -60,13 +60,18 @@
 <script setup lang="ts">
 import {ref} from "vue";
 import {useRouter} from "vue-router";
+import {logout} from "@/api/login";
+import {clearToken} from "@/utils/auth";
 
 const router = useRouter()
 
 const avatar = ref('https://img.touxiangwu.com/zb_users/upload/2023/06/202306191687149562582619.jpg')
 
 const handleLogout = () => {
-  router.push({name: "login"})
+  logout().then(() => {
+    clearToken()
+    router.push({name: "login"})
+  })
 }
 </script>
 <style scoped lang="scss">

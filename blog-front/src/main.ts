@@ -11,6 +11,8 @@ import '@arco-design/web-vue/dist/arco.css';
 import 'virtual:svg-icons-register'
 // 全局组件
 import globalComponent from '@/components'
+// axios
+import "@/request"
 
 createApp(App)
     .use(router)
