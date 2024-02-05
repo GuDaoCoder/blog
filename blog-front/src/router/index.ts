@@ -1,5 +1,6 @@
 import {createRouter, createWebHistory} from "vue-router";
 import {adminRoutes} from './routes'
+import {getToken} from "@/utils/auth";
 
 
 const router = createRouter({
@@ -8,6 +9,17 @@ const router = createRouter({
         ...adminRoutes
     ]
 });
+
+/**
+ * 导航守卫
+ */
+router.beforeEach((to, from, next) => {
+    if (to.name !== "login" && !getToken()) {
+        next({name: 'login'})
+    } else {
+        next()
+    }
+})
 
 export default router;
 
