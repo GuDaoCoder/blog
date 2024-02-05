@@ -36,15 +36,24 @@ axios.interceptors.response.use(
             switch (error.response.status) {
                 case 500:
                     Notification.error("服务器异常")
+                    break;
                 case 404:
                     Notification.error("Not Found")
+                    break;
                 case 403:
                     Notification.error("Forbidden")
+                    break;
                 case 401:
                     Notification.error("Unauthorized")
+                    break;
                     router.push({name: 'login'})
+                    break;
                 case 400:
                     Notification.error(error.response.data.errorMsg || "Error")
+                    break;
+                default:
+                    Notification.error("Error")
+                    break;
             }
         }
         return Promise.reject(error);
