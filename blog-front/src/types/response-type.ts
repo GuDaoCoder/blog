@@ -1,4 +1,4 @@
-export interface ResultType<T = unknown> {
+export interface BaseResponseType<T = unknown> {
     requestId?: string,
     timestamp?: number,
     errorMsg?: string,

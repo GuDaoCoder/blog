@@ -1,27 +1,34 @@
 import axios from 'axios';
-import type {AxiosResponse, InternalAxiosRequestConfig} from "axios";
+import type {AxiosRequestConfig, AxiosResponse} from 'axios';
 import {Notification} from '@arco-design/web-vue';
+import {getToken} from "@/utils/auth";
+import type {BaseResponseType} from "@/types/response-type";
+import router from "@/router";
 
 axios.defaults.baseURL = '/api'
 axios.defaults.timeout = 5000
 
 // 请求拦截器
 axios.interceptors.request.use(
-    (config: InternalAxiosRequestConfig) => {
+    (config: AxiosRequestConfig) => {
+        const token = getToken();
+        if (token) {
+            if (!config.headers) {
+                config.headers = {};
+            }
+            config.headers['Authorization'] = token;
+        }
         return config;
     },
-    (error: any) => {
+    (error) => {
+        // do something
         return Promise.reject(error);
     }
 );
 
 // 响应拦截器
 axios.interceptors.response.use(
-    (response: AxiosResponse) => {
-        // 响应数据为二进制流处理(Excel导出)
-        if (response.data instanceof ArrayBuffer) {
-            return response;
-        }
+    (response: AxiosResponse<BaseResponseType>) => {
         return response.data;
     },
     (error: any) => {
@@ -35,6 +42,7 @@ axios.interceptors.response.use(
                     Notification.error("Forbidden")
                 case 401:
                     Notification.error("Unauthorized")
+                    router.push({name: 'login'})
                 case 400:
                     Notification.error(error.response.data.errorMsg || "Error")
             }
