@@ -203,7 +203,6 @@
                 <version>${spring-boot.version}</version>
                 <configuration>
                     <mainClass>com.blog.BlogBackendApplication</mainClass>
-                    <skip>true</skip>
                 </configuration>
                 <executions>
                     <execution>
