@@ -1,5 +1,5 @@
 server:
-  port: 8173
+  port: ${server_port:8173}
   servlet:
     context-path: /
 
@@ -8,9 +8,9 @@ spring:
     name: blog
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/blog?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Shanghai
-    username: root
-    password: root
+    url: jdbc:mysql://${database_host:127.0.0.1}:${database_port:3306}/blog?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Shanghai
+    username: ${database_username:root}
+    password: ${database_password:root}
     type: com.alibaba.druid.pool.DruidDataSource
     # 数据源连接池配置
     druid:
@@ -67,13 +67,13 @@ spring:
   # redis单机配置
   redis:
     # 地址
-    host: 127.0.0.1
+    host: ${redis_host:127.0.0.1}
     # 端口
-    port: 6379
+    port: ${redis_port:6379}
     # 数据库索引
     database: 0
     # 密码
-    password: pass
+    password: ${redis_password:password}
     # 超时时间
     timeout: 10s
     # 是否开启ssl
