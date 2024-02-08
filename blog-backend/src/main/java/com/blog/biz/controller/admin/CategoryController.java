@@ -1,7 +1,7 @@
 package com.blog.biz.controller.admin;
 
 import com.blog.biz.model.request.UpdateCategoryRequest;
-import com.blog.biz.model.response.CategoryResponse;
+import com.blog.biz.model.response.CategoryNodeResponse;
 import com.blog.common.base.response.NodeResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -48,7 +48,7 @@ public class CategoryController {
 
     @Operation(summary = "查询分类树形结构")
     @GetMapping
-    public Result<List<NodeResponse<CategoryResponse>>> tree() {
+    public Result<List<CategoryNodeResponse>> tree() {
         return Result.success(categoryManagerService.tree());
     }
 

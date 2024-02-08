@@ -1,6 +1,7 @@
 package com.blog.biz.model.response;
 
 import com.blog.common.base.response.CommonResponse;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,5 +22,6 @@ public class CreateCategoryResponse extends CommonResponse {
     private static final long serialVersionUID = 9116953955110935038L;
 
     @Schema(description = "分类Id")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long categoryId;
 }

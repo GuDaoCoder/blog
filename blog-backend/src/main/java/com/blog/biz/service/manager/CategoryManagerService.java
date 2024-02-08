@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.blog.biz.model.request.CreateCategoryRequest;
 import com.blog.biz.model.request.UpdateCategoryRequest;
-import com.blog.biz.model.response.CategoryResponse;
+import com.blog.biz.model.response.CategoryNodeResponse;
 import com.blog.biz.model.response.CreateCategoryResponse;
 import com.blog.common.base.response.NodeResponse;
 
@@ -26,9 +26,9 @@ public interface CategoryManagerService {
      * 查询分类树形结构
      *
      * @param
-     * @return java.util.List<com.blog.common.base.response.NodeResponse<com.blog.biz.model.response.CategoryResponse>>
+     * @return java.util.List<com.blog.biz.model.response.CategoryResponse>
      */
-    List<NodeResponse<CategoryResponse>> tree();
+    List<CategoryNodeResponse> tree();
 
     /**
      * 更新分类

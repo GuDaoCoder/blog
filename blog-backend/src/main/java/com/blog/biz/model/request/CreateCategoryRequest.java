@@ -1,6 +1,7 @@
 package com.blog.biz.model.request;
 
 import com.blog.common.base.request.CommonRequest;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,6 +25,7 @@ public class CreateCategoryRequest extends CommonRequest {
     private String categoryName;
 
     @Schema(description = "上级分类")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long parentId;
 
 }

@@ -14,7 +14,7 @@ import com.blog.biz.convert.CategoryConverter;
 import com.blog.biz.model.entity.CategoryEntity;
 import com.blog.biz.model.request.CreateCategoryRequest;
 import com.blog.biz.model.request.UpdateCategoryRequest;
-import com.blog.biz.model.response.CategoryResponse;
+import com.blog.biz.model.response.CategoryNodeResponse;
 import com.blog.biz.model.response.CreateCategoryResponse;
 import com.blog.biz.service.crud.CategoryCrudService;
 import com.blog.biz.service.crud.PostCrudService;
@@ -77,11 +77,10 @@ public class CategoryManagerServiceImpl implements CategoryManagerService {
     }
 
     @Override
-    public List<NodeResponse<CategoryResponse>> tree() {
-        List<CategoryResponse> data = categoryCrudService.list().stream().map(CategoryConverter.INSTANCE::toResponse)
-            .sorted(Comparator.comparing(CategoryResponse::getOrderNo)).collect(Collectors.toList());
-        return TreeUtil.build(data, BizConstant.ROOT_ID, CategoryResponse::getCategoryId,
-            CategoryResponse::getCategoryName, CategoryResponse::getParentId);
+    public List<CategoryNodeResponse> tree() {
+        List<CategoryNodeResponse> data = categoryCrudService.list().stream().map(CategoryConverter.INSTANCE::toResponse)
+            .sorted(Comparator.comparing(CategoryNodeResponse::getOrderNo)).collect(Collectors.toList());
+        return TreeUtil.build(data, BizConstant.ROOT_ID, CategoryNodeResponse::getCategoryId, CategoryNodeResponse::getParentId);
     }
 
     @Override

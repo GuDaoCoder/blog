@@ -1,7 +1,7 @@
 package com.blog.biz.convert;
 
 import com.blog.biz.model.request.CreateCategoryRequest;
-import com.blog.biz.model.response.CategoryResponse;
+import com.blog.biz.model.response.CategoryNodeResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -18,5 +18,5 @@ public interface CategoryConverter {
 
     CategoryEntity toEntity(CreateCategoryRequest request);
 
-    CategoryResponse toResponse(CategoryEntity entity);
+    CategoryNodeResponse toResponse(CategoryEntity entity);
 }
