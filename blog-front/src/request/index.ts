@@ -45,7 +45,6 @@ axios.interceptors.response.use(
                     break;
                 case 401:
                     Notification.error("Unauthorized")
-                    break;
                     router.push({name: 'login'})
                     break;
                 case 400:
