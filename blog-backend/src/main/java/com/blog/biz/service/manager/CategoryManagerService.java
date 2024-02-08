@@ -2,11 +2,11 @@ package com.blog.biz.service.manager;
 
 import java.util.List;
 
+import com.blog.biz.model.request.CategoryTreeRequest;
 import com.blog.biz.model.request.CreateCategoryRequest;
 import com.blog.biz.model.request.UpdateCategoryRequest;
-import com.blog.biz.model.response.CategoryNodeResponse;
+import com.blog.biz.model.response.CategoryTreeResponse;
 import com.blog.biz.model.response.CreateCategoryResponse;
-import com.blog.common.base.response.NodeResponse;
 
 /**
  * @author zouzhangpeng
@@ -28,7 +28,7 @@ public interface CategoryManagerService {
      * @param
      * @return java.util.List<com.blog.biz.model.response.CategoryResponse>
      */
-    List<CategoryNodeResponse> tree();
+    List<CategoryTreeResponse> tree(CategoryTreeRequest request);
 
     /**
      * 更新分类

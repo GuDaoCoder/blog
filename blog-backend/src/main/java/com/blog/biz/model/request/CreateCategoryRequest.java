@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serial;
 
 /**
@@ -27,5 +28,9 @@ public class CreateCategoryRequest extends CommonRequest {
     @Schema(description = "上级分类")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long parentId;
+
+    @NotNull(message = "是否启用不能为空")
+    @Schema(description = "是否启用")
+    private Boolean enabled;
 
 }

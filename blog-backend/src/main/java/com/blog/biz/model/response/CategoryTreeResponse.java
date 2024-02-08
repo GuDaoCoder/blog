@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serial;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
  * @desc
  */
 @Data
-public class CategoryNodeResponse extends CommonResponse implements TreeNode<CategoryNodeResponse> {
+public class CategoryTreeResponse extends CommonResponse implements TreeNode<CategoryTreeResponse> {
 
     @Serial
     private static final long serialVersionUID = -5751674634148658873L;
@@ -39,11 +40,18 @@ public class CategoryNodeResponse extends CommonResponse implements TreeNode<Cat
     @Schema(description = "级别")
     private Integer level;
 
+    @Schema(description = "是否启用")
+    private Boolean enabled;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @Schema(description = "更新时间")
+    private LocalDateTime updateTime;
+
     @Schema(description = "子级数据")
-    private List<CategoryNodeResponse> children;
+    private List<CategoryTreeResponse> children;
 
     @Override
-    public void buildChildren(List<CategoryNodeResponse> children) {
+    public void buildChildren(List<CategoryTreeResponse> children) {
         this.children = children;
     }
 }

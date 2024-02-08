@@ -1,10 +1,13 @@
 package com.blog.biz.service.manager.impl;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import com.blog.biz.model.request.CategoryTreeRequest;
+import com.blog.biz.model.response.CategoryTreeResponse;
+import com.blog.common.constant.SymbolConstants;
+import com.blog.common.util.StreamUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,12 +17,10 @@ import com.blog.biz.convert.CategoryConverter;
 import com.blog.biz.model.entity.CategoryEntity;
 import com.blog.biz.model.request.CreateCategoryRequest;
 import com.blog.biz.model.request.UpdateCategoryRequest;
-import com.blog.biz.model.response.CategoryNodeResponse;
 import com.blog.biz.model.response.CreateCategoryResponse;
 import com.blog.biz.service.crud.CategoryCrudService;
 import com.blog.biz.service.crud.PostCrudService;
 import com.blog.biz.service.manager.CategoryManagerService;
-import com.blog.common.base.response.NodeResponse;
 import com.blog.common.exception.BusinessException;
 import com.blog.common.util.SnowflakeUtil;
 import com.blog.common.util.TreeUtil;
@@ -52,15 +53,14 @@ public class CategoryManagerServiceImpl implements CategoryManagerService {
         CategoryEntity entity = CategoryConverter.INSTANCE.toEntity(request);
 
         // 手动设置主键，方便设置fullId
-        entity.setCategoryId((Long)SnowflakeUtil.getId());
+        entity.setCategoryId((Long) SnowflakeUtil.getId());
 
         if (Objects.nonNull(request.getParentId())) {
             // 上级分类
-            CategoryEntity parentEntity = categoryCrudService.getOptById(request.getParentId())
-                .orElseThrow(() -> new BusinessException("上级分类信息不存在"));
+            CategoryEntity parentEntity = categoryCrudService.getOptById(request.getParentId()).orElseThrow(() -> new BusinessException("上级分类信息不存在"));
             entity.setParentId(parentEntity.getCategoryId());
             entity.setLevel(parentEntity.getLevel() + 1);
-            entity.setFullId(parentEntity.getFullId() + entity.getCategoryId());
+            entity.setFullId(parentEntity.getFullId() + SymbolConstants.CENTER_LINE + entity.getCategoryId());
         } else {
             entity.setParentId(BizConstant.ROOT_ID);
             entity.setLevel(BizConstant.FIRST_LEVEL);
@@ -77,10 +77,29 @@ public class CategoryManagerServiceImpl implements CategoryManagerService {
     }
 
     @Override
-    public List<CategoryNodeResponse> tree() {
-        List<CategoryNodeResponse> data = categoryCrudService.list().stream().map(CategoryConverter.INSTANCE::toResponse)
-            .sorted(Comparator.comparing(CategoryNodeResponse::getOrderNo)).collect(Collectors.toList());
-        return TreeUtil.build(data, BizConstant.ROOT_ID, CategoryNodeResponse::getCategoryId, CategoryNodeResponse::getParentId);
+    public List<CategoryTreeResponse> tree(CategoryTreeRequest request) {
+        List<CategoryEntity> entities = categoryCrudService.findAllByCondition(request.getCategoryName(), request.getEnabled());
+        if (CollectionUtils.isNotEmpty(entities)) {
+            List<Long> categoryIds = new ArrayList<>();
+            entities.forEach(o -> {
+                List<Long> ids = Arrays.stream(o.getFullId().split(SymbolConstants.CENTER_LINE)).map(Long::valueOf).collect(Collectors.toList());
+                if (CollectionUtils.isNotEmpty(ids)) {
+                    categoryIds.addAll(ids);
+                }
+            });
+            categoryIds.removeAll(entities.stream().map(CategoryEntity::getCategoryId).toList());
+            if (CollectionUtils.isNotEmpty(categoryIds)) {
+                List<CategoryEntity> otherEntities = categoryCrudService.listByIds(categoryIds);
+                if (CollectionUtils.isNotEmpty(otherEntities)) {
+                    entities.addAll(otherEntities);
+                }
+            }
+        }
+        List<CategoryTreeResponse> data = entities.stream()
+                .map(CategoryConverter.INSTANCE::toResponse)
+                .sorted(Comparator.comparing(CategoryTreeResponse::getOrderNo))
+                .collect(Collectors.toList());
+        return TreeUtil.build(data, BizConstant.ROOT_ID, CategoryTreeResponse::getCategoryId, CategoryTreeResponse::getParentId);
     }
 
     @Override
@@ -88,8 +107,7 @@ public class CategoryManagerServiceImpl implements CategoryManagerService {
         CategoryEntity entity = categoryCrudService.getById(categoryId);
         if (!StringUtils.equals(request.getCategoryName(), entity.getCategoryName())) {
             // 校验名称重复
-            CategoryEntity existsEntity =
-                categoryCrudService.findByCategoryName(request.getCategoryName()).orElse(null);
+            CategoryEntity existsEntity = categoryCrudService.findByCategoryName(request.getCategoryName()).orElse(null);
             if (Objects.nonNull(existsEntity)) {
                 throw new BusinessException("分类名称已存在");
             }

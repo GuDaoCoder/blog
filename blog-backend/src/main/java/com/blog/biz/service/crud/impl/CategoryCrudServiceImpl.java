@@ -1,7 +1,10 @@
 package com.blog.biz.service.crud.impl;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -20,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class CategoryCrudServiceImpl extends BaseCrudServiceImpl<CategoryMapper, CategoryEntity>
-    implements CategoryCrudService {
+        implements CategoryCrudService {
 
     @Override
     public Optional<CategoryEntity> findByCategoryName(String categoryName) {
@@ -34,5 +37,13 @@ public class CategoryCrudServiceImpl extends BaseCrudServiceImpl<CategoryMapper,
         LambdaQueryWrapper<CategoryEntity> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.eq(CategoryEntity::getParentId, parentId).orderByDesc(CategoryEntity::getOrderNo);
         return Optional.ofNullable(baseMapper.selectOne(queryWrapper));
+    }
+
+    @Override
+    public List<CategoryEntity> findAllByCondition(String categoryName, Boolean enabled) {
+        LambdaQueryWrapper<CategoryEntity> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.like(StringUtils.isNotBlank(categoryName), CategoryEntity::getCategoryName, categoryName)
+                .eq(Objects.nonNull(enabled), CategoryEntity::getEnabled, enabled);
+        return baseMapper.selectList(queryWrapper);
     }
 }

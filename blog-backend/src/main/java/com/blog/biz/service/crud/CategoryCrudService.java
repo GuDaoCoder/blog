@@ -3,6 +3,7 @@ package com.blog.biz.service.crud;
 import com.blog.biz.model.entity.CategoryEntity;
 import com.blog.common.base.service.IBaseCrudService;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -26,4 +27,6 @@ public interface CategoryCrudService extends IBaseCrudService<CategoryEntity> {
      * @return java.util.Optional<com.blog.biz.model.entity.CategoryEntity>
      */
     Optional<CategoryEntity> findLatest(Long parentId);
+
+    List<CategoryEntity> findAllByCondition(String categoryName,Boolean enabled);
 }

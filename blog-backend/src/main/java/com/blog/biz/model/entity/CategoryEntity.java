@@ -45,4 +45,9 @@ public class CategoryEntity extends BaseEntity {
      */
     private Integer level;
 
+    /**
+     * 是否启用
+     */
+    private Boolean enabled;
+
 }
