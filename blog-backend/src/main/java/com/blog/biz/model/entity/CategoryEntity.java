@@ -28,7 +28,7 @@ public class CategoryEntity extends BaseEntity {
     /**
      * 上级分类
      */
-    private Long parentId;
+    private Long parentCategoryId;
 
     /**
      * 全路径Id

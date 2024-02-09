@@ -27,7 +27,7 @@ public class CreateCategoryRequest extends CommonRequest {
 
     @Schema(description = "上级分类")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private Long parentId;
+    private Long parentCategoryId;
 
     @NotNull(message = "是否启用不能为空")
     @Schema(description = "是否启用")

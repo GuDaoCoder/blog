@@ -29,7 +29,7 @@ public class CategoryTreeResponse extends CommonResponse implements TreeNode<Cat
 
     @Schema(description = "上级分类")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private Long parentId;
+    private Long parentCategoryId;
 
     @Schema(description = "全路径Id")
     private String fullId;

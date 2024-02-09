@@ -55,20 +55,20 @@ public class CategoryManagerServiceImpl implements CategoryManagerService {
         // 手动设置主键，方便设置fullId
         entity.setCategoryId((Long) SnowflakeUtil.getId());
 
-        if (Objects.nonNull(request.getParentId())) {
+        if (Objects.nonNull(request.getParentCategoryId())) {
             // 上级分类
-            CategoryEntity parentEntity = categoryCrudService.getOptById(request.getParentId()).orElseThrow(() -> new BusinessException("上级分类信息不存在"));
-            entity.setParentId(parentEntity.getCategoryId());
+            CategoryEntity parentEntity = categoryCrudService.getOptById(request.getParentCategoryId()).orElseThrow(() -> new BusinessException("上级分类信息不存在"));
+            entity.setParentCategoryId(parentEntity.getCategoryId());
             entity.setLevel(parentEntity.getLevel() + 1);
             entity.setFullId(parentEntity.getFullId() + SymbolConstants.CENTER_LINE + entity.getCategoryId());
         } else {
-            entity.setParentId(BizConstant.ROOT_ID);
+            entity.setParentCategoryId(BizConstant.ROOT_ID);
             entity.setLevel(BizConstant.FIRST_LEVEL);
             entity.setFullId(String.valueOf(entity.getCategoryId()));
         }
 
         // 查询同一层级下最新的分类
-        CategoryEntity latestEntity = categoryCrudService.findLatest(entity.getParentId()).orElse(null);
+        CategoryEntity latestEntity = categoryCrudService.findLatest(entity.getParentCategoryId()).orElse(null);
         // 设置顺序号
         entity.setOrderNo(Objects.nonNull(latestEntity) ? latestEntity.getOrderNo() + 1 : 1);
 
@@ -99,7 +99,7 @@ public class CategoryManagerServiceImpl implements CategoryManagerService {
                 .map(CategoryConverter.INSTANCE::toResponse)
                 .sorted(Comparator.comparing(CategoryTreeResponse::getOrderNo))
                 .collect(Collectors.toList());
-        return TreeUtil.build(data, BizConstant.ROOT_ID, CategoryTreeResponse::getCategoryId, CategoryTreeResponse::getParentId);
+        return TreeUtil.build(data, BizConstant.ROOT_ID, CategoryTreeResponse::getCategoryId, CategoryTreeResponse::getParentCategoryId);
     }
 
     @Override

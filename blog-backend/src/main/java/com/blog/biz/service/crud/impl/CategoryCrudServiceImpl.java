@@ -35,7 +35,8 @@ public class CategoryCrudServiceImpl extends BaseCrudServiceImpl<CategoryMapper,
     @Override
     public Optional<CategoryEntity> findLatest(Long parentId) {
         LambdaQueryWrapper<CategoryEntity> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.eq(CategoryEntity::getParentId, parentId).orderByDesc(CategoryEntity::getOrderNo);
+        queryWrapper.eq(CategoryEntity::getParentCategoryId, parentId).orderByDesc(CategoryEntity::getOrderNo)
+                .last("limit 1");
         return Optional.ofNullable(baseMapper.selectOne(queryWrapper));
     }
 
