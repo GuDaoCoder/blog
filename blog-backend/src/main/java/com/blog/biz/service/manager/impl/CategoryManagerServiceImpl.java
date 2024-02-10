@@ -112,7 +112,8 @@ public class CategoryManagerServiceImpl implements CategoryManagerService {
                 throw new BusinessException("分类名称已存在");
             }
         }
-        entity.setCategoryName(request.getCategoryName());
+        entity.setCategoryName(request.getCategoryName())
+                .setEnabled(request.getEnabled());
         categoryCrudService.updateById(entity);
     }
 
