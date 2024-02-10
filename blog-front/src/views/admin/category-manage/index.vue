@@ -26,45 +26,62 @@
       </a-form>
       <a-divider/>
       <a-space direction="vertical" fill>
-        <a-button type="primary">新增分类</a-button>
+        <a-button type="primary" @click="handleSaveCategory">新增分类</a-button>
         <a-table row-key="categoryId" :columns="tableColumns" :data="categoryTableData" stripe
                  hide-expand-button-on-empty column-resizable :loading="tableLoading">
           <template #operations="{ record }">
-            <a-link @click="addCategory(record.categoryId)">新增下级分类</a-link>
-            <a-link>修改</a-link>
-            <a-link>删除</a-link>
+            <a-link @click="handleSaveChildCategory(record)">新增下级分类</a-link>
+            <a-link @click="handleUpdateCategory(record)">编辑</a-link>
+            <a-popconfirm content="确认删除?" @ok="handleDeleteCategory(record)"
+                          v-if="!record.children || record.children.length ===0">
+              <a-link>删除</a-link>
+            </a-popconfirm>
           </template>
         </a-table>
       </a-space>
     </content-card>
   </Container>
+
+  <!-- 创建或更新分类弹窗 -->
+  <save-category :visible="saveFormVisible" :form-data="saveCategoryFormData"
+                 :title="saveCategoryFormData.categoryId ? '编辑':'新增' + '文章分类'"
+                 @cancel="handleCancelSave"/>
 </template>
 <script setup lang="ts">
 import ContentCard from '@/components/ContentCard/index.vue'
 import OperationsGroup from "@/components/OperationsGroup/index.vue"
+import SaveCategory from "@/views/admin/category-manage/components/save-category.vue";
 import {ref} from "vue";
 import type {TableColumnData} from "@arco-design/web-vue";
-import type {CategoryTreeRequestType} from "@/types/request-type"
-import type {CategoryTreeResponseType} from "@/types/response-type";
-import {categoryTree} from "@/api/category-manage";
+import {deleteCategory, treeCategory} from "@/api/category-manage";
+import {Notification} from "@arco-design/web-vue";
 
-const initForm = (): CategoryTreeRequestType => {
+const initSearchForm = (): CategorySearchForm => {
   return {
     categoryName: "",
     enabled: undefined
   }
 }
 
-const searchFormData = ref<CategoryTreeRequestType>(initForm())
+const searchFormData = ref<CategorySearchForm>(initSearchForm())
 
+/**
+ * 查询按钮
+ */
 const handleSearch = () => {
   fetchTableData(searchFormData.value)
 }
 
+/**
+ * 重置按钮
+ */
 const reset = () => {
-  searchFormData.value = initForm();
+  searchFormData.value = initSearchForm();
 }
 
+/**
+ * 列表列配置
+ */
 const tableColumns = ref<TableColumnData[]>([
   {
     title: "分类名称",
@@ -88,12 +105,16 @@ const tableColumns = ref<TableColumnData[]>([
 
 const tableLoading = ref<boolean>(false)
 
-const categoryTableData = ref<CategoryTreeResponseType[]>([])
+const categoryTableData = ref<TreeCategoryVO[]>([])
 
-const fetchTableData = async (params: CategoryTreeRequestType = {}) => {
+/**
+ * 查询文章分类列表
+ * @param form
+ */
+const fetchTableData = async (form: CategorySearchForm = {}) => {
   tableLoading.value = true
   try {
-    const {data} = await categoryTree(params)
+    const {data} = await treeCategory({...form})
     categoryTableData.value = data
   } finally {
     tableLoading.value = false
@@ -102,8 +123,49 @@ const fetchTableData = async (params: CategoryTreeRequestType = {}) => {
 
 fetchTableData()
 
-const addCategory = (parentId: string) => {
-  alert(parentId)
+const saveFormVisible = ref(false)
+const saveCategoryFormData = ref<CategoryCreateForm>({})
+
+/**
+ * 新增分类
+ */
+const handleSaveCategory = () => {
+  saveCategoryFormData.value = {
+    enabled: true
+  }
+  saveFormVisible.value = true
+}
+
+/**
+ * 新增子级分类
+ * @param value
+ */
+const handleSaveChildCategory = (value: TreeCategoryVO) => {
+  saveCategoryFormData.value = {
+    parentCategoryId: value.categoryId,
+    parentCategoryName: value.categoryName,
+    enabled: true
+  }
+  saveFormVisible.value = true
+}
+
+const handleUpdateCategory = (value: TreeCategoryVO) => {
+  saveCategoryFormData.value = {...value}
+  saveFormVisible.value = true
+}
+
+const handleDeleteCategory = async (value: TreeCategoryVO) => {
+  await deleteCategory(value.categoryId)
+  Notification.success("删除成功");
+  handleSearch()
+}
+
+const handleCancelSave = (reload: boolean) => {
+  saveFormVisible.value = false
+  if (reload) {
+    // 创建成功关闭弹窗时需要触发搜索
+    handleSearch()
+  }
 }
 
 </script>

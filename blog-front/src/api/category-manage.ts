@@ -1,7 +1,17 @@
 import axios from "axios";
-import type {CategoryTreeResponseType} from "@/types/response-type";
-import type {categoryTreeRequest} from "@/types/request-type";
 
-export function categoryTree(params: categoryTreeRequest) {
-    return axios.get<CategoryTreeResponseType[]>("/admin/category", {params})
+export function treeCategory(params: TreeCategoryDTO) {
+    return axios.get<TreeCategoryVO[]>("/admin/category", {params})
+}
+
+export function createCategory(data: CreateCategoryDTO) {
+    return axios.post<CreateCategoryVO>("/admin/category", data)
+}
+
+export function updateCategory(categoryId: string, data: UpdateCategoryDTO) {
+    return axios.put("/admin/category/" + categoryId, data)
+}
+
+export function deleteCategory(categoryId: string) {
+    return axios.delete("/admin/category/" + categoryId)
 }
