@@ -16,13 +16,11 @@
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :span="8">
-            <operations-group>
-              <a-button type="primary" html-type="submit">查询</a-button>
-              <a-button type="outline" @click="reset">重置</a-button>
-            </operations-group>
-          </a-col>
         </a-row>
+        <search-button-group>
+          <a-button type="primary" html-type="submit">查询</a-button>
+          <a-button type="outline" @click="reset">重置</a-button>
+        </search-button-group>
       </a-form>
       <a-divider/>
       <a-space direction="vertical" fill>
@@ -55,6 +53,7 @@ import {ref} from "vue";
 import type {TableColumnData} from "@arco-design/web-vue";
 import {deleteCategory, treeCategory} from "@/api/category-manage";
 import {Notification} from "@arco-design/web-vue";
+import SearchButtonGroup from "@/components/SearchButtonGroup/index.vue";
 
 const initSearchForm = (): CategorySearchForm => {
   return {

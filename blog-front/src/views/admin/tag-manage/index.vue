@@ -9,12 +9,12 @@
             </a-form-item>
           </a-col>
           <a-col :span="8">
-            <operations-group>
-              <a-button type="primary" html-type="submit">查询</a-button>
-              <a-button type="outline" @click="reset">重置</a-button>
-            </operations-group>
           </a-col>
         </a-row>
+        <search-button-group>
+          <a-button type="primary" html-type="submit">查询</a-button>
+          <a-button type="outline" @click="reset">重置</a-button>
+        </search-button-group>
       </a-form>
       <a-divider/>
       <a-space direction="vertical" fill>
@@ -42,6 +42,9 @@ import {ref} from "vue";
 import OperationsGroup from "@/components/OperationsGroup/index.vue";
 import type {TableColumnData} from "@arco-design/web-vue";
 import {pageTag} from "@/api/tag-manage";
+import SearchButtonGroup from "@/components/SearchButtonGroup/index.vue";
+
+const colors = ref({})
 
 const initSearchForm = (): SearchTagForm => {
   return {
@@ -52,6 +55,7 @@ const initSearchForm = (): SearchTagForm => {
 const searchFormData = ref<SearchTagForm>(initSearchForm())
 
 const handleSearch = () => {
+  alert(colors.value)
   fetchTableData(searchFormData.value)
 }
 
