@@ -73,13 +73,13 @@
               </a-space>
             </template>
             <template #status="{record}">
-             {{ PostStatus[record.status]}}
+             {{$dict(PostStatus,record.status)}}
             </template>
             <template #top="{record}">
-              {{ Whether[record.top]}}
+              {{$dict(Whether, record.top)}}
             </template>
             <template #enableComment="{record}">
-              {{ Whether[record.enableComment]}}
+              {{$dict(Whether, record.enableComment)}}
             </template>
             <template #operations="{ record }">
               <a-link @click="handleUpdatePost(record)">编辑</a-link>
@@ -108,6 +108,7 @@ import {ref} from "vue";
 import {PostStatus, Whether} from "@/enums";
 import type {TableColumnData} from "@arco-design/web-vue";
 import {pagePost} from "@/api/post-manage";
+import {dict, text} from "../../../utils/dict";
 
 const initSearchForm = (): SearchPostForm => {
   return {
@@ -125,7 +126,6 @@ const searchFormData = ref<SearchPostForm>(initSearchForm())
 const categoryTreeData = ref([])
 
 const handleSearch = () => {
-
 }
 
 const reset = () => {

@@ -5,9 +5,9 @@ interface BaseVO<T> {
     data?: T
 }
 
-interface PageDTO{
-    pageNumber:number,
-    pageSize:number
+interface PageDTO {
+    pageNumber: number,
+    pageSize: number
 }
 
 interface PageVO<T> {
@@ -15,4 +15,10 @@ interface PageVO<T> {
     pageSize: number,
     total: number,
     items?: T[]
+}
+
+interface PaginationType {
+    pageNumber: number,
+    pageSize: number,
+    total: number,
 }

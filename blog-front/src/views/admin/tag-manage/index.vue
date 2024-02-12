@@ -8,8 +8,6 @@
               <a-input v-model="searchFormData.tagName"/>
             </a-form-item>
           </a-col>
-          <a-col :span="8">
-          </a-col>
         </a-row>
         <search-button-group>
           <a-button type="primary" html-type="submit">查询</a-button>
@@ -17,34 +15,51 @@
         </search-button-group>
       </a-form>
       <a-divider/>
-      <a-space direction="vertical" fill>
-        <a-button type="primary" @click="handleCreateTag">新增标签</a-button>
-        <a-table row-key="tagId" :columns="tableColumns" :data="tagTableData" stripe column-resizable
-                 :loading="tableLoading" :pagination="false">
-          <template #operations="{ record }">
-            <a-link @click="handleUpdateTag(record)">编辑</a-link>
-            <a-popconfirm content="确认删除?" @ok="handleDeleteTag(record)">
-              <a-link>删除</a-link>
-            </a-popconfirm>
-          </template>
-        </a-table>
+      <search-result>
+        <template #toolbar>
+          <a-button type="primary" @click="handleCreateTag">新增标签</a-button>
+        </template>
 
-        <a-pagination v-model:current="page.pageNumber" v-model:page-size="page.pageSize" :total="page.total"
-                      show-page-size show-total @change="handleChangePage" @page-size-change="handleChangePageSize"/>
-      </a-space>
+        <template #table>
+          <a-table row-key="tagId" :columns="tableColumns" :data="tagTableData" stripe column-resizable
+                   :loading="tableLoading" :pagination="false">
+            <template #tagName="{record}">
+              <a-tag :color="record.color">{{ record.tagName }}</a-tag>
+            </template>
+            <template #enable="{record}">
+              {{ $dict(Whether, record.enable) }}
+            </template>
+            <template #operations="{ record }">
+              <a-link @click="handleUpdateTag(record)">编辑</a-link>
+              <a-popconfirm content="确认删除?" @ok="handleDeleteTag(record)">
+                <a-link>删除</a-link>
+              </a-popconfirm>
+            </template>
+          </a-table>
+        </template>
+
+        <template #pagination>
+          <Pagination :pagination="pagination" @change="handleChangePage" @page-size-change="handleChangePageSize"/>
+        </template>
+      </search-result>
     </content-card>
   </Container>
+
+  <save-tag :form-data="saveTagFormData" :visible="saveTagVisible" :title="saveTagFormData.tagId ? '编辑':'新增'+'标签'"
+            @cancel="handleCancelSave"/>
 </template>
 
 <script setup lang="ts">
+import Pagination from "@/components/Pagination/index.vue"
 import ContentCard from '@/components/ContentCard/index.vue'
 import {ref} from "vue";
-import OperationsGroup from "@/components/OperationsGroup/index.vue";
 import type {TableColumnData} from "@arco-design/web-vue";
-import {pageTag} from "@/api/tag-manage";
+import {deleteTag, pageTag} from "@/api/tag-manage";
 import SearchButtonGroup from "@/components/SearchButtonGroup/index.vue";
-
-const colors = ref({})
+import SearchResult from "@/components/SearchResult/index.vue";
+import SaveTag from "@/views/admin/tag-manage/components/save-tag.vue";
+import {Notification} from "@arco-design/web-vue";
+import {Whether} from "../../../enums";
 
 const initSearchForm = (): SearchTagForm => {
   return {
@@ -55,7 +70,6 @@ const initSearchForm = (): SearchTagForm => {
 const searchFormData = ref<SearchTagForm>(initSearchForm())
 
 const handleSearch = () => {
-  alert(colors.value)
   fetchTableData(searchFormData.value)
 }
 
@@ -70,11 +84,17 @@ const reset = () => {
 const tableColumns = ref<TableColumnData[]>([
   {
     title: "标签名称",
-    dataIndex: "tagName"
+    dataIndex: "tagName",
+    slotName: "tagName",
+  },
+  {
+    title: "文章数量",
+    dataIndex: "postCount",
   },
   {
     title: "是否启用",
-    dataIndex: "enable"
+    dataIndex: "enable",
+    slotName: "enable",
   },
   {
     title: "更新时间",
@@ -84,11 +104,17 @@ const tableColumns = ref<TableColumnData[]>([
     title: "操作",
     dataIndex: "operations",
     slotName: 'operations',
-    fixed: "right"
+    fixed: "right",
+    width: 120
   }
 ])
 
-const page = ref<PageVO<PageTagVO>>({pageNumber: 1, pageSize: 10, total: 0})
+const pagination = ref<PaginationType>(
+    {
+      pageNumber: 1,
+      pageSize: 10,
+      total: 0
+    })
 
 const tableLoading = ref<boolean>(false)
 
@@ -101,15 +127,15 @@ const fetchTableData = async (form: SearchTagForm = {}) => {
   tableLoading.value = true
   try {
     const {data} = await pageTag({
-          pageNumber: page.value.pageNumber,
-          pageSize: page.value.pageSize,
+          pageNumber: pagination.value.pageNumber,
+          pageSize: pagination.value.pageSize,
           ...form
         }
     )
     tagTableData.value = data.items || []
-    page.value.pageNumber = data.pageNumber
-    page.value.pageSize = data.pageSize
-    page.value.total = data.total
+    pagination.value.pageNumber = data.pageNumber
+    pagination.value.pageSize = data.pageSize
+    pagination.value.total = data.total
   } finally {
     tableLoading.value = false
   }
@@ -117,26 +143,44 @@ const fetchTableData = async (form: SearchTagForm = {}) => {
 
 fetchTableData()
 
-const handleCreateTag = () => {
+const saveTagVisible = ref<boolean>(false)
+const saveTagFormData = ref<SaveTagForm>({})
 
+const handleCreateTag = () => {
+  saveTagFormData.value = {
+    color: "#000000",
+    enable: true
+  }
+  saveTagVisible.value = true
 }
 
 const handleUpdateTag = (value: PageTagVO) => {
-
+  saveTagFormData.value = {...value}
+  saveTagVisible.value = true
 }
 
-const handleDeleteTag = (value: PageTagVO) => {
-
+const handleCancelSave = (reload: boolean) => {
+  saveTagVisible.value = false
+  if (reload) {
+    handleSearch()
+  }
 }
 
-const handleChangePage = () => {
+const handleDeleteTag = async (value: PageTagVO) => {
+  await deleteTag(value.tagId)
+  Notification.success("删除成功");
+  handleSearch()
+}
+
+const handleChangePage = (pageNumber: number) => {
+  pagination.value.pageNumber = pageNumber
   fetchTableData(searchFormData.value)
 }
 
-const handleChangePageSize = () => {
+const handleChangePageSize = (pageSize: number) => {
+  pagination.value.pageSize = pageSize
   fetchTableData(searchFormData.value)
 }
-
 
 </script>
 

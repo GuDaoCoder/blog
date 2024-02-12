@@ -13,6 +13,8 @@ import 'virtual:svg-icons-register'
 import globalComponent from '@/components'
 // axios
 import "@/request"
+// 全局通用方法
+import utils from "@/utils"
 
 createApp(App)
     .use(router)
@@ -20,4 +22,5 @@ createApp(App)
     .use(ArcoVue)
     .use(ArcoVueIcon)
     .use(globalComponent)
+    .use(utils)
     .mount('#app')
