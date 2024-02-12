@@ -22,6 +22,7 @@ public class PageTagResponse extends CommonResponse {
     @Serial
     private static final long serialVersionUID = 5843521204175924852L;
 
+
     @Schema(description = "标签Id")
     private Long tagId;
 

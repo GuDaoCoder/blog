@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.blog.common.exception.DataNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
@@ -32,41 +33,41 @@ public class GlobalExceptionHandler {
 
     /**
      * 参数校验异常
-     * 
+     *
      * @param request HttpServletRequest
-     * @param ex MethodArgumentNotValidException
+     * @param ex      MethodArgumentNotValidException
      * @return com.blog.common.domain.Result<java.lang.Void>
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public Result<Void> exceptionHandler(HttpServletRequest request, MethodArgumentNotValidException ex) {
         String exceptionStr = Optional.ofNullable(ex).map(MethodArgumentNotValidException::getBindingResult)
-            .map(BindingResult::getFieldErrors).map(CollUtil::getFirst).map(FieldError::getDefaultMessage).orElse(null);
+                .map(BindingResult::getFieldErrors).map(CollUtil::getFirst).map(FieldError::getDefaultMessage).orElse(null);
         log.warn(">>>>>>>>>>>>[{}]-[{}] occurred a argument not valid error", request.getMethod(),
-            request.getRequestURL(), ex);
+                request.getRequestURL(), ex);
         return Result.fail(exceptionStr);
     }
 
     /**
      * 参数转换错误异常
-     * 
+     *
      * @param request HttpServletRequest
-     * @param ex MethodArgumentTypeMismatchException
+     * @param ex      MethodArgumentTypeMismatchException
      * @return com.blog.common.domain.Result<java.lang.Void>
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = HttpMessageNotReadableException.class)
     public Result<Void> exceptionHandler(HttpServletRequest request, HttpMessageNotReadableException ex) {
         log.warn(">>>>>>>>>>>>[{}]-[{}] occurred a param convert error", request.getMethod(), request.getRequestURL(),
-            ex);
+                ex);
         return Result.fail("参数转换错误");
     }
 
     /**
      * 业务异常
-     * 
+     *
      * @param request HttpServletRequest
-     * @param ex BusinessException
+     * @param ex      BusinessException
      * @return com.blog.common.domain.Result<java.lang.Void>
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -78,9 +79,9 @@ public class GlobalExceptionHandler {
 
     /**
      * 用户未登录或登录信息失效异常
-     * 
+     *
      * @param request HttpServletRequest
-     * @param ex NotLoginException
+     * @param ex      NotLoginException
      * @return com.blog.common.domain.Result<java.lang.Void>
      */
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -92,39 +93,47 @@ public class GlobalExceptionHandler {
 
     /**
      * 认证失败异常
-     * 
+     *
      * @param request HttpServletRequest
-     * @param ex InvalidCredentialsException
+     * @param ex      InvalidCredentialsException
      * @return com.blog.common.domain.Result<java.lang.Void>
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidCredentialsException.class)
     public Result<Void> exceptionHandler(HttpServletRequest request, InvalidCredentialsException ex) {
         log.warn(">>>>>>>>>>>>[{}]-[{}] occurred a invalid credentials error", request.getMethod(),
-            request.getRequestURI(), ex);
+                request.getRequestURI(), ex);
         return Result.fail("用户名或密码错误");
     }
 
     /**
      * 授权失败异常
-     * 
+     *
      * @param request HttpServletRequest
-     * @param ex NotPermissionException
+     * @param ex      NotPermissionException
      * @return com.blog.common.domain.Result<java.lang.Void>
      */
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(NotPermissionException.class)
     public Result<Void> exceptionHandler(HttpServletRequest request, NotPermissionException ex) {
         log.warn(">>>>>>>>>>>>[{}]-[{}] occurred a not permission error", request.getMethod(), request.getRequestURI(),
-            ex);
+                ex);
         return Result.fail("没有权限访问");
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(DataNotFoundException.class)
+    public Result<Void> exceptionHandler(HttpServletRequest request, DataNotFoundException ex) {
+        log.warn(">>>>>>>>>>>>[{}]-[{}] occurred a data not found error", request.getMethod(), request.getRequestURI(),
+                ex);
+        return Result.fail("数据不存在或已被删除");
     }
 
     /**
      * 未知错误
-     * 
+     *
      * @param request HttpServletRequest
-     * @param ex Exception
+     * @param ex      Exception
      * @return com.blog.common.domain.Result<java.lang.Void>
      */
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

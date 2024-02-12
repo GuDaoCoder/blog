@@ -25,7 +25,7 @@ public class BaseCrudServiceImpl<Mapper extends BaseMapper<Entity>, Entity exten
 
     @Override
     public Entity getOneOrThrow(Long id) {
-        return this.getOptById(id).orElseThrow(() -> new DataNotFoundException());
+        return this.getOptById(id).orElseThrow(DataNotFoundException::new);
     }
 
     @Override

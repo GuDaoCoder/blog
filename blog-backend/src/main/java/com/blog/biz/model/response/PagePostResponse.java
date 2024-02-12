@@ -19,6 +19,7 @@ import lombok.Data;
 @Data
 public class PagePostResponse extends CommonResponse {
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @Schema(description = "主键")
     private Long postId;
 
