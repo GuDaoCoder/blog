@@ -24,7 +24,7 @@ import com.blog.biz.model.request.PagePostRequest;
 import com.blog.biz.model.request.UpdatePostRequest;
 import com.blog.biz.model.response.CreatePostResponse;
 import com.blog.biz.model.response.PagePostResponse;
-import com.blog.biz.model.response.TagResponse;
+import com.blog.biz.model.response.PageTagResponse;
 import com.blog.biz.service.crud.*;
 import com.blog.biz.service.manager.PostManagerService;
 import com.blog.common.base.response.PageResponse;
@@ -63,13 +63,13 @@ public class PostManagerServiceImpl implements PostManagerService {
     public CreatePostResponse create(CreatePostRequest request) {
         // 校验分类信息是否存在
         categoryCrudService.getOptById(request.getCategoryId())
-            .orElseThrow(() -> new BusinessException("分类信息不存在或已被删除"));
+                .orElseThrow(() -> new BusinessException("分类信息不存在或已被删除"));
 
         PostEntity entity = PostConverter.INSTANCE.toEntity(request);
         entity.setSource(PostSource.ADD).setStatus(request.getPublish() ? PostStatus.PUBLISHED : PostStatus.DRAFT)
-            .setPublishTime(request.getPublish() ? LocalDateTime.now() : null)
-            // todo: 统计markdown文章字数
-            .setWordCount(0);
+                .setPublishTime(request.getPublish() ? LocalDateTime.now() : null)
+                // todo: 统计markdown文章字数
+                .setWordCount(0);
         // 加密密码
         encryptPassword(entity, request.getPassword());
 
@@ -91,13 +91,13 @@ public class PostManagerServiceImpl implements PostManagerService {
     public void update(Long postId, UpdatePostRequest request) {
         // 校验分类信息是否存在
         categoryCrudService.getOptById(request.getCategoryId())
-            .orElseThrow(() -> new BusinessException("分类信息不存在或已被删除"));
+                .orElseThrow(() -> new BusinessException("分类信息不存在或已被删除"));
 
         // 文章基础信息
         PostEntity entity = postCrudService.getOneOrThrow(postId);
         entity.setTitle(request.getTitle()).setSummary(request.getSummary())
-            .setCoverPictureUrl(request.getCoverPictureUrl()).setCategoryId(request.getCategoryId())
-            .setTop(request.getTop()).setEnableComment(request.getEnableComment());
+                .setCoverPictureUrl(request.getCoverPictureUrl()).setCategoryId(request.getCategoryId())
+                .setTop(request.getTop()).setEnableComment(request.getEnableComment());
 
         // 加密密码
         encryptPassword(entity, request.getPassword());
@@ -105,7 +105,7 @@ public class PostManagerServiceImpl implements PostManagerService {
 
         // 文章内容信息
         PostContentEntity postContentEntity = postContentCrudService.getByField(PostContentEntity::getPostId, postId)
-            .orElseThrow(() -> new BusinessException("文章内容信息不存在或已被删除"));
+                .orElseThrow(() -> new BusinessException("文章内容信息不存在或已被删除"));
         postContentEntity.setContent(request.getContent());
         postContentCrudService.updateById(postContentEntity);
 
@@ -139,7 +139,7 @@ public class PostManagerServiceImpl implements PostManagerService {
         if (CollectionUtils.isNotEmpty(page.getRecords())) {
             List<Long> categoryIds = StreamUtil.mapField(page.getRecords(), PostEntity::getCategoryId);
             categoryMap = categoryCrudService.listByIds(categoryIds).stream()
-                .collect(Collectors.toMap(CategoryEntity::getCategoryId, Function.identity()));
+                    .collect(Collectors.toMap(CategoryEntity::getCategoryId, Function.identity()));
 
             List<Long> postIds = StreamUtil.mapField(page.getRecords(), PostEntity::getPostId);
             tagMap = postTagsRela(postIds);
@@ -150,13 +150,15 @@ public class PostManagerServiceImpl implements PostManagerService {
         return PageUtil.toResult(page, entity -> {
             PagePostResponse pagePostResponse = PostConverter.INSTANCE.toPagePostResponse(entity);
             Optional.ofNullable(finalCategoryMap.get(entity.getCategoryId())).map(CategoryEntity::getCategoryName)
-                .ifPresent(pagePostResponse::setCategoryName);
+                    .ifPresent(pagePostResponse::setCategoryName);
 
-            Optional.ofNullable(finalTagMap.get(entity.getPostId())).map(tags -> tags.stream().map(tag -> {
-                TagResponse tagResponse = new TagResponse();
-                tagResponse.setTagId(tag.getTagId()).setTagName(tag.getTagName()).setOrderNo(tag.getOrderNo());
-                return tagResponse;
-            }).collect(Collectors.toList())).ifPresent(pagePostResponse::setTags);
+            Optional.ofNullable(finalTagMap.get(entity.getPostId())).ifPresent(list -> {
+                List<PagePostResponse.TagItem> tagItems = list
+                        .stream()
+                        .map(o -> new PagePostResponse.TagItem(o.getTagName(), o.getColor()))
+                        .collect(Collectors.toList());
+                pagePostResponse.setTags(tagItems);
+            });
             return pagePostResponse;
         });
     }
@@ -186,35 +188,35 @@ public class PostManagerServiceImpl implements PostManagerService {
      * 查询文章和标签关系
      *
      * @param postIds Long>
-     * @return java.util.Map<java.lang.Long,java.util.List<com.blog.biz.model.entity.TagEntity>>
+     * @return java.util.Map<java.lang.Long, java.util.List < com.blog.biz.model.entity.TagEntity>>
      */
     private Map<Long, List<TagEntity>> postTagsRela(List<Long> postIds) {
         if (CollectionUtils.isEmpty(postIds)) {
             return new HashMap<>();
         }
         List<PostTagRelaEntity> postTagRelaEntities =
-            postTagRelaCrudService.listByFields(PostTagRelaEntity::getPostId, postIds);
+                postTagRelaCrudService.listByFields(PostTagRelaEntity::getPostId, postIds);
         if (CollectionUtils.isEmpty(postTagRelaEntities)) {
             return new HashMap<>();
         }
         List<Long> tagIds = StreamUtil.mapField(postTagRelaEntities, PostTagRelaEntity::getTagId);
         Map<Long, TagEntity> tagMap = tagCrudService.listByIds(tagIds).stream()
-            .collect(Collectors.toMap(TagEntity::getTagId, Function.identity()));
+                .collect(Collectors.toMap(TagEntity::getTagId, Function.identity()));
         return postTagRelaEntities.stream().collect(Collectors.groupingBy(PostTagRelaEntity::getPostId,
-            Collectors.mapping(o -> tagMap.get(o.getTagId()), Collectors.toList())));
+                Collectors.mapping(o -> tagMap.get(o.getTagId()), Collectors.toList())));
     }
 
     /**
      * 加密密码
-     * 
-     * @param entity PostEntity
+     *
+     * @param entity   PostEntity
      * @param password String
      */
     private void encryptPassword(PostEntity entity, String password) {
         if (StringUtils.isNotBlank(password)) {
             // 密码加密
             entity.setPassword(
-                SaSecureUtil.rsaEncryptByPublic(securityProperties.getRsa().getPublicKey(), entity.getPassword()));
+                    SaSecureUtil.rsaEncryptByPublic(securityProperties.getRsa().getPublicKey(), entity.getPassword()));
         } else {
             entity.setPassword(null);
         }
@@ -222,7 +224,7 @@ public class PostManagerServiceImpl implements PostManagerService {
 
     /**
      * 保存文章标签关系
-     * 
+     *
      * @param postId Long
      * @param tagIds Long>
      */

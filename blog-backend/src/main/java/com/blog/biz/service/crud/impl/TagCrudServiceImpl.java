@@ -24,13 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 public class TagCrudServiceImpl extends BaseCrudServiceImpl<TagMapper, TagEntity> implements TagCrudService {
 
     @Override
-    public Optional<TagEntity> findLatest() {
-        LambdaQueryWrapper<TagEntity> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.orderByDesc(TagEntity::getOrderNo).last(limitOneExpression());
-        return Optional.ofNullable(baseMapper.selectOne(queryWrapper));
-    }
-
-    @Override
     public Optional<TagEntity> findByTagName(String tagName) {
         LambdaQueryWrapper<TagEntity> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.eq(TagEntity::getTagName, tagName);
@@ -41,22 +34,8 @@ public class TagCrudServiceImpl extends BaseCrudServiceImpl<TagMapper, TagEntity
     public IPage<TagEntity> page(String tagName, IPage<TagEntity> pageable) {
         LambdaQueryWrapper<TagEntity> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.like(StringUtils.isNotBlank(tagName), TagEntity::getTagName, tagName)
-            .orderByDesc(TagEntity::getOrderNo);
+                .orderByDesc(TagEntity::getUpdateTime);
         return baseMapper.selectPage(pageable, queryWrapper);
     }
 
-    @Override
-    public Optional<TagEntity> findPrevious(Integer orderNo) {
-        LambdaQueryWrapper<TagEntity> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.ge(TagEntity::getOrderNo, orderNo).orderByAsc(TagEntity::getOrderNo).last(limitOneExpression());
-        return Optional.ofNullable(baseMapper.selectOne(queryWrapper));
-    }
-
-    @Override
-
-    public Optional<TagEntity> findLatter(Integer orderNo) {
-        LambdaQueryWrapper<TagEntity> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.le(TagEntity::getOrderNo, orderNo).orderByDesc(TagEntity::getOrderNo).last(limitOneExpression());
-        return Optional.ofNullable(baseMapper.selectOne(queryWrapper));
-    }
 }

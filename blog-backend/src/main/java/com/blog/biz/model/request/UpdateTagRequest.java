@@ -3,6 +3,7 @@ package com.blog.biz.model.request;
 import java.io.Serial;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.blog.common.base.request.CommonRequest;
 
@@ -24,4 +25,12 @@ public class UpdateTagRequest extends CommonRequest {
     @NotBlank(message = "标签名称不能为空")
     @Schema(description = "标签名称")
     private String tagName;
+
+    @NotBlank(message = "颜色不能为空")
+    @Schema(description = "颜色")
+    private String color;
+
+    @NotNull(message = "是否启用不能为空")
+    @Schema(description = "是否启用")
+    private Boolean enable;
 }

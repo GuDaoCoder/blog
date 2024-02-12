@@ -2,6 +2,7 @@ package com.blog.biz.service.crud.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.blog.biz.model.entity.custom.TagPostCountEntity;
 import org.springframework.stereotype.Service;
 
 import com.blog.biz.mapper.PostTagRelaMapper;
@@ -11,6 +12,8 @@ import com.blog.common.base.service.impl.BaseCrudServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+
 /**
  * @author zouzhangpeng
  * @desc
@@ -18,11 +21,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class PostTagRelaCrudServiceImpl extends BaseCrudServiceImpl<PostTagRelaMapper, PostTagRelaEntity>
-    implements PostTagRelaCrudService {
+        implements PostTagRelaCrudService {
     @Override
     public boolean tagUsed(Long tagId) {
         LambdaQueryWrapper<PostTagRelaEntity> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.eq(PostTagRelaEntity::getTagId, tagId);
         return baseMapper.selectCount(queryWrapper) > 0;
+    }
+
+    @Override
+    public List<TagPostCountEntity> getTagPostCountEntity(List<Long> tagIds) {
+        return baseMapper.getTagPostCountEntity(tagIds);
     }
 }

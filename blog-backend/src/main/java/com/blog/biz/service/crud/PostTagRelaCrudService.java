@@ -1,7 +1,11 @@
 package com.blog.biz.service.crud;
 
 import com.blog.biz.model.entity.PostTagRelaEntity;
+import com.blog.biz.model.entity.custom.TagPostCountEntity;
 import com.blog.common.base.service.IBaseCrudService;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author zouzhangpeng
@@ -11,8 +15,11 @@ public interface PostTagRelaCrudService extends IBaseCrudService<PostTagRelaEnti
 
     /**
      * 查询标签是否被使用
+     *
      * @param tagId Long
- * @return boolean
+     * @return boolean
      */
     boolean tagUsed(Long tagId);
+
+    List<TagPostCountEntity> getTagPostCountEntity(List<Long> tagIds);
 }

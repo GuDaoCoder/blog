@@ -7,7 +7,9 @@ import com.blog.biz.enums.PostSource;
 import com.blog.biz.enums.PostStatus;
 import com.blog.common.base.response.CommonResponse;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -41,14 +43,11 @@ public class PagePostResponse extends CommonResponse {
     @Schema(description = "所属分类名称")
     private String categoryName;
 
-    @Schema(description = "发布时间")
-    private LocalDateTime publishTime;
-
-    @Schema(description = "创建时间")
-    private LocalDateTime createTime;
-
     @Schema(description = "是否置顶")
     private Boolean top;
+
+    @Schema(description = "是否加密")
+    private Boolean encrypt;
 
     @Schema(description = "是否开启评论")
     private Boolean enableComment;
@@ -57,5 +56,24 @@ public class PagePostResponse extends CommonResponse {
     private String password;
 
     @Schema(description = "标签集合")
-    private List<TagResponse> tags;
+    private List<TagItem> tags;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @Schema(description = "发布时间")
+    private LocalDateTime publishTime;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @Schema(description = "创建时间")
+    private LocalDateTime updateTime;
+
+    @AllArgsConstructor
+    @Data
+    public static class TagItem {
+
+        @Schema(description = "标签名称")
+        private String tagName;
+
+        @Schema(description = "颜色")
+        private String color;
+    }
 }

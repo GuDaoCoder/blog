@@ -4,7 +4,7 @@ import com.blog.biz.model.request.CreateTagRequest;
 import com.blog.biz.model.request.PageTagRequest;
 import com.blog.biz.model.request.UpdateTagRequest;
 import com.blog.biz.model.response.CreateTagResponse;
-import com.blog.biz.model.response.TagResponse;
+import com.blog.biz.model.response.PageTagResponse;
 import com.blog.common.base.response.PageResponse;
 
 /**
@@ -35,7 +35,7 @@ public interface TagManagerService {
      * @param request PageTagRequest
      * @return com.blog.common.base.response.PageResponse<com.blog.biz.model.response.TagResponse>
      */
-    PageResponse<TagResponse> page(PageTagRequest request);
+    PageResponse<PageTagResponse> page(PageTagRequest request);
 
     /**
      * 删除标签
@@ -43,18 +43,4 @@ public interface TagManagerService {
      * @param tagId Long
      */
     void delete(Long tagId);
-
-    /**
-     * 向上移动标签顺序
-     * 
-     * @param tagId Long
-     */
-    void moveUp(Long tagId);
-
-    /**
-     * 向下移动标签顺序
-     * 
-     * @param tagId Long
-     */
-    void moveDown(Long tagId);
 }

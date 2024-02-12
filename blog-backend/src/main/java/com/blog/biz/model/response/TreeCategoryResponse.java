@@ -15,7 +15,7 @@ import java.util.List;
  * @desc
  */
 @Data
-public class CategoryTreeResponse extends CommonResponse implements TreeNode<CategoryTreeResponse> {
+public class TreeCategoryResponse extends CommonResponse implements TreeNode<TreeCategoryResponse> {
 
     @Serial
     private static final long serialVersionUID = -5751674634148658873L;
@@ -48,10 +48,10 @@ public class CategoryTreeResponse extends CommonResponse implements TreeNode<Cat
     private LocalDateTime updateTime;
 
     @Schema(description = "子级数据")
-    private List<CategoryTreeResponse> children;
+    private List<TreeCategoryResponse> children;
 
     @Override
-    public void buildChildren(List<CategoryTreeResponse> children) {
+    public void buildChildren(List<TreeCategoryResponse> children) {
         this.children = children;
     }
 }

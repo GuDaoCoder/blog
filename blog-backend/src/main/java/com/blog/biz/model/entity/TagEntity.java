@@ -29,8 +29,13 @@ public class TagEntity extends BaseEntity {
     private String tagName;
 
     /**
-     * 标签顺序
+     * 颜色
      */
-    private Integer orderNo;
+    private String color;
+
+    /**
+     * 是否启用
+     */
+    private Boolean enable;
 
 }

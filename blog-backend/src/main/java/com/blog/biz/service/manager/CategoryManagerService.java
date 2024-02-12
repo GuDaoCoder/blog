@@ -5,7 +5,7 @@ import java.util.List;
 import com.blog.biz.model.request.CategoryTreeRequest;
 import com.blog.biz.model.request.CreateCategoryRequest;
 import com.blog.biz.model.request.UpdateCategoryRequest;
-import com.blog.biz.model.response.CategoryTreeResponse;
+import com.blog.biz.model.response.TreeCategoryResponse;
 import com.blog.biz.model.response.CreateCategoryResponse;
 
 /**
@@ -28,7 +28,7 @@ public interface CategoryManagerService {
      * @param
      * @return java.util.List<com.blog.biz.model.response.CategoryResponse>
      */
-    List<CategoryTreeResponse> tree(CategoryTreeRequest request);
+    List<TreeCategoryResponse> tree(CategoryTreeRequest request);
 
     /**
      * 更新分类

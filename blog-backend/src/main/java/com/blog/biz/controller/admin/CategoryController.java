@@ -2,7 +2,7 @@ package com.blog.biz.controller.admin;
 
 import com.blog.biz.model.request.CategoryTreeRequest;
 import com.blog.biz.model.request.UpdateCategoryRequest;
-import com.blog.biz.model.response.CategoryTreeResponse;
+import com.blog.biz.model.response.TreeCategoryResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.validation.annotation.Validated;
@@ -34,7 +34,7 @@ public class CategoryController {
 
     @Operation(summary = "查询分类树形结构")
     @GetMapping
-    public Result<List<CategoryTreeResponse>> tree(CategoryTreeRequest request) {
+    public Result<List<TreeCategoryResponse>> tree(CategoryTreeRequest request) {
         return Result.success(categoryManagerService.tree(request));
     }
 

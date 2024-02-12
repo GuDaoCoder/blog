@@ -4,9 +4,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.blog.biz.model.request.CategoryTreeRequest;
-import com.blog.biz.model.response.CategoryTreeResponse;
+import com.blog.biz.model.response.TreeCategoryResponse;
 import com.blog.common.constant.SymbolConstants;
-import com.blog.common.util.StreamUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -77,7 +76,7 @@ public class CategoryManagerServiceImpl implements CategoryManagerService {
     }
 
     @Override
-    public List<CategoryTreeResponse> tree(CategoryTreeRequest request) {
+    public List<TreeCategoryResponse> tree(CategoryTreeRequest request) {
         List<CategoryEntity> entities = categoryCrudService.findAllByCondition(request.getCategoryName(), request.getEnabled());
         if (CollectionUtils.isNotEmpty(entities)) {
             List<Long> categoryIds = new ArrayList<>();
@@ -95,11 +94,11 @@ public class CategoryManagerServiceImpl implements CategoryManagerService {
                 }
             }
         }
-        List<CategoryTreeResponse> data = entities.stream()
+        List<TreeCategoryResponse> data = entities.stream()
                 .map(CategoryConverter.INSTANCE::toResponse)
-                .sorted(Comparator.comparing(CategoryTreeResponse::getOrderNo))
+                .sorted(Comparator.comparing(TreeCategoryResponse::getOrderNo))
                 .collect(Collectors.toList());
-        return TreeUtil.build(data, BizConstant.ROOT_ID, CategoryTreeResponse::getCategoryId, CategoryTreeResponse::getParentCategoryId);
+        return TreeUtil.build(data, BizConstant.ROOT_ID, TreeCategoryResponse::getCategoryId, TreeCategoryResponse::getParentCategoryId);
     }
 
     @Override

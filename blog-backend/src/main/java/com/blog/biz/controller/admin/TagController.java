@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import com.blog.biz.model.request.PageTagRequest;
 import com.blog.biz.model.request.UpdateTagRequest;
 import com.blog.biz.model.response.CreateTagResponse;
-import com.blog.biz.model.response.TagResponse;
+import com.blog.biz.model.response.PageTagResponse;
 import com.blog.biz.service.manager.TagManagerService;
 import com.blog.common.base.response.PageResponse;
 import com.blog.common.domain.Result;
@@ -41,14 +41,14 @@ public class TagController {
     @Operation(summary = "编辑标签")
     @PutMapping("/{tagId}")
     public Result<Void> update(@Parameter(description = "标签Id") @PathVariable Long tagId,
-        @Validated @RequestBody UpdateTagRequest request) {
+                               @Validated @RequestBody UpdateTagRequest request) {
         tagManagerService.update(tagId, request);
         return Result.success();
     }
 
     @Operation(summary = "查询标签列表")
     @GetMapping
-    public Result<PageResponse<TagResponse>> page(@ParameterObject PageTagRequest request) {
+    public Result<PageResponse<PageTagResponse>> page(@ParameterObject PageTagRequest request) {
         return Result.success(tagManagerService.page(request));
     }
 
@@ -56,20 +56,6 @@ public class TagController {
     @DeleteMapping("/{tagId}")
     public Result<Void> delete(@Parameter(description = "标签Id") @PathVariable Long tagId) {
         tagManagerService.delete(tagId);
-        return Result.success();
-    }
-
-    @Operation(summary = "向上移动标签顺序")
-    @PutMapping("/{tagId}/moveUp")
-    public Result<Void> moveUp(@Parameter(description = "标签Id") @PathVariable Long tagId) {
-        tagManagerService.moveUp(tagId);
-        return Result.success();
-    }
-
-    @Operation(summary = "向下移动标签顺序")
-    @PutMapping("/{tagId}/moveDown")
-    public Result<Void> moveDown(@Parameter(description = "标签Id") @PathVariable Long tagId) {
-        tagManagerService.moveDown(tagId);
         return Result.success();
     }
 }
