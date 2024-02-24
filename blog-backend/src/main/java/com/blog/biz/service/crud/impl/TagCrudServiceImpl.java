@@ -1,7 +1,10 @@
 package com.blog.biz.service.crud.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +39,16 @@ public class TagCrudServiceImpl extends BaseCrudServiceImpl<TagMapper, TagEntity
         queryWrapper.like(StringUtils.isNotBlank(tagName), TagEntity::getTagName, tagName)
                 .orderByDesc(TagEntity::getUpdateTime);
         return baseMapper.selectPage(pageable, queryWrapper);
+    }
+
+    @Override
+    public List<TagEntity> findAllByTagNames(List<String> tagNames) {
+        if (CollectionUtils.isEmpty(tagNames)) {
+            return new ArrayList<>();
+        }
+        LambdaQueryWrapper<TagEntity> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.in(TagEntity::getTagName, tagNames);
+        return baseMapper.selectList(queryWrapper);
     }
 
 }

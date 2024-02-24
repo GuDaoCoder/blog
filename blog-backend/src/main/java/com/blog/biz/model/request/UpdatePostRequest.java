@@ -46,5 +46,5 @@ public class UpdatePostRequest extends CommonRequest {
     private String content;
 
     @Schema(description = "标签集合")
-    private List<Long> tagIds;
+    private List<String> tags;
 }

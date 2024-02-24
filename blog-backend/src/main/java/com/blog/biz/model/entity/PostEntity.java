@@ -27,6 +27,11 @@ public class PostEntity extends BaseEntity {
     private String title;
 
     /**
+     * 文章内容
+     */
+    private String content;
+
+    /**
      * 摘要
      */
     @TableField(updateStrategy = FieldStrategy.IGNORED)

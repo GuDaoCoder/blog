@@ -1,5 +1,6 @@
 package com.blog.biz.service.crud;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -29,4 +30,5 @@ public interface TagCrudService extends IBaseCrudService<TagEntity> {
      */
     IPage<TagEntity> page(String tagName, IPage<TagEntity> pageable);
 
+    List<TagEntity> findAllByTagNames(List<String> tagNames);
 }

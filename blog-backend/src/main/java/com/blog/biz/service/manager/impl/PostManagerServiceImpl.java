@@ -1,13 +1,11 @@
 package com.blog.biz.service.manager.impl;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.blog.common.util.ColorUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -24,7 +22,6 @@ import com.blog.biz.model.request.PagePostRequest;
 import com.blog.biz.model.request.UpdatePostRequest;
 import com.blog.biz.model.response.CreatePostResponse;
 import com.blog.biz.model.response.PagePostResponse;
-import com.blog.biz.model.response.PageTagResponse;
 import com.blog.biz.service.crud.*;
 import com.blog.biz.service.manager.PostManagerService;
 import com.blog.common.base.response.PageResponse;
@@ -82,7 +79,7 @@ public class PostManagerServiceImpl implements PostManagerService {
         postContentCrudService.save(postContentEntity);
 
         // 保存文章标签关系
-        savePostTagRelas(entity.getPostId(), request.getTagIds());
+        savePostTagRelation(entity.getPostId(), request.getTags());
         return new CreatePostResponse(entity.getPostId());
     }
 
@@ -111,9 +108,11 @@ public class PostManagerServiceImpl implements PostManagerService {
 
         // 标签信息
         postTagRelaCrudService.removeByField(PostTagRelaEntity::getPostId, postId);
-        if (CollectionUtils.isNotEmpty(request.getTagIds())) {
-            savePostTagRelas(postId, request.getTagIds());
-        }
+
+        // 重新保存文章标签关系
+        postTagRelaCrudService.removeByField(PostTagRelaEntity::getPostId, postId);
+        savePostTagRelation(postId, request.getTags());
+
     }
 
     @Override
@@ -226,21 +225,38 @@ public class PostManagerServiceImpl implements PostManagerService {
      * 保存文章标签关系
      *
      * @param postId Long
-     * @param tagIds Long>
+     * @param tags
      */
-    private void savePostTagRelas(Long postId, List<Long> tagIds) {
-        if (CollectionUtils.isNotEmpty(tagIds)) {
-            List<TagEntity> tagEntities = tagCrudService.listByIds(tagIds);
-            if (CollectionUtils.isEmpty(tagEntities) || tagIds.size() != tagEntities.size()) {
-                throw new BusinessException("存在未知的标签，请检查");
-            }
-            List<PostTagRelaEntity> postTagRelaEntities = tagIds.stream().map(tagId -> {
-                PostTagRelaEntity postTagRelaEntity = new PostTagRelaEntity();
-                postTagRelaEntity.setPostId(postId).setTagId(tagId);
-                return postTagRelaEntity;
-            }).collect(Collectors.toList());
-            // 保存文章标签关系
-            postTagRelaCrudService.saveBatch(postTagRelaEntities);
+    private void savePostTagRelation(Long postId, List<String> tags) {
+        if (CollectionUtils.isEmpty(tags)) {
+            return;
         }
+        List<TagEntity> tagEntities = tagCrudService.findAllByTagNames(tags);
+        Set<String> existsTagNames = tagEntities
+                .stream()
+                .map(TagEntity::getTagName)
+                .collect(Collectors.toSet());
+        List<String> nonExistsTagNames = tags.stream().filter(tagName -> !existsTagNames.add(tagName)).collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(nonExistsTagNames)) {
+            List<TagEntity> addedTagEntities = nonExistsTagNames.stream().map(tagName -> {
+                TagEntity tagEntity = new TagEntity();
+                tagEntity.setTagName(tagName)
+                        .setEnable(Boolean.TRUE)
+                        .setColor(ColorUtil.generateHexColor());
+                return tagEntity;
+            }).toList();
+            tagCrudService.saveBatch(tagEntities);
+            tagEntities.addAll(addedTagEntities);
+        }
+
+        List<PostTagRelaEntity> postTagRelaEntities = tagEntities.stream().map(tagEntity -> {
+            PostTagRelaEntity postTagRelaEntity = new PostTagRelaEntity();
+            postTagRelaEntity.setPostId(postId).setTagId(tagEntity.getTagId());
+            return postTagRelaEntity;
+        }).collect(Collectors.toList());
+
+        // 保存文章标签关系
+        postTagRelaCrudService.saveBatch(postTagRelaEntities);
     }
+
 }

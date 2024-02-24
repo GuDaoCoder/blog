@@ -2,6 +2,7 @@ package com.blog.biz.model.request;
 
 import java.util.List;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -20,6 +21,9 @@ public class CreatePostRequest extends CommonRequest {
     @NotBlank(message = "文章标题不能为空")
     @Schema(description = "标题")
     private String title;
+
+    @Schema(description = "文章内容")
+    private String content;
 
     @Schema(description = "摘要")
     private String summary;
@@ -46,9 +50,8 @@ public class CreatePostRequest extends CommonRequest {
     @Schema(description = "是否发布")
     private Boolean publish;
 
-    @Schema(description = "文章内容")
-    private String content;
-
+    @Valid
     @Schema(description = "标签集合")
-    private List<Long> tagIds;
+    private List<String> tags;
+
 }
