@@ -57,8 +57,9 @@
       <a-divider/>
 
       <search-result>
-<!--        <template #toolbar>-->
-<!--        </template>-->
+        <template #toolbar>
+          <a-button type="primary" @click="handleCreatePost">新增文章</a-button>
+        </template>
 
         <template #table>
           <a-table row-key="tagId" :columns="tableColumns" :data="postTableData" stripe column-resizable
@@ -73,13 +74,13 @@
               </a-space>
             </template>
             <template #status="{record}">
-             {{$dict(PostStatus,record.status)}}
+              {{ $dict(PostStatus, record.status) }}
             </template>
             <template #top="{record}">
-              {{$dict(Whether, record.top)}}
+              {{ $dict(Whether, record.top) }}
             </template>
             <template #enableComment="{record}">
-              {{$dict(Whether, record.enableComment)}}
+              {{ $dict(Whether, record.enableComment) }}
             </template>
             <template #operations="{ record }">
               <a-link @click="handleUpdatePost(record)">编辑</a-link>
@@ -98,17 +99,19 @@
       </search-result>
     </content-card>
   </Container>
+
+  <save-post :form-data="savePostFormData" :visible="savePostVisible" title="新增文章" @cancel="handleCancelSave"/>
 </template>
 
 <script setup lang="ts">
 import ContentCard from "@/components/ContentCard/index.vue";
 import SearchButtonGroup from "@/components/SearchButtonGroup/index.vue"
 import SearchResult from "@/components/SearchResult/index.vue"
+import SavePost from "@/views/admin/post-manage/components/save-post.vue";
 import {ref} from "vue";
 import {PostStatus, Whether} from "@/enums";
 import type {TableColumnData} from "@arco-design/web-vue";
 import {pagePost} from "@/api/post-manage";
-import {dict, text} from "../../../utils/dict";
 
 const initSearchForm = (): SearchPostForm => {
   return {
@@ -126,6 +129,7 @@ const searchFormData = ref<SearchPostForm>(initSearchForm())
 const categoryTreeData = ref([])
 
 const handleSearch = () => {
+  fetchTableData(searchFormData.value)
 }
 
 const reset = () => {
@@ -226,6 +230,34 @@ const fetchTableData = async (form: SearchPostForm = {}) => {
 }
 
 fetchTableData()
+
+const savePostVisible = ref<boolean>(false)
+const savePostFormData = ref<SavePostForm>(
+    {
+      title: "",
+      categoryId: "",
+      categoryName: "",
+      summary: "",
+      content: "",
+      coverPictureUrl: "https://placekitten.com/800/800",
+      enableComment: false,
+      encrypt: false,
+      password: "",
+      status: "",
+      top: false,
+      publish: false
+    })
+
+const handleCreatePost = () => {
+  savePostVisible.value = true
+}
+
+const handleCancelSave = (reload: boolean) => {
+  savePostVisible.value = false
+  if (reload) {
+    handleSearch()
+  }
+}
 
 const handleUpdatePost = (value: PagePostVO) => {
 

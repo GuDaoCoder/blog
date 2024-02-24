@@ -15,6 +15,7 @@ defineProps({
 
 <style scoped lang="scss">
 .center {
-  margin: 0 auto;
+  display: flex;
+  justify-content: center
 }
 </style>

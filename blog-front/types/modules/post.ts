@@ -38,3 +38,37 @@ interface PagePostTagItem {
     tagName?: string,
     color?: string
 }
+
+interface SavePostForm {
+    postId?: string,
+    title?: string,
+    summary?: string,
+    content?: string,
+    coverPictureUrl?: string,
+    status?: string,
+    categoryId?: string,
+    categoryName?: string,
+    top?: boolean,
+    enableComment?: boolean,
+    encrypt?: boolean,
+    password?: string,
+    publish?: boolean
+}
+
+interface CreatePostDTO {
+    title?: string,
+    summary?: string,
+    content?: string,
+    coverPictureUrl?: string,
+    status?: string,
+    categoryId?: string,
+    top?: boolean,
+    enableComment?: boolean,
+    encrypt?: boolean,
+    password?: string,
+    publish?: boolean
+}
+
+interface CreatePostVO {
+    postId: string
+}
