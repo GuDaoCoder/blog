@@ -11,11 +11,11 @@
 
       <div v-else class="post-form-wrapper">
         <a-form ref="formRef" :model="formData" layout="vertical">
-          <a-form-item label="文章标题" :rules="formRule.title">
+          <a-form-item field="title" label="文章标题" :rules="formRule.title">
             <a-input v-model="formData.title"/>
           </a-form-item>
 
-          <a-form-item label="文章分类" :rules="formRule.categoryId">
+          <a-form-item field="categoryId" label="文章分类" :rules="formRule.categoryId">
             <a-tree-select
                 v-model="formData.categoryId"
                 placeholder="全部"
@@ -39,19 +39,19 @@
           <!--            <a-upload action="/" image-preview :limit="1" list-type="picture" show-preview-button/>-->
           <!--          </a-form-item>-->
 
-          <a-form-item label="是否置顶" :rules="formRule.top">
+          <a-form-item field="top" label="是否置顶" :rules="formRule.top">
             <a-switch v-model="formData.top"/>
           </a-form-item>
 
-          <a-form-item label="是否开启评论" :rules="formRule.enableComment">
+          <a-form-item field="enableComment" label="是否开启评论" :rules="formRule.enableComment">
             <a-switch v-model="formData.enableComment"/>
           </a-form-item>
 
-          <a-form-item label="是否加密访问" :rules="formRule.encrypt">
+          <a-form-item field="encrypt" label="是否加密访问" :rules="formRule.encrypt">
             <a-switch v-model="formData.encrypt"/>
           </a-form-item>
 
-          <a-form-item v-if="formData.encrypt" label="访问密码" :rules="formRule.password">
+          <a-form-item field="password" v-if="formData.encrypt" label="访问密码" :rules="formRule.password">
             <a-input-password v-model="formData.password" allow-clear/>
           </a-form-item>
         </a-form>
@@ -94,12 +94,12 @@ const props = defineProps({
 const emit = defineEmits(["cancel"]);
 
 const formRule = reactive({
-  title: ref<FieldRule[]>([{required: true, message: "文章标题必填"}]),
-  categoryId: ref<FieldRule[]>([{required: true, message: "文章分类必填"}]),
-  top: ref<FieldRule[]>([{required: true, message: "是否置顶必填"}]),
-  enableComment: ref<FieldRule[]>([{required: true, message: "是否开启评论必填"}]),
-  encrypt: ref<FieldRule[]>([{required: true, message: "是否加密访问必填"}]),
-  password: ref<FieldRule[]>([{required: true, message: "访问密码必填"}]),
+  title: [{required: true, message: "文章标题必填"}],
+  categoryId: [{required: true, message: "文章分类必填"}],
+  top: [{required: true, message: "是否置顶必填"}],
+  enableComment: [{required: true, message: "是否开启评论必填"}],
+  encrypt: [{required: true, message: "是否加密访问必填"}],
+  password: [{required: true, message: "访问密码必填"}],
 })
 
 

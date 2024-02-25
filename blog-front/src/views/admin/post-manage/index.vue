@@ -133,7 +133,7 @@ const handleSearch = () => {
 }
 
 const reset = () => {
-  initSearchForm();
+  searchFormData.value = initSearchForm();
 }
 
 const tableColumns = ref<TableColumnData[]>([
