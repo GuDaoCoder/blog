@@ -71,14 +71,17 @@ public class PostEntity extends BaseEntity {
     /**
      * 是否置顶
      */
-    @TableField("is_top")
     private Boolean top;
 
     /**
      * 是否开启评论
      */
-    @TableField("is_enable_comment")
     private Boolean enableComment;
+
+    /**
+     * 是否加密访问
+     */
+    private Boolean encrypt;
 
     /**
      * 访问密码

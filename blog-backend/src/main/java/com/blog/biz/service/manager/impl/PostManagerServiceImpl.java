@@ -53,8 +53,6 @@ public class PostManagerServiceImpl implements PostManagerService {
 
     private final TagCrudService tagCrudService;
 
-    private final PostContentCrudService postContentCrudService;
-
     @Transactional(rollbackFor = Exception.class)
     @Override
     public CreatePostResponse create(CreatePostRequest request) {
@@ -73,13 +71,8 @@ public class PostManagerServiceImpl implements PostManagerService {
         // 保存文章基本信息
         postCrudService.save(entity);
 
-        // 保存文章内容
-        PostContentEntity postContentEntity = new PostContentEntity();
-        postContentEntity.setPostId(entity.getPostId()).setContent(request.getContent());
-        postContentCrudService.save(postContentEntity);
-
         // 保存文章标签关系
-        savePostTagRelation(entity.getPostId(), request.getTags());
+        savePostTagRelation(entity.getPostId(), request.getTagNames());
         return new CreatePostResponse(entity.getPostId());
     }
 
@@ -90,9 +83,10 @@ public class PostManagerServiceImpl implements PostManagerService {
         categoryCrudService.getOptById(request.getCategoryId())
                 .orElseThrow(() -> new BusinessException("分类信息不存在或已被删除"));
 
-        // 文章基础信息
+        // 文章信息
         PostEntity entity = postCrudService.getOneOrThrow(postId);
         entity.setTitle(request.getTitle()).setSummary(request.getSummary())
+                .setContent(request.getContent())
                 .setCoverPictureUrl(request.getCoverPictureUrl()).setCategoryId(request.getCategoryId())
                 .setTop(request.getTop()).setEnableComment(request.getEnableComment());
 
@@ -100,18 +94,9 @@ public class PostManagerServiceImpl implements PostManagerService {
         encryptPassword(entity, request.getPassword());
         postCrudService.updateById(entity);
 
-        // 文章内容信息
-        PostContentEntity postContentEntity = postContentCrudService.getByField(PostContentEntity::getPostId, postId)
-                .orElseThrow(() -> new BusinessException("文章内容信息不存在或已被删除"));
-        postContentEntity.setContent(request.getContent());
-        postContentCrudService.updateById(postContentEntity);
-
         // 标签信息
         postTagRelaCrudService.removeByField(PostTagRelaEntity::getPostId, postId);
-
-        // 重新保存文章标签关系
-        postTagRelaCrudService.removeByField(PostTagRelaEntity::getPostId, postId);
-        savePostTagRelation(postId, request.getTags());
+        savePostTagRelation(postId, request.getTagNames());
 
     }
 
@@ -121,8 +106,6 @@ public class PostManagerServiceImpl implements PostManagerService {
 
         // 删除文章基本信息
         postCrudService.removeById(postId);
-        // 删除文章内容
-        postContentCrudService.removeByField(PostContentEntity::getPostId, postId);
         // 删除文章标签关系
         postTagRelaCrudService.removeByField(PostTagRelaEntity::getPostId, postId);
     }
@@ -154,7 +137,7 @@ public class PostManagerServiceImpl implements PostManagerService {
             Optional.ofNullable(finalTagMap.get(entity.getPostId())).ifPresent(list -> {
                 List<PagePostResponse.TagItem> tagItems = list
                         .stream()
-                        .map(o -> new PagePostResponse.TagItem(o.getTagName(), o.getColor()))
+                        .map(o -> new PagePostResponse.TagItem(o.getTagId(), o.getTagName(), o.getColor()))
                         .collect(Collectors.toList());
                 pagePostResponse.setTags(tagItems);
             });
@@ -224,20 +207,20 @@ public class PostManagerServiceImpl implements PostManagerService {
     /**
      * 保存文章标签关系
      *
-     * @param postId Long
-     * @param tags
+     * @param postId   Long
+     * @param tagNames
      */
-    private void savePostTagRelation(Long postId, List<String> tags) {
-        if (CollectionUtils.isEmpty(tags)) {
+    private void savePostTagRelation(Long postId, List<String> tagNames) {
+        if (CollectionUtils.isEmpty(tagNames)) {
             return;
         }
-        List<TagEntity> tagEntities = tagCrudService.findAllByTagNames(tags);
+        List<TagEntity> tagEntities = tagCrudService.findAllByTagNames(tagNames);
         Set<String> existsTagNames = tagEntities
                 .stream()
                 .map(TagEntity::getTagName)
                 .collect(Collectors.toSet());
-        List<String> nonExistsTagNames = tags.stream().filter(tagName -> !existsTagNames.add(tagName)).collect(Collectors.toList());
-        if (CollectionUtils.isEmpty(nonExistsTagNames)) {
+        List<String> nonExistsTagNames = tagNames.stream().filter(existsTagNames::add).collect(Collectors.toList());
+        if (CollectionUtils.isNotEmpty(nonExistsTagNames)) {
             List<TagEntity> addedTagEntities = nonExistsTagNames.stream().map(tagName -> {
                 TagEntity tagEntity = new TagEntity();
                 tagEntity.setTagName(tagName)
@@ -245,7 +228,7 @@ public class PostManagerServiceImpl implements PostManagerService {
                         .setColor(ColorUtil.generateHexColor());
                 return tagEntity;
             }).toList();
-            tagCrudService.saveBatch(tagEntities);
+            tagCrudService.saveBatch(addedTagEntities);
             tagEntities.addAll(addedTagEntities);
         }
 

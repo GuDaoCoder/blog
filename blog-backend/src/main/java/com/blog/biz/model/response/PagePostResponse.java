@@ -29,6 +29,9 @@ public class PagePostResponse extends CommonResponse {
     @Schema(description = "摘要")
     private String summary;
 
+    @Schema(description = "文章内容")
+    private String content;
+
     @Schema(description = "封面图片链接")
     private String coverPictureUrl;
 
@@ -39,6 +42,7 @@ public class PagePostResponse extends CommonResponse {
     private PostSource source;
 
     @Schema(description = "所属分类Id")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long categoryId;
 
     @Schema(description = "所属分类名称")
@@ -70,6 +74,10 @@ public class PagePostResponse extends CommonResponse {
     @AllArgsConstructor
     @Data
     public static class TagItem {
+
+        @JsonFormat(shape = JsonFormat.Shape.STRING)
+        @Schema(description = "标签Id")
+        private Long tagId;
 
         @Schema(description = "标签名称")
         private String tagName;

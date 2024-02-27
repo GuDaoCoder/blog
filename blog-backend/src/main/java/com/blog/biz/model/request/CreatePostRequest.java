@@ -52,6 +52,6 @@ public class CreatePostRequest extends CommonRequest {
 
     @Valid
     @Schema(description = "标签集合")
-    private List<String> tags;
+    private List<String> tagNames;
 
 }
