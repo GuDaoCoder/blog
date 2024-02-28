@@ -232,23 +232,21 @@ const fetchTableData = async (form: SearchPostForm = {}) => {
 fetchTableData()
 
 const savePostVisible = ref<boolean>(false)
-const savePostFormData = ref<SavePostForm>(
-    {
-      title: "",
-      categoryId: "",
-      categoryName: "",
-      summary: "",
-      content: "",
-      coverPictureUrl: "https://placekitten.com/800/800",
-      enableComment: false,
-      encrypt: false,
-      password: "",
-      status: "",
-      top: false,
-      publish: false
-    })
+const savePostFormData = ref<SavePostForm>({})
 
 const handleCreatePost = () => {
+  savePostFormData.value = {
+    coverPictureUrl: "https://placekitten.com/800/800",
+    enableComment: false,
+    encrypt: false,
+    top: false,
+    publish: false
+  }
+  savePostVisible.value = true
+}
+
+const handleUpdatePost = (value: PagePostVO) => {
+  savePostFormData.value = {...value, tagIds: value.tags?.map(obj => obj.tagId) || []}
   savePostVisible.value = true
 }
 
@@ -257,10 +255,6 @@ const handleCancelSave = (reload: boolean) => {
   if (reload) {
     handleSearch()
   }
-}
-
-const handleUpdatePost = (value: PagePostVO) => {
-
 }
 
 const handleDeletePost = (value: PagePostVO) => {

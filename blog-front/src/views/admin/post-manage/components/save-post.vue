@@ -10,48 +10,36 @@
       <md-edit ref="mdEditor" v-if="step ===1" :content="formData.content"/>
 
       <div v-else class="post-form-wrapper">
-        <a-form ref="formRef" :model="formData" layout="vertical">
-          <a-form-item field="title" label="文章标题" :rules="formRule.title">
+        <a-form ref="formRef" :model="formData" :rules="rules" layout="vertical">
+          <a-form-item field="title" label="文章标题">
             <a-input v-model="formData.title"/>
           </a-form-item>
 
-          <a-form-item field="categoryId" label="文章分类" :rules="formRule.categoryId">
-            <a-tree-select
-                v-model="formData.categoryId"
-                placeholder="全部"
-                :field-names="{
-                  key:'categoryId',
-                  title:'categoryName'
-                }"
-                :data="categoryTreeData"
-            ></a-tree-select>
+          <a-form-item field="categoryId" label="文章分类">
+            <category-select v-model="formData.categoryId"/>
           </a-form-item>
 
           <a-form-item label="摘要">
             <a-textarea v-model="formData.summary" show-word-limit allow-clear auto-size :max-length="100"/>
           </a-form-item>
 
-          <a-form-item label="标签">
-            <a-input-tag :max-tag-count="5" allow-clear/>
+          <a-form-item field="tagIds" label="标签">
+            <tag-select v-model="formData.tagIds"/>
           </a-form-item>
 
-          <!--          <a-form-item label="封面">-->
-          <!--            <a-upload action="/" image-preview :limit="1" list-type="picture" show-preview-button/>-->
-          <!--          </a-form-item>-->
-
-          <a-form-item field="top" label="是否置顶" :rules="formRule.top">
+          <a-form-item field="top" label="是否置顶">
             <a-switch v-model="formData.top"/>
           </a-form-item>
 
-          <a-form-item field="enableComment" label="是否开启评论" :rules="formRule.enableComment">
+          <a-form-item field="enableComment" label="是否开启评论">
             <a-switch v-model="formData.enableComment"/>
           </a-form-item>
 
-          <a-form-item field="encrypt" label="是否加密访问" :rules="formRule.encrypt">
+          <a-form-item field="encrypt" label="是否加密访问">
             <a-switch v-model="formData.encrypt"/>
           </a-form-item>
 
-          <a-form-item field="password" v-if="formData.encrypt" label="访问密码" :rules="formRule.password">
+          <a-form-item field="password" v-if="formData.encrypt" label="访问密码">
             <a-input-password v-model="formData.password" allow-clear/>
           </a-form-item>
         </a-form>
@@ -61,7 +49,6 @@
     <operations-group center style="margin-top: 20px">
       <a-button v-if="step === 2" type="primary" @click="handleChangeStep(1)">上一步</a-button>
       <a-button v-if="step === 1" type="primary" @click="handleChangeStep(2)">下一步</a-button>
-      <!--      <a-button v-if="step === 2" type="primary" html-type="submit">直接发布</a-button>-->
       <a-button v-if="step === 2" type="primary" @click="handleSubmit" :loading="loading">保存</a-button>
       <a-button type="outline" @click="handleCancel">返回</a-button>
     </operations-group>
@@ -70,11 +57,12 @@
 
 <script setup lang="ts">
 import {type PropType, reactive, ref} from "vue";
+import CategorySelect from "@/components/CategorySelect/index.vue"
+import TagSelect from "@/components/TagSelect/index.vue"
 import OperationsGroup from "@/components/OperationsGroup/index.vue";
 import MdEdit from "@/components/MdEdit/index.vue";
-import {treeCategory} from "@/api/category-manage";
-import {type FieldRule, Notification, type ValidatedError} from "@arco-design/web-vue";
-import {createPost} from "@/api/post-manage";
+import {Notification, type ValidatedError} from "@arco-design/web-vue";
+import {createPost, updatePost} from "@/api/post-manage";
 
 const props = defineProps({
   visible: {
@@ -93,24 +81,15 @@ const props = defineProps({
 
 const emit = defineEmits(["cancel"]);
 
-const formRule = reactive({
+const rules = reactive({
   title: [{required: true, message: "文章标题必填"}],
   categoryId: [{required: true, message: "文章分类必填"}],
+  tagIds: [{required: true, message: "文章标签必填"}],
   top: [{required: true, message: "是否置顶必填"}],
   enableComment: [{required: true, message: "是否开启评论必填"}],
   encrypt: [{required: true, message: "是否加密访问必填"}],
   password: [{required: true, message: "访问密码必填"}],
 })
-
-
-const categoryTreeData = ref<TreeCategoryVO[]>([])
-const fetchCategoryTree = async () => {
-  const {data} = await treeCategory({})
-  categoryTreeData.value = data;
-}
-
-fetchCategoryTree();
-
 const mdEditor = ref();
 
 const step = ref<number>(1)
@@ -136,6 +115,7 @@ const handleSubmit = () => {
     loading.value = true
     try {
       if (props.formData.postId) {
+        await updatePost(props.formData.postId, {...props.formData})
         Notification.success("更新成功");
       } else {
         await createPost({...props.formData})
@@ -147,7 +127,6 @@ const handleSubmit = () => {
     }
   });
 }
-
 
 const handleCancel = () => {
   emit("cancel")

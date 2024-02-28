@@ -7,3 +7,7 @@ export function pagePost(params: PagePostDTO) {
 export function createPost(data: CreatePostDTO) {
     return axios.post<CreatePostVO>("/admin/post", data)
 }
+
+export function updatePost(postId: string, data: UpdatePostDTO) {
+    return axios.put("/admin/post/" + postId, data)
+}

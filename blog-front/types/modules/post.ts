@@ -19,8 +19,8 @@ interface PagePostDTO extends PageDTO {
 interface PagePostVO {
     postId: string,
     title: string,
-    summary?: string,
-    coverPictureUrl?: string,
+    summary: string,
+    coverPictureUrl: string,
     status: string,
     source: string,
     categoryId: string,
@@ -28,15 +28,16 @@ interface PagePostVO {
     publishTime: string,
     updateTime: string,
     top: boolean,
-    enableComment: boolean,
+    enableComment?: boolean,
     encrypt: boolean
-    password?: string,
-    tags?: PagePostTagItem[]
+    password: string,
+    tags: PagePostTagItem[]
 }
 
 interface PagePostTagItem {
-    tagName?: string,
-    color?: string
+    tagId: string,
+    tagName: string,
+    color: string
 }
 
 interface SavePostForm {
@@ -48,6 +49,7 @@ interface SavePostForm {
     status?: string,
     categoryId?: string,
     categoryName?: string,
+    tagIds?: string[],
     top?: boolean,
     enableComment?: boolean,
     encrypt?: boolean,
@@ -62,6 +64,7 @@ interface CreatePostDTO {
     coverPictureUrl?: string,
     status?: string,
     categoryId?: string,
+    tagIds?: string[],
     top?: boolean,
     enableComment?: boolean,
     encrypt?: boolean,
@@ -71,4 +74,19 @@ interface CreatePostDTO {
 
 interface CreatePostVO {
     postId: string
+}
+
+interface UpdatePostDTO {
+    title?: string,
+    summary?: string,
+    content?: string,
+    coverPictureUrl?: string,
+    status?: string,
+    categoryId?: string,
+    tagIds?: string[],
+    top?: boolean,
+    enableComment?: boolean,
+    encrypt?: boolean,
+    password?: string,
+    publish?: boolean
 }
