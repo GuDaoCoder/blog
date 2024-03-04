@@ -4,9 +4,9 @@ interface CategorySearchForm {
 }
 
 interface CategoryCreateForm {
-    categoryId?: string,
+    categoryId?: number,
     categoryName?: string,
-    parentCategoryId?: string,
+    parentCategoryId?: number,
     parentCategoryName?: string
     enabled?: boolean,
 }
@@ -17,9 +17,9 @@ interface TreeCategoryDTO {
 }
 
 interface TreeCategoryVO {
-    categoryId: string,
+    categoryId: number,
     categoryName: string,
-    parentId: string,
+    parentId: number,
     fullId: string,
     orderNo: number,
     updateTime: string,
@@ -30,12 +30,12 @@ interface TreeCategoryVO {
 
 interface CreateCategoryDTO {
     categoryName?: string,
-    parentCategoryId?: string,
+    parentCategoryId?: number,
     enabled?: boolean
 }
 
 interface CreateCategoryVO {
-    categoryId?: string
+    categoryId?: number
 }
 
 interface UpdateCategoryDTO {

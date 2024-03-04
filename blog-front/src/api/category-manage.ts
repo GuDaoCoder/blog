@@ -8,10 +8,10 @@ export function createCategory(data: CreateCategoryDTO) {
     return axios.post<CreateCategoryVO>("/admin/category", data)
 }
 
-export function updateCategory(categoryId: string, data: UpdateCategoryDTO) {
+export function updateCategory(categoryId: number, data: UpdateCategoryDTO) {
     return axios.put("/admin/category/" + categoryId, data)
 }
 
-export function deleteCategory(categoryId: string) {
+export function deleteCategory(categoryId: number) {
     return axios.delete("/admin/category/" + categoryId)
 }

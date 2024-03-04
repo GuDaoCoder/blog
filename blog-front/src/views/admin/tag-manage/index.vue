@@ -52,7 +52,7 @@
 <script setup lang="ts">
 import Pagination from "@/components/Pagination/index.vue"
 import ContentCard from '@/components/ContentCard/index.vue'
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import type {TableColumnData} from "@arco-design/web-vue";
 import {deleteTag, pageTag} from "@/api/tag-manage";
 import SearchButtonGroup from "@/components/SearchButtonGroup/index.vue";
@@ -141,7 +141,9 @@ const fetchTableData = async (form: SearchTagForm = {}) => {
   }
 }
 
-fetchTableData()
+onMounted(() => {
+  fetchTableData()
+})
 
 const saveTagVisible = ref<boolean>(false)
 const saveTagFormData = ref<SaveTagForm>({})

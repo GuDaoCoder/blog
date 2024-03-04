@@ -40,9 +40,6 @@ public class PagePostRequest extends PageRequest {
     @Schema(description = "创建结束时间")
     private LocalDateTime createEndTime;
 
-    @Schema(description = "是否加密")
-    private Boolean encrypt;
-
     @Schema(description = "是否置顶")
     private Boolean top;
 

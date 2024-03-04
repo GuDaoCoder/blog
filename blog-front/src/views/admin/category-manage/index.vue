@@ -47,9 +47,8 @@
 </template>
 <script setup lang="ts">
 import ContentCard from '@/components/ContentCard/index.vue'
-import OperationsGroup from "@/components/OperationsGroup/index.vue"
 import SaveCategory from "@/views/admin/category-manage/components/save-category.vue";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import type {TableColumnData} from "@arco-design/web-vue";
 import {deleteCategory, treeCategory} from "@/api/category-manage";
 import {Notification} from "@arco-design/web-vue";
@@ -76,6 +75,7 @@ const handleSearch = () => {
  */
 const reset = () => {
   searchFormData.value = initSearchForm();
+  fetchTableData(searchFormData.value)
 }
 
 /**
@@ -120,7 +120,9 @@ const fetchTableData = async (form: CategorySearchForm = {}) => {
   }
 }
 
-fetchTableData()
+onMounted(() => {
+  fetchTableData(searchFormData.value)
+})
 
 const saveFormVisible = ref(false)
 const saveCategoryFormData = ref<CategoryCreateForm>({})

@@ -18,18 +18,7 @@
           </a-col>
           <a-col :span="8">
             <a-form-item label="文章分类">
-              <a-tree-select
-                  v-model="searchFormData.categoryId"
-                  :data="categoryTreeData"
-                  placeholder="全部"
-              ></a-tree-select>
-            </a-form-item>
-          </a-col>
-          <a-col :span="8">
-            <a-form-item label="加密">
-              <a-select v-model="searchFormData.encrypt" placeholder="全部">
-                <a-option v-for="[key,value] in Object.entries(Whether)" :key="key" :value="key">{{ value }}</a-option>
-              </a-select>
+              <category-select v-model="searchFormData.categoryId"/>
             </a-form-item>
           </a-col>
           <a-col :span="8">
@@ -84,8 +73,9 @@
             </template>
             <template #operations="{ record }">
               <a-link @click="handleUpdatePost(record)">编辑</a-link>
-              <a-link @click="handleUpdatePost(record)">发布</a-link>
-              <a-popconfirm content="确认删除?" @ok="handleDeletePost(record)">
+              <a-link v-if="record.status === 'DRAFT'" @click="handlePublishPost(record)">发布</a-link>
+              <a-link v-if="record.status === 'PUBLISHED'" @click="handleCancelPublishPost(record)">取消发布</a-link>
+              <a-popconfirm content="确认移到回收站?" @ok="handleMoveRecycleBin(record)">
                 <a-link>移到回收站</a-link>
               </a-popconfirm>
             </template>
@@ -100,7 +90,8 @@
     </content-card>
   </Container>
 
-  <save-post :form-data="savePostFormData" :visible="savePostVisible" title="新增文章" @cancel="handleCancelSave"/>
+  <save-post v-if="savePostVisible" :form-data="savePostFormData" :visible="savePostVisible" title="新增文章"
+             @cancel="handleCancelSave"/>
 </template>
 
 <script setup lang="ts">
@@ -111,22 +102,20 @@ import SavePost from "@/views/admin/post-manage/components/save-post.vue";
 import {ref} from "vue";
 import {PostStatus, Whether} from "@/enums";
 import type {TableColumnData} from "@arco-design/web-vue";
-import {pagePost} from "@/api/post-manage";
+import {moveRecycleBin, pagePost, publishPost, unpublished} from "@/api/post-manage";
+import CategorySelect from "@/components/CategorySelect/index.vue";
 
 const initSearchForm = (): SearchPostForm => {
   return {
     title: "",
     status: "",
-    categoryId: "",
-    encrypt: undefined,
+    categoryId: undefined,
     top: undefined,
     enableComment: undefined
   }
 }
 
 const searchFormData = ref<SearchPostForm>(initSearchForm())
-
-const categoryTreeData = ref([])
 
 const handleSearch = () => {
   fetchTableData(searchFormData.value)
@@ -149,10 +138,6 @@ const tableColumns = ref<TableColumnData[]>([
     width: 200
   },
   {
-    title: "摘要",
-    dataIndex: "summary"
-  },
-  {
     title: "状态",
     dataIndex: "status",
     slotName: "status",
@@ -169,15 +154,13 @@ const tableColumns = ref<TableColumnData[]>([
     width: 120
   },
   {
+    title: "摘要",
+    dataIndex: "summary"
+  },
+  {
     title: "是否置顶",
     dataIndex: "top",
     slotName: "top",
-    width: 100
-  },
-  {
-    title: "是否加密",
-    dataIndex: "enableComment",
-    slotName: "enableComment",
     width: 100
   },
   {
@@ -195,7 +178,7 @@ const tableColumns = ref<TableColumnData[]>([
     dataIndex: "operations",
     slotName: 'operations',
     fixed: "right",
-    width: 200
+    width: 220
   }
 ])
 
@@ -238,15 +221,14 @@ const handleCreatePost = () => {
   savePostFormData.value = {
     coverPictureUrl: "https://placekitten.com/800/800",
     enableComment: false,
-    encrypt: false,
     top: false,
     publish: false
   }
   savePostVisible.value = true
 }
 
-const handleUpdatePost = (value: PagePostVO) => {
-  savePostFormData.value = {...value, tagIds: value.tags?.map(obj => obj.tagId) || []}
+const handleUpdatePost = (record: PagePostVO) => {
+  savePostFormData.value = {...record, tagIds: record.tags?.map(obj => obj.tagId) || []}
   savePostVisible.value = true
 }
 
@@ -256,9 +238,19 @@ const handleCancelSave = (reload: boolean) => {
     handleSearch()
   }
 }
+const handlePublishPost = async (record: PagePostVO) => {
+  await publishPost(record.postId)
+  handleSearch()
+}
 
-const handleDeletePost = (value: PagePostVO) => {
+const handleCancelPublishPost = async (record: PagePostVO) => {
+  await unpublished(record.postId)
+  handleSearch()
+}
 
+const handleMoveRecycleBin = async (record: PagePostVO) => {
+  await moveRecycleBin(record.postId)
+  handleSearch()
 }
 
 const handleChangePage = () => {

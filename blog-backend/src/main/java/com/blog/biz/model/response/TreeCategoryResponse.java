@@ -21,14 +21,12 @@ public class TreeCategoryResponse extends CommonResponse implements TreeNode<Tre
     private static final long serialVersionUID = -5751674634148658873L;
 
     @Schema(description = "分类Id")
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long categoryId;
 
     @Schema(description = "分类名称")
     private String categoryName;
 
     @Schema(description = "上级分类")
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long parentCategoryId;
 
     @Schema(description = "全路径Id")

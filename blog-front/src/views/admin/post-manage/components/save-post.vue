@@ -34,14 +34,6 @@
           <a-form-item field="enableComment" label="是否开启评论">
             <a-switch v-model="formData.enableComment"/>
           </a-form-item>
-
-          <a-form-item field="encrypt" label="是否加密访问">
-            <a-switch v-model="formData.encrypt"/>
-          </a-form-item>
-
-          <a-form-item field="password" v-if="formData.encrypt" label="访问密码">
-            <a-input-password v-model="formData.password" allow-clear/>
-          </a-form-item>
         </a-form>
       </div>
     </keep-alive>

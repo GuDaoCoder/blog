@@ -22,6 +22,5 @@ public class CreateCategoryResponse extends CommonResponse {
     private static final long serialVersionUID = 9116953955110935038L;
 
     @Schema(description = "分类Id")
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long categoryId;
 }

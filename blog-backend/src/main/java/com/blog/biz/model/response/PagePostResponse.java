@@ -19,7 +19,6 @@ import lombok.Data;
 @Data
 public class PagePostResponse extends CommonResponse {
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @Schema(description = "主键")
     private Long postId;
 
@@ -42,7 +41,6 @@ public class PagePostResponse extends CommonResponse {
     private PostSource source;
 
     @Schema(description = "所属分类Id")
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long categoryId;
 
     @Schema(description = "所属分类名称")
@@ -75,7 +73,6 @@ public class PagePostResponse extends CommonResponse {
     @Data
     public static class TagItem {
 
-        @JsonFormat(shape = JsonFormat.Shape.STRING)
         @Schema(description = "标签Id")
         private Long tagId;
 

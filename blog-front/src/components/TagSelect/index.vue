@@ -1,5 +1,5 @@
 <template>
-  <a-select multiple allow-create v-model="model" :loading="loading" @change="handleChange">
+  <a-select multiple v-model="model" :loading="loading">
     <a-option v-for="option in options" :key="option.tagId" :value="option.tagId" :label="option.tagName"
               :tag-props="{color:option.color}"/>
   </a-select>
@@ -7,13 +7,13 @@
 
 <script setup lang="ts">
 import {createTag, pageTag} from "@/api/tag-manage";
-import {onBeforeMount, reactive, ref} from "vue";
+import {onBeforeMount, onMounted, reactive, ref} from "vue";
 import type {SelectFieldNames} from "@arco-design/web-vue/es/select/interface";
 import {useVModel} from "@/utils/useVModel";
 
 const props = defineProps({
   modelValue: {
-    type: Array<string>,
+    type: Array<number>,
     default: []
   }
 })
@@ -25,9 +25,7 @@ const loading = ref<boolean>(false)
 // 选项数据
 const options = ref<PageTagVO[]>([])
 
-onBeforeMount(() => {
-  console.log(props.modelValue);
-  debugger
+onMounted(() => {
   fetchOptions()
 })
 
@@ -42,7 +40,7 @@ const fetchOptions = async () => {
   }
 }
 
-const initValues = ref<String[]>([])
+const initValues = ref<Number[]>([])
 
 const model = useVModel(props, "modelValue", emits)
 
@@ -51,14 +49,13 @@ const handleChange = (checkedValues: string[]) => {
   if (addValues && addValues.length > 0) {
     handleCreateTag(addValues[0]);
     fetchOptions();
-
   }
 }
 
 const handleCreateTag = async (tagName: string) => {
   loading.value = true;
   try {
-    const {data: {tagId}} = await createTag({tagName: tagName, enable: true})
+    await createTag({tagName: tagName, enable: true})
   } finally {
     loading.value = false;
   }

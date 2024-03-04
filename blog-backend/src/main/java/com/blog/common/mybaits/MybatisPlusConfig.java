@@ -22,15 +22,4 @@ public class MybatisPlusConfig {
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
         return interceptor;
     }
-
-    /**
-     * 自定义Id
-     * 
-     * @param
-     * @return com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator
-     */
-    @Bean
-    public IdentifierGenerator idGenerator() {
-        return new CustomIdGenerator();
-    }
 }

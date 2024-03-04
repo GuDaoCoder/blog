@@ -43,15 +43,12 @@ public class CreatePostRequest extends CommonRequest {
     @Schema(description = "是否开启评论")
     private Boolean enableComment;
 
-    @Schema(description = "访问密码")
-    private String password;
-
     @NotNull(message = "是否发布不能为空")
     @Schema(description = "是否发布")
     private Boolean publish;
 
     @Valid
     @Schema(description = "标签集合")
-    private List<String> tagNames;
+    private List<Long> tagIds;
 
 }

@@ -30,22 +30,22 @@ public class PostController {
 
     private final PostManagerService postManagerService;
 
-    @Operation(summary = "新增文章")
-    @PostMapping
-    public Result<CreatePostResponse> create(@Validated @RequestBody CreatePostRequest request) {
-        return Result.success(postManagerService.create(request));
-    }
-
     @Operation(summary = "查询文章列表")
     @GetMapping
     public Result<PageResponse<PagePostResponse>> page(@ParameterObject @Validated PagePostRequest request) {
         return Result.success(postManagerService.page(request));
     }
 
+    @Operation(summary = "新增文章")
+    @PostMapping
+    public Result<CreatePostResponse> create(@Validated @RequestBody CreatePostRequest request) {
+        return Result.success(postManagerService.create(request));
+    }
+
     @Operation(summary = "更新文章")
     @PutMapping("/{postId}")
     public Result<Void> update(@Parameter(description = "文章Id") @PathVariable Long postId,
-        @Validated @RequestBody UpdatePostRequest request) {
+                               @Validated @RequestBody UpdatePostRequest request) {
         postManagerService.update(postId, request);
         return Result.success();
     }

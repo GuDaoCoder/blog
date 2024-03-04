@@ -22,7 +22,7 @@ import {useVModel} from "@/utils/useVModel";
 
 const props = defineProps({
   modelValue: {
-    type: String,
+    type: Number,
     default: ""
   }
 })

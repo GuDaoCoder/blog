@@ -39,12 +39,9 @@ public class UpdatePostRequest extends CommonRequest {
     @Schema(description = "是否开启评论")
     private Boolean enableComment;
 
-    @Schema(description = "访问密码")
-    private String password;
-
     @Schema(description = "文章内容")
     private String content;
 
     @Schema(description = "标签集合")
-    private List<String> tagNames;
+    private List<Long> tagIds;
 }

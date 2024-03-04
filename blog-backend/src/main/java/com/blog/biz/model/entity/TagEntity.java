@@ -20,7 +20,7 @@ public class TagEntity extends BaseEntity {
     /**
      * 用户Id
      */
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(type = IdType.AUTO)
     private Long tagId;
 
     /**

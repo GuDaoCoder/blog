@@ -8,11 +8,11 @@ export function createTag(data: TagDTO) {
     return axios.post<CreateTagVO>("/admin/tag", data)
 }
 
-export function updateTag(tagId: string, data: TagDTO) {
+export function updateTag(tagId: number, data: TagDTO) {
     return axios.put("/admin/tag/" + tagId, data)
 }
 
 
-export function deleteTag(tagId: string) {
+export function deleteTag(tagId: number) {
     return axios.delete("/admin/tag/" + tagId)
 }

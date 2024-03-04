@@ -17,7 +17,7 @@ import lombok.experimental.Accessors;
 @TableName("t_category")
 public class CategoryEntity extends BaseEntity {
 
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(type = IdType.AUTO)
     private Long categoryId;
 
     /**

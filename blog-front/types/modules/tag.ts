@@ -7,7 +7,7 @@ interface PageTagDTO extends PageDTO {
 }
 
 interface PageTagVO {
-    tagId: string,
+    tagId: number,
     tagName: string,
     enable: boolean,
     color: string,
@@ -16,7 +16,7 @@ interface PageTagVO {
 }
 
 interface SaveTagForm {
-    tagId?: string,
+    tagId?: number,
     tagName?: string,
     color?: string,
     enable?: boolean
@@ -29,5 +29,5 @@ interface TagDTO {
 }
 
 interface CreateTagVO {
-    tagId?: string
+    tagId?: number
 }

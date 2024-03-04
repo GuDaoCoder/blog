@@ -63,16 +63,13 @@ public class PostManagerServiceImpl implements PostManagerService {
         PostEntity entity = PostConverter.INSTANCE.toEntity(request);
         entity.setSource(PostSource.ADD).setStatus(request.getPublish() ? PostStatus.PUBLISHED : PostStatus.DRAFT)
                 .setPublishTime(request.getPublish() ? LocalDateTime.now() : null)
-                // todo: 统计markdown文章字数
                 .setWordCount(0);
-        // 加密密码
-        encryptPassword(entity, request.getPassword());
 
         // 保存文章基本信息
         postCrudService.save(entity);
 
         // 保存文章标签关系
-        savePostTagRelation(entity.getPostId(), request.getTagNames());
+        savePostTagRelation(entity.getPostId(), request.getTagIds());
         return new CreatePostResponse(entity.getPostId());
     }
 
@@ -83,20 +80,16 @@ public class PostManagerServiceImpl implements PostManagerService {
         categoryCrudService.getOptById(request.getCategoryId())
                 .orElseThrow(() -> new BusinessException("分类信息不存在或已被删除"));
 
-        // 文章信息
-        PostEntity entity = postCrudService.getOneOrThrow(postId);
-        entity.setTitle(request.getTitle()).setSummary(request.getSummary())
-                .setContent(request.getContent())
-                .setCoverPictureUrl(request.getCoverPictureUrl()).setCategoryId(request.getCategoryId())
-                .setTop(request.getTop()).setEnableComment(request.getEnableComment());
+        // 校验文章信息
+        postCrudService.getOneOrThrow(postId);
 
-        // 加密密码
-        encryptPassword(entity, request.getPassword());
+        PostEntity entity = PostConverter.INSTANCE.toEntity(request);
+        entity.setPostId(postId);
         postCrudService.updateById(entity);
 
         // 标签信息
         postTagRelaCrudService.removeByField(PostTagRelaEntity::getPostId, postId);
-        savePostTagRelation(postId, request.getTagNames());
+        savePostTagRelation(postId, request.getTagIds());
 
     }
 
@@ -162,7 +155,7 @@ public class PostManagerServiceImpl implements PostManagerService {
     @Override
     public void unpublished(Long postId) {
         PostEntity entity = postCrudService.getOneOrThrow(postId);
-        entity.setStatus(PostStatus.UNPUBLISHED);
+        entity.setStatus(PostStatus.DRAFT);
         postCrudService.updateById(entity);
     }
 
@@ -198,7 +191,7 @@ public class PostManagerServiceImpl implements PostManagerService {
         if (StringUtils.isNotBlank(password)) {
             // 密码加密
             entity.setPassword(
-                    SaSecureUtil.rsaEncryptByPublic(securityProperties.getRsa().getPublicKey(), entity.getPassword()));
+                    SaSecureUtil.rsaEncryptByPublic(securityProperties.getRsa().getPublicKey(), password));
         } else {
             entity.setPassword(null);
         }
@@ -207,34 +200,17 @@ public class PostManagerServiceImpl implements PostManagerService {
     /**
      * 保存文章标签关系
      *
-     * @param postId   Long
-     * @param tagNames
+     * @param postId
+     * @param tagIds
      */
-    private void savePostTagRelation(Long postId, List<String> tagNames) {
-        if (CollectionUtils.isEmpty(tagNames)) {
+    private void savePostTagRelation(Long postId, List<Long> tagIds) {
+        if (CollectionUtils.isEmpty(tagIds)) {
             return;
         }
-        List<TagEntity> tagEntities = tagCrudService.findAllByTagNames(tagNames);
-        Set<String> existsTagNames = tagEntities
-                .stream()
-                .map(TagEntity::getTagName)
-                .collect(Collectors.toSet());
-        List<String> nonExistsTagNames = tagNames.stream().filter(existsTagNames::add).collect(Collectors.toList());
-        if (CollectionUtils.isNotEmpty(nonExistsTagNames)) {
-            List<TagEntity> addedTagEntities = nonExistsTagNames.stream().map(tagName -> {
-                TagEntity tagEntity = new TagEntity();
-                tagEntity.setTagName(tagName)
-                        .setEnable(Boolean.TRUE)
-                        .setColor(ColorUtil.generateHexColor());
-                return tagEntity;
-            }).toList();
-            tagCrudService.saveBatch(addedTagEntities);
-            tagEntities.addAll(addedTagEntities);
-        }
 
-        List<PostTagRelaEntity> postTagRelaEntities = tagEntities.stream().map(tagEntity -> {
+        List<PostTagRelaEntity> postTagRelaEntities = tagIds.stream().map(tagId -> {
             PostTagRelaEntity postTagRelaEntity = new PostTagRelaEntity();
-            postTagRelaEntity.setPostId(postId).setTagId(tagEntity.getTagId());
+            postTagRelaEntity.setPostId(postId).setTagId(tagId);
             return postTagRelaEntity;
         }).collect(Collectors.toList());
 

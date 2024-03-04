@@ -18,7 +18,7 @@ public class PostContentEntity extends BaseEntity {
     /**
      * 主键Id
      */
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(type = IdType.AUTO)
     private Long postContentId;
 
     /**

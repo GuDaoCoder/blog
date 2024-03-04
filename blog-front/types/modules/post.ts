@@ -1,8 +1,7 @@
 interface SearchPostForm {
     title?: string,
     status?: string,
-    categoryId?: string,
-    encrypt?: boolean,
+    categoryId?: number,
     top?: boolean,
     enableComment?: boolean
 }
@@ -10,50 +9,45 @@ interface SearchPostForm {
 interface PagePostDTO extends PageDTO {
     title?: string,
     status?: string,
-    categoryId?: string,
-    encrypt?: boolean,
+    categoryId?: number,
     top?: boolean,
     enableComment?: boolean
 }
 
 interface PagePostVO {
-    postId: string,
+    postId: number,
     title: string,
     summary: string,
     coverPictureUrl: string,
     status: string,
     source: string,
-    categoryId: string,
+    categoryId: number,
     categoryName: string,
     publishTime: string,
     updateTime: string,
     top: boolean,
     enableComment?: boolean,
-    encrypt: boolean
-    password: string,
     tags: PagePostTagItem[]
 }
 
 interface PagePostTagItem {
-    tagId: string,
+    tagId: number,
     tagName: string,
     color: string
 }
 
 interface SavePostForm {
-    postId?: string,
+    postId?: number,
     title?: string,
     summary?: string,
     content?: string,
     coverPictureUrl?: string,
     status?: string,
-    categoryId?: string,
+    categoryId?: number,
     categoryName?: string,
-    tagIds?: string[],
+    tagIds?: number[],
     top?: boolean,
     enableComment?: boolean,
-    encrypt?: boolean,
-    password?: string,
     publish?: boolean
 }
 
@@ -63,12 +57,10 @@ interface CreatePostDTO {
     content?: string,
     coverPictureUrl?: string,
     status?: string,
-    categoryId?: string,
-    tagIds?: string[],
+    categoryId?: number,
+    tagIds?: number[],
     top?: boolean,
     enableComment?: boolean,
-    encrypt?: boolean,
-    password?: string,
     publish?: boolean
 }
 
@@ -82,11 +74,9 @@ interface UpdatePostDTO {
     content?: string,
     coverPictureUrl?: string,
     status?: string,
-    categoryId?: string,
-    tagIds?: string[],
+    categoryId?: number,
+    tagIds?: number[],
     top?: boolean,
     enableComment?: boolean,
-    encrypt?: boolean,
-    password?: string,
     publish?: boolean
 }

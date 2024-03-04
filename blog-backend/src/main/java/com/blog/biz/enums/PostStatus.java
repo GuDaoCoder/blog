@@ -15,8 +15,6 @@ public enum PostStatus {
 
     PUBLISHED("已发布"),
 
-    UNPUBLISHED("取消发布"),
-
     RECYCLE_BIN("位于回收站"),
 
     ;
@@ -24,7 +22,7 @@ public enum PostStatus {
     private String label;
 
     @Override
-    public String toString(){
-        return this.name()+"-"+this.label;
+    public String toString() {
+        return this.name() + "-" + this.label;
     }
 }

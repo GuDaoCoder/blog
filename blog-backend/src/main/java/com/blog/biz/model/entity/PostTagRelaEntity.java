@@ -20,7 +20,7 @@ public class PostTagRelaEntity extends BaseEntity {
     /**
      * 主键
      */
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(type = IdType.AUTO)
     private Long postTagRelaId;
 
     /**
