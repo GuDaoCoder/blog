@@ -189,3 +189,10 @@ security:
     - /webjars/**
     - /favicon.ico
 
+oss:
+  access-key:
+  secret-key:
+  bucket-name:
+  domain:
+  image-bed-directory:
+

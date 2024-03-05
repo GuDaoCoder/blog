@@ -13,10 +13,8 @@ import lombok.Getter;
 @Getter
 public class BusinessException extends RuntimeException {
 
-    private String code;
-
-    public BusinessException(String errorMsg, Objects... args) {
-        super(MessageFormatter.arrayFormat(errorMsg, args).getMessage());
+    public BusinessException(String errorMsg, Object... arguments) {
+        super(MessageFormatter.arrayFormat(errorMsg, arguments).getMessage());
     }
 
 }
