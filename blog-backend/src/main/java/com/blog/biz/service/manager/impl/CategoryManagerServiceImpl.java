@@ -1,18 +1,21 @@
 package com.blog.biz.service.manager.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.blog.biz.constant.BizConstant;
 import com.blog.biz.convert.CategoryConverter;
 import com.blog.biz.model.entity.CategoryEntity;
-import com.blog.biz.model.request.CategoryTreeRequest;
+import com.blog.biz.model.entity.custom.CategoryPostCountEntity;
+import com.blog.biz.model.request.SearchCategoryTreeRequest;
 import com.blog.biz.model.request.CreateCategoryRequest;
 import com.blog.biz.model.request.UpdateCategoryRequest;
-import com.blog.biz.model.response.CreateCategoryResponse;
-import com.blog.biz.model.response.TreeCategoryResponse;
+import com.blog.biz.model.response.CategoryResponse;
+import com.blog.biz.model.response.CategoryTreeResponse;
 import com.blog.biz.service.crud.CategoryCrudService;
 import com.blog.biz.service.crud.PostCrudService;
 import com.blog.biz.service.manager.CategoryManagerService;
 import com.blog.common.constant.SymbolConstants;
 import com.blog.common.exception.BusinessException;
+import com.blog.common.util.StreamUtil;
 import com.blog.common.util.TreeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,75 +40,86 @@ public class CategoryManagerServiceImpl implements CategoryManagerService {
 
     private final PostCrudService postCrudService;
 
-    @Transactional(rollbackFor = RuntimeException.class)
     @Override
-    public CreateCategoryResponse create(CreateCategoryRequest request) {
-        // 校验名称重复
-        CategoryEntity existsEntity = categoryCrudService.findByCategoryName(request.getCategoryName()).orElse(null);
-        if (Objects.nonNull(existsEntity)) {
-            throw new BusinessException("分类名称已存在");
-        }
-
-        CategoryEntity entity = CategoryConverter.INSTANCE.toEntity(request);
-
-        if (Objects.nonNull(request.getParentCategoryId())) {
-            // 上级分类
-            CategoryEntity parentEntity = categoryCrudService.getOptById(request.getParentCategoryId()).orElseThrow(() -> new BusinessException("上级分类信息不存在"));
-            entity.setParentCategoryId(parentEntity.getCategoryId());
-            entity.setLevel(parentEntity.getLevel() + 1);
-            entity.setFullId(parentEntity.getFullId() + SymbolConstants.CENTER_LINE + request.getParentCategoryId());
-        } else {
-            entity.setParentCategoryId(BizConstant.ROOT_ID);
-            entity.setLevel(BizConstant.FIRST_LEVEL);
-            entity.setFullId(String.valueOf(BizConstant.ROOT_ID));
-        }
-
-        // 查询同一层级下最新的分类
-        CategoryEntity latestEntity = categoryCrudService.findLatest(entity.getParentCategoryId()).orElse(null);
-        // 设置顺序号
-        entity.setOrderNo(Objects.nonNull(latestEntity) ? latestEntity.getOrderNo() + 1 : 1);
-
-        categoryCrudService.save(entity);
-        return new CreateCategoryResponse(entity.getCategoryId());
-    }
-
-    @Override
-    public List<TreeCategoryResponse> tree(CategoryTreeRequest request) {
-        List<CategoryEntity> entities = categoryCrudService.findAllByCondition(request.getCategoryName(), request.getEnabled());
-        if (CollectionUtils.isNotEmpty(entities)) {
+    public List<CategoryTreeResponse> searchTree(SearchCategoryTreeRequest request) {
+        List<CategoryEntity> categoryEntities = categoryCrudService.findAllByCondition(request.getCategoryName(), request.getEnabled());
+        if (CollectionUtils.isNotEmpty(categoryEntities)) {
             Set<Long> categoryIds = new HashSet<>();
-            entities.forEach(o -> {
+            categoryEntities.forEach(o -> {
                 Set<Long> ids = Arrays.stream(o.getFullId().split(SymbolConstants.CENTER_LINE)).map(Long::valueOf).collect(Collectors.toSet());
                 if (CollectionUtils.isNotEmpty(ids)) {
                     categoryIds.addAll(ids);
                 }
             });
-            entities.stream().map(CategoryEntity::getCategoryId).toList().forEach(categoryIds::remove);
+            categoryEntities.stream().map(CategoryEntity::getCategoryId).toList().forEach(categoryIds::remove);
             if (CollectionUtils.isNotEmpty(categoryIds)) {
                 List<CategoryEntity> otherEntities = categoryCrudService.listByIds(categoryIds);
                 if (CollectionUtils.isNotEmpty(otherEntities)) {
-                    entities.addAll(otherEntities);
+                    categoryEntities.addAll(otherEntities);
                 }
             }
         }
-        List<TreeCategoryResponse> data = entities.stream().map(CategoryConverter.INSTANCE::toResponse).sorted(Comparator.comparing(TreeCategoryResponse::getOrderNo)).collect(Collectors.toList());
-        return TreeUtil.build(data, BizConstant.ROOT_ID, TreeCategoryResponse::getCategoryId, TreeCategoryResponse::getParentCategoryId);
+        List<CategoryTreeResponse> data = toResponses(categoryEntities)
+                .stream()
+                .map(CategoryConverter.INSTANCE::toTreeResponse)
+                .sorted(Comparator.comparing(CategoryResponse::getOrderNo))
+                .collect(Collectors.toList());
+        return TreeUtil.build(data, BizConstant.ROOT_ID, CategoryTreeResponse::getCategoryId, CategoryTreeResponse::getParentCategoryId);
     }
 
+    @Transactional(rollbackFor = RuntimeException.class)
     @Override
-    public void update(Long categoryId, UpdateCategoryRequest request) {
-        CategoryEntity entity = categoryCrudService.getById(categoryId);
-        if (!StringUtils.equals(request.getCategoryName(), entity.getCategoryName())) {
-            // 校验名称重复
-            CategoryEntity existsEntity = categoryCrudService.findByCategoryName(request.getCategoryName()).orElse(null);
-            if (Objects.nonNull(existsEntity)) {
-                throw new BusinessException("分类名称已存在");
-            }
+    public CategoryResponse create(CreateCategoryRequest request) {
+        // 校验名称重复
+        categoryCrudService.findByCategoryName(request.getCategoryName()).ifPresent(o -> {
+            throw new BusinessException("分类名称[{}]已存在", request.getCategoryName());
+        });
+
+        CategoryEntity categoryEntity = CategoryConverter.INSTANCE.toEntity(request);
+        if (Objects.nonNull(request.getParentCategoryId()) && !request.getParentCategoryId().equals(BizConstant.ROOT_ID)) {
+            // 上级分类
+            CategoryEntity parentCategoryEntity = categoryCrudService.getOptById(request.getParentCategoryId())
+                    .orElseThrow(() -> new BusinessException("上级分类信息不存在"));
+            categoryEntity.setParentCategoryId(parentCategoryEntity.getCategoryId())
+                    .setLevel(parentCategoryEntity.getLevel() + 1)
+                    .setFullId(parentCategoryEntity.getFullId() + SymbolConstants.CENTER_LINE + request.getParentCategoryId());
+        } else {
+            categoryEntity.setParentCategoryId(BizConstant.ROOT_ID)
+                    .setLevel(BizConstant.FIRST_LEVEL)
+                    .setFullId(String.valueOf(BizConstant.ROOT_ID));
         }
-        entity.setCategoryName(request.getCategoryName()).setEnabled(request.getEnabled());
-        categoryCrudService.updateById(entity);
+
+        // 查询同一层级下最新的分类
+        CategoryEntity latestEntity = categoryCrudService.findLatest(categoryEntity.getParentCategoryId()).orElse(null);
+        // 设置顺序号
+        categoryEntity.setOrderNo(Objects.nonNull(latestEntity) ? latestEntity.getOrderNo() + 1 : 1);
+
+        categoryCrudService.save(categoryEntity);
+        return toResponse(categoryEntity);
     }
 
+    @Transactional(rollbackFor = RuntimeException.class)
+    @Override
+    public CategoryResponse update(Long categoryId, UpdateCategoryRequest request) {
+        CategoryEntity existsCategoryEntity = categoryCrudService.getOneOrThrow(categoryId);
+        if (!StringUtils.equals(request.getCategoryName(), existsCategoryEntity.getCategoryName())) {
+            categoryCrudService.findByCategoryName(request.getCategoryName()).ifPresent(o -> {
+                throw new BusinessException("分类名称[{}]已存在", request.getCategoryName());
+            });
+        }
+        // 修改了所属上级分类
+        if (!Objects.equals(request.getParentCategoryId(), BizConstant.ROOT_ID)
+                && !Objects.equals(request.getParentCategoryId(), existsCategoryEntity.getParentCategoryId())) {
+            categoryCrudService.getOptById(request.getParentCategoryId())
+                    .orElseThrow(() -> new BusinessException("上级分类不存在"));
+        }
+        CategoryEntity categoryEntity = CategoryConverter.INSTANCE.toEntity(request);
+        categoryEntity.setCategoryId(categoryId);
+        categoryCrudService.updateById(categoryEntity);
+        return toResponse(categoryCrudService.getById(categoryId));
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
     @Override
     public void delete(Long categoryId) {
         categoryCrudService.getOneOrThrow(categoryId);
@@ -115,7 +129,44 @@ public class CategoryManagerServiceImpl implements CategoryManagerService {
         }
 
         categoryCrudService.removeById(categoryId);
+    }
 
+    private CategoryResponse toResponse(CategoryEntity categoryEntity) {
+        if (categoryEntity == null) {
+            return null;
+        }
+        return CollUtil.getFirst(toResponses(List.of(categoryEntity)));
+    }
+
+    private List<CategoryResponse> toResponses(List<CategoryEntity> categoryEntities) {
+        if (CollectionUtils.isEmpty(categoryEntities)) {
+            return new ArrayList<>();
+        }
+        Set<Long> categoryIds = categoryEntities
+                .stream()
+                .map(CategoryEntity::getCategoryId)
+                .collect(Collectors.toSet());
+
+        Set<Long> parentCategoryIds = categoryEntities
+                .stream()
+                .map(CategoryEntity::getParentCategoryId)
+                .filter(parentCategoryId -> !Objects.equals(parentCategoryId, BizConstant.ROOT_ID))
+                .collect(Collectors.toSet());
+
+        Map<Long, String> categoryNameMap = categoryCrudService.listByIds(parentCategoryIds)
+                .stream()
+                .collect(Collectors.toMap(CategoryEntity::getCategoryId, CategoryEntity::getCategoryName));
+
+        Map<Long, Long> categoryPostCountMap = postCrudService.getCategoryPostCountEntity(categoryIds)
+                .stream()
+                .collect(Collectors.toMap(CategoryPostCountEntity::getCategoryId, CategoryPostCountEntity::getPostCount));
+
+        return categoryEntities.stream().map(entity -> {
+            CategoryResponse categoryResponse = CategoryConverter.INSTANCE.toResponse(entity);
+            categoryResponse.setPostCount(categoryPostCountMap.getOrDefault(entity.getCategoryId(), 0L))
+                    .setParentCategoryName(categoryNameMap.getOrDefault(entity.getParentCategoryId(), null));
+            return categoryResponse;
+        }).toList();
     }
 
 }

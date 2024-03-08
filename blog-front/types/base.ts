@@ -1,16 +1,16 @@
-interface BaseVO<T> {
+interface BaseResponse<T = unknown> {
     requestId?: string,
     timestamp?: number,
     errorMsg?: string,
     data?: T
 }
 
-interface PageDTO {
+interface PageRequest {
     pageNumber: number,
     pageSize: number
 }
 
-interface PageVO<T> {
+interface PageResponse<T> {
     pageNumber: number,
     pageSize: number,
     total: number,

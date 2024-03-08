@@ -2,10 +2,10 @@
   <div class="container">
     <div class="login-form-wrapper">
       <div class="login-form-title">博客管理系统</div>
-      <a-form :model="loginFormModel" class="login-form" layout="vertical" @submit="handleLogin">
-        <a-form-item field="username" tooltip="用户名" hide-label :rules="usernameRules">
+      <a-form :model="loginForm" :rules="formRules" class="login-form" layout="vertical" @submit="handleLogin">
+        <a-form-item field="username" hide-label tooltip="用户名">
           <a-input
-              v-model="loginFormModel.username"
+              v-model="loginForm.username"
               placeholder="用户名"
           >
             <template #prefix>
@@ -13,11 +13,11 @@
             </template>
           </a-input>
         </a-form-item>
-        <a-form-item field="password" tooltip="密码" hide-label :rules="passwordRules">
+        <a-form-item field="password" hide-label tooltip="密码">
           <a-input-password
-              v-model="loginFormModel.password"
-              placeholder="密码"
+              v-model="loginForm.password"
               allow-clear
+              placeholder="密码"
           >
             <template #prefix>
               <icon-lock/>
@@ -30,7 +30,7 @@
             <a-link>忘记密码</a-link>
           </div>
 
-          <a-button type="primary" html-type="submit" long :loading="loading">
+          <a-button :loading="loading" html-type="submit" long type="primary">
             登录
           </a-button>
         </a-space>
@@ -40,31 +40,33 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import {type FieldRule, type ValidatedError, Notification} from '@arco-design/web-vue';
+<script lang="ts" setup>
+import {Notification, type ValidatedError} from '@arco-design/web-vue';
 import {useRouter} from "vue-router";
 import {reactive, ref} from "vue";
-import type {LoginRequestType} from "@/types/request-type";
-import {login} from '@/api/login'
+import {login} from '@/api/admin/login'
 import {setToken} from "@/utils/auth";
 
 const router = useRouter()
 
 const loading = ref<boolean>(false)
-const loginFormModel = reactive<LoginRequestType>({username: "admin", password: "136415Zzp++"})
-const usernameRules = reactive<FieldRule[]>([
-  {
+const loginForm = reactive<LoginForm>({username: "admin", password: "136415Zzp++"})
+
+const formRules = reactive({
+  username: [{
     required: true,
     message: '用户名不能为空'
   }
-])
-const passwordRules = reactive<FieldRule[]>([
-  {
-    required: true,
-    message: '密码不能为空'
-  }
-])
-const handleLogin = ({values, errors}: {
+  ],
+  password: [
+    {
+      required: true,
+      message: '用户名不能为空'
+    }
+  ]
+})
+
+const handleLogin = async ({values, errors}: {
   errors: Record<string, ValidatedError> | undefined;
   values: Record<string, any>;
 }) => {
@@ -74,11 +76,10 @@ const handleLogin = ({values, errors}: {
   if (!errors) {
     loading.value = true
     try {
-      login(loginFormModel).then(response => {
-        setToken(response.data.token)
-        Notification.success("欢迎进入博客管理系统");
-        router.push({name: "admin"})
-      })
+      const {data: {token}} = await login(values as LoginRequest)
+      setToken(token)
+      Notification.success("欢迎进入博客管理系统");
+      await router.push({name: "admin"})
     } finally {
       loading.value = false
     }
@@ -86,7 +87,7 @@ const handleLogin = ({values, errors}: {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .container {
   background-color: #FFFFFF;
   height: 100vh;

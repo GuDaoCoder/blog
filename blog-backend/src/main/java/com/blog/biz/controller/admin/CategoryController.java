@@ -1,15 +1,16 @@
 package com.blog.biz.controller.admin;
 
-import com.blog.biz.model.request.CategoryTreeRequest;
+import com.blog.biz.model.request.SearchCategoryTreeRequest;
 import com.blog.biz.model.request.UpdateCategoryRequest;
-import com.blog.biz.model.response.TreeCategoryResponse;
+import com.blog.biz.model.response.CategoryTreeResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.blog.biz.model.request.CreateCategoryRequest;
-import com.blog.biz.model.response.CreateCategoryResponse;
+import com.blog.biz.model.response.CategoryResponse;
 import com.blog.biz.service.manager.CategoryManagerService;
 import com.blog.common.domain.Result;
 
@@ -25,31 +26,30 @@ import java.util.List;
  */
 @Slf4j
 @RequiredArgsConstructor
-@Tag(name = "分类管理")
+@Tag(name = "文章分类管理")
 @RestController
 @RequestMapping("/admin/category")
 public class CategoryController {
 
     private final CategoryManagerService categoryManagerService;
 
-    @Operation(summary = "查询分类树形结构")
+    @Operation(summary = "查询文章分类树")
     @GetMapping
-    public Result<List<TreeCategoryResponse>> tree(CategoryTreeRequest request) {
-        return Result.success(categoryManagerService.tree(request));
+    public Result<List<CategoryTreeResponse>> searchTree(@ParameterObject SearchCategoryTreeRequest request) {
+        return Result.success(categoryManagerService.searchTree(request));
     }
 
     @Operation(summary = "新增分类")
     @PostMapping
-    public Result<CreateCategoryResponse> create(@Validated @RequestBody CreateCategoryRequest request) {
+    public Result<CategoryResponse> create(@Validated @RequestBody CreateCategoryRequest request) {
         return Result.success(categoryManagerService.create(request));
     }
 
     @Operation(summary = "编辑分类")
-    @PutMapping("/{categoryId}")
-    public Result<Void> update(@Parameter(description = "分类Id") @PathVariable Long categoryId,
-                               @Validated @RequestBody UpdateCategoryRequest request) {
-        categoryManagerService.update(categoryId, request);
-        return Result.success();
+    @PatchMapping("/{categoryId}")
+    public Result<CategoryResponse> update(@Parameter(description = "分类Id") @PathVariable Long categoryId,
+                                           @Validated @RequestBody UpdateCategoryRequest request) {
+        return Result.success(categoryManagerService.update(categoryId, request));
     }
 
     @Operation(summary = "删除分类")

@@ -1,8 +1,7 @@
-import axios from 'axios';
 import type {AxiosRequestConfig, AxiosResponse} from 'axios';
+import axios from 'axios';
 import {Notification} from '@arco-design/web-vue';
 import {getToken} from "@/utils/auth";
-import type {BaseResponseType} from "@/types/response-type";
 import router from "@/router";
 
 axios.defaults.baseURL = '/api'
@@ -28,7 +27,7 @@ axios.interceptors.request.use(
 
 // 响应拦截器
 axios.interceptors.response.use(
-    (response: AxiosResponse<BaseResponseType>) => {
+    (response: AxiosResponse<BaseResponse>) => {
         return response.data;
     },
     (error: any) => {
@@ -53,6 +52,10 @@ axios.interceptors.response.use(
                 default:
                     Notification.error("Error")
                     break;
+            }
+        } else {
+            if (error.message) {
+                Notification.error(error.message)
             }
         }
         return Promise.reject(error);

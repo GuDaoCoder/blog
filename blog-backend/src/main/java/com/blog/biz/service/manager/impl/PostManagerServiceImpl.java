@@ -5,7 +5,9 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.blog.common.util.ColorUtil;
+import cn.hutool.core.collection.CollUtil;
+import com.blog.biz.model.context.SearchPostContext;
+import com.blog.common.exception.DataNotFoundException;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -15,22 +17,18 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.blog.biz.convert.PostConverter;
 import com.blog.biz.enums.PostSource;
 import com.blog.biz.enums.PostStatus;
-import com.blog.biz.model.context.PagePostContext;
 import com.blog.biz.model.entity.*;
 import com.blog.biz.model.request.CreatePostRequest;
-import com.blog.biz.model.request.PagePostRequest;
+import com.blog.biz.model.request.SearchPostRequest;
 import com.blog.biz.model.request.UpdatePostRequest;
-import com.blog.biz.model.response.CreatePostResponse;
-import com.blog.biz.model.response.PagePostResponse;
+import com.blog.biz.model.response.PostResponse;
 import com.blog.biz.service.crud.*;
 import com.blog.biz.service.manager.PostManagerService;
-import com.blog.common.base.response.PageResponse;
+import com.blog.common.base.response.SearchResponse;
 import com.blog.common.exception.BusinessException;
-import com.blog.common.properties.SecurityProperties;
 import com.blog.common.util.PageUtil;
 import com.blog.common.util.StreamUtil;
 
-import cn.dev33.satoken.secure.SaSecureUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,56 +41,77 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class PostManagerServiceImpl implements PostManagerService {
 
-    private final SecurityProperties securityProperties;
-
     private final CategoryCrudService categoryCrudService;
 
     private final PostCrudService postCrudService;
 
     private final PostTagRelaCrudService postTagRelaCrudService;
 
+    private final PostContentCrudService postContentCrudService;
+
     private final TagCrudService tagCrudService;
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
-    public CreatePostResponse create(CreatePostRequest request) {
-        // 校验分类信息是否存在
-        categoryCrudService.getOptById(request.getCategoryId())
-                .orElseThrow(() -> new BusinessException("分类信息不存在或已被删除"));
-
-        PostEntity entity = PostConverter.INSTANCE.toEntity(request);
-        entity.setSource(PostSource.ADD).setStatus(request.getPublish() ? PostStatus.PUBLISHED : PostStatus.DRAFT)
-                .setPublishTime(request.getPublish() ? LocalDateTime.now() : null)
-                .setWordCount(0);
-
-        // 保存文章基本信息
-        postCrudService.save(entity);
-
-        // 保存文章标签关系
-        savePostTagRelation(entity.getPostId(), request.getTagIds());
-        return new CreatePostResponse(entity.getPostId());
+    public SearchResponse<PostResponse> search(SearchPostRequest request) {
+        SearchPostContext searchPostContext = PostConverter.INSTANCE.toPageContext(request);
+        searchPostContext.setPageable(PageUtil.pageable(request));
+        IPage<PostEntity> page = postCrudService.page(searchPostContext);
+        return PageUtil.result(page, toPostResponses(page.getRecords()));
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void update(Long postId, UpdatePostRequest request) {
+    public PostResponse create(CreatePostRequest request) {
         // 校验分类信息是否存在
         categoryCrudService.getOptById(request.getCategoryId())
                 .orElseThrow(() -> new BusinessException("分类信息不存在或已被删除"));
 
+        PostEntity postEntity = PostConverter.INSTANCE.toEntity(request);
+        postEntity.setSource(PostSource.ADD)
+                .setStatus(request.getPublish() ? PostStatus.PUBLISHED : PostStatus.DRAFT)
+                .setPublishTime(PostStatus.PUBLISHED.equals(postEntity.getStatus()) ? LocalDateTime.now() : null);
+
+        // 保存文章基本信息
+        postCrudService.save(postEntity);
+
+        // 保存文章内容
+        postContentCrudService.saveContent(postEntity.getPostId(), request.getContent());
+
+        // 保存标签信息
+        savePostTagRelation(postEntity.getPostId(), request.getTagIds());
+        return toPostResponse(postEntity);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public PostResponse update(Long postId, UpdatePostRequest request) {
         // 校验文章信息
-        postCrudService.getOneOrThrow(postId);
+        PostEntity existsPostEntity = postCrudService.getOneOrThrow(postId);
 
-        PostEntity entity = PostConverter.INSTANCE.toEntity(request);
-        entity.setPostId(postId);
-        postCrudService.updateById(entity);
+        // 校验分类信息是否存在
+        categoryCrudService.getOptById(request.getCategoryId())
+                .orElseThrow(() -> new BusinessException("分类信息不存在或已被删除"));
 
-        // 标签信息
+        PostEntity postEntity = PostConverter.INSTANCE.toEntity(request);
+        postEntity.setPostId(postId);
+        // 是否可以直接发布
+        if (request.getPublish() && canPublish(existsPostEntity.getStatus())) {
+            postEntity.setStatus(PostStatus.PUBLISHED);
+        }
+        // 更新文章基本信息
+        postCrudService.updateById(postEntity);
+
+        // 更新文章内容
+        postContentCrudService.updateContentByPostId(postId, request.getContent());
+
+        // 更新标签信息
         postTagRelaCrudService.removeByField(PostTagRelaEntity::getPostId, postId);
         savePostTagRelation(postId, request.getTagIds());
 
+        return toPostResponse(postCrudService.getById(postId));
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void delete(Long postId) {
         postCrudService.getOneOrThrow(postId);
@@ -103,60 +122,78 @@ public class PostManagerServiceImpl implements PostManagerService {
         postTagRelaCrudService.removeByField(PostTagRelaEntity::getPostId, postId);
     }
 
-    @Override
-    public PageResponse<PagePostResponse> page(PagePostRequest request) {
-        PagePostContext pageContext = PostConverter.INSTANCE.toPageContext(request);
-        pageContext.setPageable(PageUtil.pageable(request));
-        IPage<PostEntity> page = postCrudService.page(pageContext);
-
-        Map<Long, CategoryEntity> categoryMap = new HashMap<>();
-        Map<Long, List<TagEntity>> tagMap = new HashMap<>();
-        if (CollectionUtils.isNotEmpty(page.getRecords())) {
-            List<Long> categoryIds = StreamUtil.mapField(page.getRecords(), PostEntity::getCategoryId);
-            categoryMap = categoryCrudService.listByIds(categoryIds).stream()
-                    .collect(Collectors.toMap(CategoryEntity::getCategoryId, Function.identity()));
-
-            List<Long> postIds = StreamUtil.mapField(page.getRecords(), PostEntity::getPostId);
-            tagMap = postTagsRela(postIds);
-        }
-
-        Map<Long, CategoryEntity> finalCategoryMap = categoryMap;
-        Map<Long, List<TagEntity>> finalTagMap = tagMap;
-        return PageUtil.toResult(page, entity -> {
-            PagePostResponse pagePostResponse = PostConverter.INSTANCE.toPagePostResponse(entity);
-            Optional.ofNullable(finalCategoryMap.get(entity.getCategoryId())).map(CategoryEntity::getCategoryName)
-                    .ifPresent(pagePostResponse::setCategoryName);
-
-            Optional.ofNullable(finalTagMap.get(entity.getPostId())).ifPresent(list -> {
-                List<PagePostResponse.TagItem> tagItems = list
-                        .stream()
-                        .map(o -> new PagePostResponse.TagItem(o.getTagId(), o.getTagName(), o.getColor()))
-                        .collect(Collectors.toList());
-                pagePostResponse.setTags(tagItems);
-            });
-            return pagePostResponse;
-        });
-    }
 
     @Override
     public void moveRecycleBin(Long postId) {
-        PostEntity entity = postCrudService.getOneOrThrow(postId);
-        entity.setStatus(PostStatus.RECYCLE_BIN);
-        postCrudService.updateById(entity);
+        PostEntity existsPostEntity = postCrudService.getOneOrThrow(postId);
+        existsPostEntity.setStatus(PostStatus.RECYCLE_BIN).setDeleteTime(LocalDateTime.now());
+        postCrudService.updateById(existsPostEntity);
     }
 
     @Override
     public void publish(Long postId) {
-        PostEntity entity = postCrudService.getOneOrThrow(postId);
-        entity.setStatus(PostStatus.PUBLISHED).setPublishTime(LocalDateTime.now());
-        postCrudService.updateById(entity);
+        PostEntity existsPostEntity = postCrudService.getOneOrThrow(postId);
+        if (!canPublish(existsPostEntity.getStatus())) {
+            throw new BusinessException("只有草稿和已下架的文章才可以发布");
+        }
+        existsPostEntity.setStatus(PostStatus.PUBLISHED).setPublishTime(LocalDateTime.now());
+        postCrudService.updateById(existsPostEntity);
     }
 
     @Override
-    public void unpublished(Long postId) {
-        PostEntity entity = postCrudService.getOneOrThrow(postId);
-        entity.setStatus(PostStatus.DRAFT);
-        postCrudService.updateById(entity);
+    public void remove(Long postId) {
+        PostEntity existsPostEntity = postCrudService.getOneOrThrow(postId);
+        if (!canRemove(existsPostEntity.getStatus())) {
+            throw new BusinessException("只有已发布的文章才可以下架");
+        }
+        existsPostEntity.setStatus(PostStatus.DRAFT).setRemoveTime(LocalDateTime.now());
+        postCrudService.updateById(existsPostEntity);
+    }
+
+    @Override
+    public String getPostContent(Long postId) {
+        postCrudService.getOneOrThrow(postId);
+        return postContentCrudService.getByField(PostContentEntity::getPostId, postId)
+                .map(PostContentEntity::getContent)
+                .orElse(null);
+    }
+
+    private List<PostResponse> toPostResponses(List<PostEntity> postEntities) {
+        if (CollectionUtils.isEmpty(postEntities)) {
+            return new ArrayList<>();
+        }
+        List<Long> categoryIds = StreamUtil.mapField(postEntities, PostEntity::getCategoryId);
+        Map<Long, CategoryEntity> categoryMap = CollectionUtils.isNotEmpty(categoryIds)
+                ? categoryCrudService.listByIds(categoryIds).stream()
+                .collect(Collectors.toMap(CategoryEntity::getCategoryId, Function.identity()))
+                : new HashMap<>(0);
+
+        List<Long> postIds = StreamUtil.mapField(postEntities, PostEntity::getPostId);
+        Map<Long, List<TagEntity>> tagMap = CollectionUtils.isNotEmpty(postIds)
+                ? postTagsRela(postIds) : new HashMap<>(0);
+
+        return postEntities
+                .stream()
+                .map(postEntity -> {
+                    PostResponse postResponse = PostConverter.INSTANCE.toResponse(postEntity);
+                    Optional.ofNullable(categoryMap.get(postEntity.getCategoryId()))
+                            .map(CategoryEntity::getCategoryName)
+                            .ifPresent(postResponse::setCategoryName);
+
+                    Optional.ofNullable(tagMap.get(postEntity.getPostId())).ifPresent(list -> {
+                        List<PostResponse.TagItem> tagItems = list
+                                .stream()
+                                .map(o -> new PostResponse.TagItem(o.getTagId(), o.getTagName(), o.getColor()))
+                                .collect(Collectors.toList());
+                        postResponse.setTags(tagItems);
+                    });
+                    return postResponse;
+                }).toList();
+    }
+
+    private PostResponse toPostResponse(PostEntity postEntity) {
+        List<PostResponse> postResponses = toPostResponses(List.of(postEntity));
+        return postResponses.stream().findFirst().orElse(null);
     }
 
     /**
@@ -182,22 +219,6 @@ public class PostManagerServiceImpl implements PostManagerService {
     }
 
     /**
-     * 加密密码
-     *
-     * @param entity   PostEntity
-     * @param password String
-     */
-    private void encryptPassword(PostEntity entity, String password) {
-        if (StringUtils.isNotBlank(password)) {
-            // 密码加密
-            entity.setPassword(
-                    SaSecureUtil.rsaEncryptByPublic(securityProperties.getRsa().getPublicKey(), password));
-        } else {
-            entity.setPassword(null);
-        }
-    }
-
-    /**
      * 保存文章标签关系
      *
      * @param postId
@@ -218,4 +239,23 @@ public class PostManagerServiceImpl implements PostManagerService {
         postTagRelaCrudService.saveBatch(postTagRelaEntities);
     }
 
+    /**
+     * 判断是否可以发布
+     *
+     * @param postStatus
+     * @return boolean
+     **/
+    private boolean canPublish(PostStatus postStatus) {
+        return PostStatus.DRAFT.equals(postStatus) || PostStatus.REMOVED.equals(postStatus);
+    }
+
+    /**
+     * 判断是否可以下架
+     *
+     * @param postStatus
+     * @return boolean
+     **/
+    private boolean canRemove(PostStatus postStatus) {
+        return PostStatus.PUBLISHED.equals(postStatus);
+    }
 }

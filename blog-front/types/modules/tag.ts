@@ -2,7 +2,7 @@ interface SearchTagForm {
     tagName?: string
 }
 
-interface PageTagDTO extends PageDTO {
+interface PageTagDTO extends PageRequest {
     tagName?: string
 }
 

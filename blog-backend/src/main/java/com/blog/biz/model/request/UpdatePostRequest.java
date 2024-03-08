@@ -9,17 +9,22 @@ import com.blog.common.base.request.CommonRequest;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author zouzhangpeng
  * @desc
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class UpdatePostRequest extends CommonRequest {
 
     @NotBlank(message = "文章标题不能为空")
     @Schema(description = "标题")
     private String title;
+
+    @Schema(description = "文章内容")
+    private String content;
 
     @Schema(description = "摘要")
     private String summary;
@@ -39,8 +44,9 @@ public class UpdatePostRequest extends CommonRequest {
     @Schema(description = "是否开启评论")
     private Boolean enableComment;
 
-    @Schema(description = "文章内容")
-    private String content;
+    @NotNull(message = "是否发布不能为空")
+    @Schema(description = "是否发布")
+    private Boolean publish;
 
     @Schema(description = "标签集合")
     private List<Long> tagIds;

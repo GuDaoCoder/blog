@@ -13,7 +13,7 @@ import java.io.Serial;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class PageTagRequest extends PageRequest {
+public class SearchTagRequest extends PageRequest {
     @Serial
     private static final long serialVersionUID = -5932485187665352003L;
 

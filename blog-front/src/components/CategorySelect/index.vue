@@ -1,22 +1,22 @@
 <template>
   <a-tree-select
       v-model="model"
-      placeholder="全部"
+      :allow-clear="true"
+      :allow-search="true"
+      :data="categoryTreeData"
       :field-names="{
                   key:'categoryId',
                   title:'categoryName'
                 }"
-      :data="categoryTreeData"
-      selectable="leaf"
-      :allow-search="true"
       :filter-tree-node="filterTreeNode"
-      :allow-clear="true"
+      placeholder="全部"
+      selectable="leaf"
   ></a-tree-select>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import {ref} from "vue";
-import {treeCategory} from "@/api/category-manage";
+import {searchTree} from "@/api/category-manage";
 import type {TreeNodeData} from "@arco-design/web-vue";
 import {useVModel} from "@/utils/useVModel";
 
@@ -29,9 +29,9 @@ const props = defineProps({
 
 const emits = defineEmits(["update:modelValue"])
 
-const categoryTreeData = ref<TreeCategoryVO[]>([])
+const categoryTreeData = ref<CategoryTreeResponse[]>([])
 const fetchCategoryTree = async () => {
-  const {data} = await treeCategory({})
+  const {data} = await searchTree({})
   categoryTreeData.value = data;
 }
 

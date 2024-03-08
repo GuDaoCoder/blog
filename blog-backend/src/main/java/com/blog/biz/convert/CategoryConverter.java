@@ -1,11 +1,15 @@
 package com.blog.biz.convert;
 
 import com.blog.biz.model.request.CreateCategoryRequest;
-import com.blog.biz.model.response.TreeCategoryResponse;
+import com.blog.biz.model.request.UpdateCategoryRequest;
+import com.blog.biz.model.response.CategoryResponse;
+import com.blog.biz.model.response.CategoryTreeResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import com.blog.biz.model.entity.CategoryEntity;
+
+import java.util.List;
 
 /**
  * @author zouzhangpeng
@@ -18,5 +22,9 @@ public interface CategoryConverter {
 
     CategoryEntity toEntity(CreateCategoryRequest request);
 
-    TreeCategoryResponse toResponse(CategoryEntity entity);
+    CategoryEntity toEntity(UpdateCategoryRequest request);
+
+    CategoryResponse toResponse(CategoryEntity entity);
+
+    CategoryTreeResponse toTreeResponse(CategoryResponse categoryResponse);
 }

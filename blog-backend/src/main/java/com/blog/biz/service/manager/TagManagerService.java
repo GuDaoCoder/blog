@@ -1,11 +1,9 @@
 package com.blog.biz.service.manager;
 
-import com.blog.biz.model.request.CreateTagRequest;
-import com.blog.biz.model.request.PageTagRequest;
-import com.blog.biz.model.request.UpdateTagRequest;
-import com.blog.biz.model.response.CreateTagResponse;
-import com.blog.biz.model.response.PageTagResponse;
-import com.blog.common.base.response.PageResponse;
+import com.blog.biz.model.request.SearchTagRequest;
+import com.blog.biz.model.request.TagRequest;
+import com.blog.biz.model.response.TagResponse;
+import com.blog.common.base.response.SearchResponse;
 
 /**
  * @author zouzhangpeng
@@ -14,28 +12,30 @@ import com.blog.common.base.response.PageResponse;
 public interface TagManagerService {
 
     /**
+     * 查询标签
+     *
+     * @param request
+     * @return SearchResponse<TagResponse>
+     **/
+    SearchResponse<TagResponse> search(SearchTagRequest request);
+
+    /**
      * 新增标签
-     * 
-     * @param request CreateTagRequest
-     * @return com.blog.biz.model.response.CreateTagResponse
-     */
-    CreateTagResponse create(CreateTagRequest request);
+     *
+     * @param request
+     * @return TagResponse
+     **/
+    TagResponse create(TagRequest request);
 
     /**
      * 编辑标签
-     * 
-     * @param tagId Long
-     * @param request UpdateTagRequest
-     */
-    void update(Long tagId, UpdateTagRequest request);
+     *
+     * @param tagId
+     * @param request
+     * @return TagResponse
+     **/
+    TagResponse update(Long tagId, TagRequest request);
 
-    /**
-     * 分页查询标签
-     * 
-     * @param request PageTagRequest
-     * @return com.blog.common.base.response.PageResponse<com.blog.biz.model.response.TagResponse>
-     */
-    PageResponse<PageTagResponse> page(PageTagRequest request);
 
     /**
      * 删除标签

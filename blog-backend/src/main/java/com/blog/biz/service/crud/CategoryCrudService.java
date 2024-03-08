@@ -13,8 +13,17 @@ import java.util.Optional;
 public interface CategoryCrudService extends IBaseCrudService<CategoryEntity> {
 
     /**
+     * 根据条件查询文章分类
+     *
+     * @param categoryName
+     * @param enabled
+     * @return List<CategoryEntity>
+     **/
+    List<CategoryEntity> findAllByCondition(String categoryName, Boolean enabled);
+
+    /**
      * 根据名称查询分类
-     * 
+     *
      * @param categoryName String
      * @return java.util.Optional<com.blog.biz.model.entity.CategoryEntity>
      */
@@ -22,11 +31,10 @@ public interface CategoryCrudService extends IBaseCrudService<CategoryEntity> {
 
     /**
      * 查询最新的文章分类，如果存在上级，则查询上级分类下最新的
-     * 
+     *
      * @param parentId Long
      * @return java.util.Optional<com.blog.biz.model.entity.CategoryEntity>
      */
     Optional<CategoryEntity> findLatest(Long parentId);
 
-    List<CategoryEntity> findAllByCondition(String categoryName,Boolean enabled);
 }

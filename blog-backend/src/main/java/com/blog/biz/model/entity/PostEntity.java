@@ -8,8 +8,10 @@ import com.blog.biz.enums.PostStatus;
 import com.blog.common.base.entity.BaseEntity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 @TableName("t_post")
@@ -27,26 +29,16 @@ public class PostEntity extends BaseEntity {
     private String title;
 
     /**
-     * 文章内容
-     */
-    private String content;
-
-    /**
      * 摘要
      */
-    @TableField(updateStrategy = FieldStrategy.IGNORED)
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String summary;
 
     /**
      * 封面图片链接
      */
-    @TableField(updateStrategy = FieldStrategy.IGNORED)
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String coverPictureUrl;
-
-    /**
-     * 字数
-     */
-    private Integer wordCount;
 
     /**
      * 状态
@@ -64,11 +56,6 @@ public class PostEntity extends BaseEntity {
     private Long categoryId;
 
     /**
-     * 发布时间
-     */
-    private LocalDateTime publishTime;
-
-    /**
      * 是否置顶
      */
     private Boolean top;
@@ -79,14 +66,18 @@ public class PostEntity extends BaseEntity {
     private Boolean enableComment;
 
     /**
-     * 是否加密访问
+     * 发布时间
      */
-    private Boolean encrypt;
+    private LocalDateTime publishTime;
 
     /**
-     * 访问密码
+     * 下架时间
      */
-    @TableField(updateStrategy = FieldStrategy.IGNORED)
-    private String password;
+    private LocalDateTime removeTime;
+
+    /**
+     * 删除时间
+     */
+    private LocalDateTime deleteTime;
 
 }

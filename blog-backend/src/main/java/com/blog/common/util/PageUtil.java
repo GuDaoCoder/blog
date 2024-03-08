@@ -1,5 +1,7 @@
 package com.blog.common.util;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -10,7 +12,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.common.base.entity.BaseEntity;
 import com.blog.common.base.request.PageRequest;
-import com.blog.common.base.response.PageResponse;
+import com.blog.common.base.response.SearchResponse;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 
 /**
  * @author zouzhangpeng
@@ -27,13 +30,23 @@ public class PageUtil {
         return pageable;
     }
 
-    public static <Response, Entity extends BaseEntity> PageResponse<Response> toResult(IPage<Entity> page,
-        Function<Entity, Response> converter) {
-        PageResponse<Response> pageResponse = new PageResponse<>();
-        pageResponse.setPageNumber(page.getCurrent()).setPageSize(page.getSize()).setTotal(page.getTotal());
+    public static <Response, Entity extends BaseEntity> SearchResponse<Response> toResult(IPage<Entity> page,
+                                                                                          Function<Entity, Response> converter) {
+        SearchResponse<Response> searchResponse = new SearchResponse<>();
+        searchResponse.setPageNumber(page.getCurrent()).setPageSize(page.getSize()).setTotal(page.getTotal());
         if (CollectionUtils.isNotEmpty(page.getRecords())) {
-            pageResponse.setItems(page.getRecords().stream().map(converter).collect(Collectors.toList()));
+            searchResponse.setItems(page.getRecords().stream().map(converter).collect(Collectors.toList()));
         }
-        return pageResponse;
+        return searchResponse;
+    }
+
+    public static <Response, Entity extends BaseEntity> SearchResponse<Response> result(IPage<Entity> page,
+                                                                                        List<Response> responses) {
+        SearchResponse<Response> searchResponse = new SearchResponse<>();
+        searchResponse.setPageNumber(page.getCurrent())
+                .setPageSize(page.getSize())
+                .setTotal(page.getTotal())
+                .setItems(responses);
+        return searchResponse;
     }
 }

@@ -1,9 +1,9 @@
-interface CategorySearchForm {
+interface SearchCategoryForm {
     categoryName?: string,
     enabled?: boolean
 }
 
-interface CategoryCreateForm {
+interface SaveCategoryForm {
     categoryId?: number,
     categoryName?: string,
     parentCategoryId?: number,
@@ -11,34 +11,36 @@ interface CategoryCreateForm {
     enabled?: boolean,
 }
 
-interface TreeCategoryDTO {
+interface SearchCategoryTreeRequest {
     categoryName?: string,
     enabled?: boolean
 }
 
-interface TreeCategoryVO {
+interface CategoryTreeResponse extends CategoryResponse {
+    children?: CategoryTreeResponse[]
+}
+
+interface CreateCategoryRequest {
+    categoryName: string,
+    parentCategoryId: number,
+    enabled: boolean
+}
+
+interface CategoryResponse {
     categoryId: number,
     categoryName: string,
-    parentId: number,
+    parentCategoryId: number,
+    parentCategoryName: string,
     fullId: string,
     orderNo: number,
-    updateTime: string,
     level: number,
     enabled: boolean,
-    children?: TreeCategoryVO[]
+    postCount: number,
+    createTime: string,
+    updateTime: string
 }
 
-interface CreateCategoryDTO {
-    categoryName?: string,
-    parentCategoryId?: number,
-    enabled?: boolean
-}
-
-interface CreateCategoryVO {
-    categoryId?: number
-}
-
-interface UpdateCategoryDTO {
-    categoryName?: string,
-    enabled?: boolean
+interface UpdateCategoryRequest {
+    categoryName: string,
+    enabled: boolean
 }

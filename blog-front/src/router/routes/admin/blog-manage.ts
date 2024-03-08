@@ -34,6 +34,14 @@ const BLOG_MANGE: RouteRaw = {
             meta: {
                 title: '文章管理'
             }
+        },
+        {
+            name: 'admin-post-preview',
+            path: "/admin/post-preview",
+            component: () => import(/* webpackChunkName: "post-preview" */ "@/views/admin/post-manage/preview.vue"),
+            meta: {
+                title: '文章预览'
+            }
         }]
 }
 

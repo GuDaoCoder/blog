@@ -72,6 +72,7 @@
               {{ $dict(Whether, record.enableComment) }}
             </template>
             <template #operations="{ record }">
+              <a-link @click="handlePreview(record)">预览</a-link>
               <a-link @click="handleUpdatePost(record)">编辑</a-link>
               <a-link v-if="record.status === 'DRAFT'" @click="handlePublishPost(record)">发布</a-link>
               <a-link v-if="record.status === 'PUBLISHED'" @click="handleCancelPublishPost(record)">取消发布</a-link>
@@ -186,7 +187,7 @@ const scroll = {
   x: 1800
 }
 
-const page = ref<PageVO<PageTagVO>>({pageNumber: 1, pageSize: 10, total: 0})
+const page = ref<PageResponse<PageTagVO>>({pageNumber: 1, pageSize: 10, total: 0})
 
 const postTableData = ref<PagePostVO[]>([])
 
@@ -225,6 +226,10 @@ const handleCreatePost = () => {
     publish: false
   }
   savePostVisible.value = true
+}
+
+const handlePreview = (record:PagePostVO) => {
+
 }
 
 const handleUpdatePost = (record: PagePostVO) => {

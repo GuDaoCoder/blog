@@ -13,7 +13,7 @@ public class DataNotFoundException extends RuntimeException{
     public DataNotFoundException(){
     }
 
-    public DataNotFoundException(String errorMsg, Objects... args){
+    public DataNotFoundException(String errorMsg, Object... args){
         super(MessageFormatter.arrayFormat(errorMsg,args).getMessage());
     }
 }

@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class CategoryTreeRequest extends CommonRequest {
+public class SearchCategoryTreeRequest extends CommonRequest {
 
     @Schema(description = "分类名称")
     private String categoryName;

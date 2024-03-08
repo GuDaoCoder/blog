@@ -6,7 +6,7 @@ interface SearchPostForm {
     enableComment?: boolean
 }
 
-interface PagePostDTO extends PageDTO {
+interface PagePostDTO extends PageRequest {
     title?: string,
     status?: string,
     categoryId?: number,

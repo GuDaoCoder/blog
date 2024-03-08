@@ -1,15 +1,13 @@
 package com.blog.biz.model.request;
 
-import java.io.Serial;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
 import com.blog.common.base.request.CommonRequest;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.io.Serial;
 
 /**
  * @author zouzhangpeng
@@ -17,7 +15,7 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class UpdateTagRequest extends CommonRequest {
+public class TagRequest extends CommonRequest {
 
     @Serial
     private static final long serialVersionUID = 6475559052331430554L;

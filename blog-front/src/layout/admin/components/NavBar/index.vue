@@ -60,7 +60,7 @@
 <script setup lang="ts">
 import {ref} from "vue";
 import {useRouter} from "vue-router";
-import {logout} from "@/api/login";
+import {logout} from "@/api/admin/login";
 import {clearToken} from "@/utils/auth";
 
 const router = useRouter()

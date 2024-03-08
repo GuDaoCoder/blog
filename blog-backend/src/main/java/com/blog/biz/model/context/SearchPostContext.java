@@ -17,7 +17,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class PagePostContext extends BasePageContext<PostEntity> {
+public class SearchPostContext extends BasePageContext<PostEntity> {
 
     /**
      * 标题
@@ -74,7 +74,7 @@ public class PagePostContext extends BasePageContext<PostEntity> {
      */
     private Boolean enableComment;
 
-    public PagePostContext(IPage<PostEntity> pageable) {
+    public SearchPostContext(IPage<PostEntity> pageable) {
         super(pageable);
     }
 }

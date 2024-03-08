@@ -1,7 +1,6 @@
 package com.blog.biz.model.request;
 
 import com.blog.common.base.request.CommonRequest;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

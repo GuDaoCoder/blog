@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export function pagePost(params: PagePostDTO) {
-    return axios.get<PageVO<PagePostVO>>("/admin/post", {params})
+    return axios.get<PageResponse<PagePostVO>>("/admin/post", {params})
 }
 
 export function createPost(data: CreatePostDTO) {
@@ -22,4 +22,8 @@ export function unpublished(postId: number) {
 
 export function moveRecycleBin(postId: number) {
     return axios.put(`/admin/post/${postId}/moveRecycleBin`)
+}
+
+export function getPostContent(postId: number) {
+    return axios.get<string>(`/admin/post/${postId}/content`)
 }

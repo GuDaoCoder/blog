@@ -1,31 +1,30 @@
 package com.blog.biz.service.manager.impl;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import com.blog.biz.model.entity.custom.TagPostCountEntity;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.blog.biz.convert.TagConverter;
 import com.blog.biz.model.entity.TagEntity;
-import com.blog.biz.model.request.CreateTagRequest;
-import com.blog.biz.model.request.PageTagRequest;
-import com.blog.biz.model.request.UpdateTagRequest;
-import com.blog.biz.model.response.CreateTagResponse;
-import com.blog.biz.model.response.PageTagResponse;
+import com.blog.biz.model.entity.custom.TagPostCountEntity;
+import com.blog.biz.model.request.SearchTagRequest;
+import com.blog.biz.model.request.TagRequest;
+import com.blog.biz.model.response.TagResponse;
 import com.blog.biz.service.crud.PostTagRelaCrudService;
 import com.blog.biz.service.crud.TagCrudService;
 import com.blog.biz.service.manager.TagManagerService;
-import com.blog.common.base.response.PageResponse;
+import com.blog.common.base.response.SearchResponse;
 import com.blog.common.exception.BusinessException;
 import com.blog.common.util.PageUtil;
-
+import com.blog.common.util.StreamUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author zouzhangpeng
@@ -41,49 +40,34 @@ public class TagManagerServiceImpl implements TagManagerService {
     private final PostTagRelaCrudService postTagRelaCrudService;
 
     @Override
-    public CreateTagResponse create(CreateTagRequest request) {
+    public SearchResponse<TagResponse> search(SearchTagRequest request) {
+        IPage<TagEntity> page = tagCrudService.page(request.getTagName(), PageUtil.pageable(request));
+        return PageUtil.result(page, toResponses(page.getRecords()));
+    }
+
+    @Override
+    public TagResponse create(TagRequest request) {
         TagEntity entity = TagConverter.INSTANCE.toEntity(request);
         // 校验名称是否重复
-        TagEntity existsTagEntity = tagCrudService.findByTagName(request.getTagName()).orElse(null);
-        if (Objects.nonNull(existsTagEntity)) {
-            throw new BusinessException("标签名称不能重复");
-        }
-        tagCrudService.save(entity);
-        return new CreateTagResponse(entity.getTagId());
-    }
-
-    @Override
-    public void update(Long tagId, UpdateTagRequest request) {
-        TagEntity entity = tagCrudService.getOneOrThrow(tagId);
-        if (!StringUtils.equals(request.getTagName(), entity.getTagName())) {
-            TagEntity existsTagEntity = tagCrudService.findByTagName(request.getTagName()).orElse(null);
-            if (Objects.nonNull(existsTagEntity)) {
-                throw new BusinessException("标签名称不能重复");
-            }
-        }
-        entity.setTagName(request.getTagName())
-                .setColor(request.getColor())
-                .setEnable(request.getEnable());
-        tagCrudService.updateById(entity);
-    }
-
-    @Override
-    public PageResponse<PageTagResponse> page(PageTagRequest request) {
-        IPage<TagEntity> page = tagCrudService.page(request.getTagName(), PageUtil.pageable(request));
-        Map<Long, Long> tagPostCountMap = new HashMap<>();
-        if (CollectionUtils.isNotEmpty(page.getRecords())) {
-            List<Long> tagIds = page.getRecords().stream().map(TagEntity::getTagId).collect(Collectors.toList());
-            tagPostCountMap = postTagRelaCrudService.getTagPostCountEntity(tagIds)
-                    .stream()
-                    .collect(Collectors.toMap(TagPostCountEntity::getTagId, TagPostCountEntity::getPostCount));
-        }
-        Map<Long, Long> finalTagPostCountMap = tagPostCountMap;
-        return PageUtil.toResult(page, entity -> {
-            PageTagResponse pageTagResponse = TagConverter.INSTANCE.toResponse(entity);
-            Long postCount = Optional.ofNullable(finalTagPostCountMap.get(entity.getTagId())).orElse(0L);
-            pageTagResponse.setPostCount(postCount);
-            return pageTagResponse;
+        tagCrudService.findByTagName(request.getTagName()).ifPresent(o -> {
+            throw new BusinessException("标签名称[{}]已存在", request.getTagName());
         });
+        tagCrudService.save(entity);
+        return toResponse(entity);
+    }
+
+    @Override
+    public TagResponse update(Long tagId, TagRequest request) {
+        TagEntity existEntity = tagCrudService.getOneOrThrow(tagId);
+        if (!StringUtils.equals(request.getTagName(), existEntity.getTagName())) {
+            tagCrudService.findByTagName(request.getTagName()).ifPresent(o -> {
+                throw new BusinessException("标签名称[{}]已存在", request.getTagName());
+            });
+        }
+        TagEntity entity = TagConverter.INSTANCE.toEntity(request);
+        entity.setTagId(tagId);
+        tagCrudService.updateById(entity);
+        return toResponse(tagCrudService.getById(tagId));
     }
 
     @Override
@@ -93,5 +77,28 @@ public class TagManagerServiceImpl implements TagManagerService {
             throw new BusinessException("标签已被使用，无法删除");
         }
         tagCrudService.removeById(tagId);
+    }
+
+    private TagResponse toResponse(TagEntity tagEntity) {
+        return CollUtil.getFirst(toResponses(List.of(tagEntity)));
+    }
+
+    private List<TagResponse> toResponses(List<TagEntity> tagEntities) {
+        if (CollectionUtils.isEmpty(tagEntities)) {
+            return new ArrayList<>();
+        }
+        List<Long> tagIds = StreamUtil.mapField(tagEntities, TagEntity::getTagId);
+
+        Map<Long, Long> tagPostCountMap = postTagRelaCrudService.getTagPostCountEntity(tagIds)
+                .stream()
+                .collect(Collectors.toMap(TagPostCountEntity::getTagId, TagPostCountEntity::getPostCount));
+
+        return tagEntities
+                .stream()
+                .map(tagEntity -> {
+                    TagResponse tagResponse = TagConverter.INSTANCE.toResponse(tagEntity);
+                    tagResponse.setPostCount(tagPostCountMap.getOrDefault(tagEntity.getTagId(), 0L));
+                    return tagResponse;
+                }).toList();
     }
 }

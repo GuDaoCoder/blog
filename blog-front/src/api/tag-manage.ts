@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export function pageTag(params: PageTagDTO) {
-    return axios.get<PageVO<PageTagVO>>("/admin/tag", {params})
+    return axios.get<PageResponse<PageTagVO>>("/admin/tag", {params})
 }
 
 export function createTag(data: TagDTO) {

@@ -14,7 +14,7 @@ import lombok.Data;
  * @desc
  */
 @Data
-public class PagePostRequest extends PageRequest {
+public class SearchPostRequest extends PageRequest {
 
     @Schema(description = "标题")
     private String title;

@@ -3,15 +3,15 @@ package com.blog.biz.model.entity.custom;
 import lombok.Data;
 
 @Data
-public class TagPostCountEntity {
+public class CategoryPostCountEntity {
 
     /**
-     * 标签Id
+     * 分类Id
      */
-    private Long tagId;
+    private Long categoryId;
 
     /**
-     * 文章数量
+     * 数量
      */
     private Long postCount;
 }

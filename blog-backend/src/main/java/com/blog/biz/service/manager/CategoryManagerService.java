@@ -2,11 +2,11 @@ package com.blog.biz.service.manager;
 
 import java.util.List;
 
-import com.blog.biz.model.request.CategoryTreeRequest;
+import com.blog.biz.model.request.SearchCategoryTreeRequest;
 import com.blog.biz.model.request.CreateCategoryRequest;
 import com.blog.biz.model.request.UpdateCategoryRequest;
-import com.blog.biz.model.response.TreeCategoryResponse;
-import com.blog.biz.model.response.CreateCategoryResponse;
+import com.blog.biz.model.response.CategoryTreeResponse;
+import com.blog.biz.model.response.CategoryResponse;
 
 /**
  * @author zouzhangpeng
@@ -15,28 +15,29 @@ import com.blog.biz.model.response.CreateCategoryResponse;
 public interface CategoryManagerService {
 
     /**
-     * 新增分类
+     * 查询文章分类树
      *
-     * @param request CreateCategoryRequest
-     * @return com.blog.biz.model.response.CreateCategoryResponse
-     */
-    CreateCategoryResponse create(CreateCategoryRequest request);
+     * @param request
+     * @return List<TreeCategoryResponse>
+     **/
+    List<CategoryTreeResponse> searchTree(SearchCategoryTreeRequest request);
 
     /**
-     * 查询分类树形结构
+     * 新增分类
      *
-     * @param
-     * @return java.util.List<com.blog.biz.model.response.CategoryResponse>
-     */
-    List<TreeCategoryResponse> tree(CategoryTreeRequest request);
+     * @param request
+     * @return CategoryResponse
+     **/
+    CategoryResponse create(CreateCategoryRequest request);
 
     /**
      * 更新分类
-     * 
-     * @param categoryId Long
-     * @param request UpdateCategoryRequest
-     */
-    void update(Long categoryId, UpdateCategoryRequest request);
+     *
+     * @param categoryId
+     * @param request
+     * @return CategoryResponse
+     **/
+    CategoryResponse update(Long categoryId, UpdateCategoryRequest request);
 
     /**
      * 删除分类

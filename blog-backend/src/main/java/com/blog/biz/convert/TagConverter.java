@@ -1,11 +1,10 @@
 package com.blog.biz.convert;
 
-import com.blog.biz.model.request.CreateTagRequest;
-import com.blog.biz.model.response.PageTagResponse;
+import com.blog.biz.model.entity.TagEntity;
+import com.blog.biz.model.request.TagRequest;
+import com.blog.biz.model.response.TagResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-
-import com.blog.biz.model.entity.TagEntity;
 
 /**
  * @author zouzhangpeng
@@ -16,7 +15,8 @@ public interface TagConverter {
 
     TagConverter INSTANCE = Mappers.getMapper(TagConverter.class);
 
-    TagEntity toEntity(CreateTagRequest request);
+    TagEntity toEntity(TagRequest request);
 
-    PageTagResponse toResponse(TagEntity entity);
+    TagResponse toResponse(TagEntity entity);
+
 }

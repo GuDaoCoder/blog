@@ -10,11 +10,13 @@ import com.blog.common.base.request.CommonRequest;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author zouzhangpeng
  * @desc
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class CreatePostRequest extends CommonRequest {
 
@@ -31,7 +33,7 @@ public class CreatePostRequest extends CommonRequest {
     @Schema(description = "封面图片链接")
     private String coverPictureUrl;
 
-    @NotNull(message = "所属分类Id不能为空")
+    @NotNull(message = "是否置顶不能为空")
     @Schema(description = "所属分类Id")
     private Long categoryId;
 

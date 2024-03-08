@@ -1,23 +1,19 @@
 package com.blog.biz.controller.admin;
 
-import com.blog.biz.model.request.CreateTagRequest;
-import org.springdoc.api.annotations.ParameterObject;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import com.blog.biz.model.request.PageTagRequest;
-import com.blog.biz.model.request.UpdateTagRequest;
-import com.blog.biz.model.response.CreateTagResponse;
-import com.blog.biz.model.response.PageTagResponse;
+import com.blog.biz.model.request.SearchTagRequest;
+import com.blog.biz.model.request.TagRequest;
+import com.blog.biz.model.response.TagResponse;
 import com.blog.biz.service.manager.TagManagerService;
-import com.blog.common.base.response.PageResponse;
+import com.blog.common.base.response.SearchResponse;
 import com.blog.common.domain.Result;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.api.annotations.ParameterObject;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author zouzhangpeng
@@ -32,24 +28,23 @@ public class TagController {
 
     private final TagManagerService tagManagerService;
 
+    @Operation(summary = "查询标签列表")
+    @GetMapping
+    public Result<SearchResponse<TagResponse>> search(@ParameterObject SearchTagRequest request) {
+        return Result.success(tagManagerService.search(request));
+    }
+
     @Operation(summary = "新增标签")
     @PostMapping
-    public Result<CreateTagResponse> create(@Validated @RequestBody CreateTagRequest request) {
+    public Result<TagResponse> create(@Validated @RequestBody TagRequest request) {
         return Result.success(tagManagerService.create(request));
     }
 
     @Operation(summary = "编辑标签")
-    @PutMapping("/{tagId}")
-    public Result<Void> update(@Parameter(description = "标签Id") @PathVariable Long tagId,
-                               @Validated @RequestBody UpdateTagRequest request) {
-        tagManagerService.update(tagId, request);
-        return Result.success();
-    }
-
-    @Operation(summary = "查询标签列表")
-    @GetMapping
-    public Result<PageResponse<PageTagResponse>> page(@ParameterObject PageTagRequest request) {
-        return Result.success(tagManagerService.page(request));
+    @PatchMapping("/{tagId}")
+    public Result<TagResponse> update(@Parameter(description = "标签Id") @PathVariable Long tagId,
+                                      @Validated @RequestBody TagRequest request) {
+        return Result.success(tagManagerService.update(tagId, request));
     }
 
     @Operation(summary = "删除标签")

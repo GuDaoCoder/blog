@@ -15,6 +15,8 @@ public enum PostStatus {
 
     PUBLISHED("已发布"),
 
+    REMOVED("已下架"),
+
     RECYCLE_BIN("位于回收站"),
 
     ;

@@ -29,7 +29,7 @@ public class PostContentEntity extends BaseEntity {
     /**
      * 文章内容
      */
-    @TableField(updateStrategy = FieldStrategy.IGNORED)
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String content;
 
 }
