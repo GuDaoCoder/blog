@@ -16,7 +16,7 @@
 
 <script lang="ts" setup>
 import {ref} from "vue";
-import {searchTree} from "@/api/category-manage";
+import {searchTree} from "@/api/admin/category-manage";
 import type {TreeNodeData} from "@arco-design/web-vue";
 import {useVModel} from "@/utils/useVModel";
 

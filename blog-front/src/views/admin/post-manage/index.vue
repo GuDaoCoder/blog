@@ -38,7 +38,7 @@
         </a-row>
 
         <search-button-group>
-          <a-button type="primary" html-type="submit">查询</a-button>
+          <a-button html-type="submit" type="primary">查询</a-button>
           <a-button type="outline" @click="reset">重置</a-button>
         </search-button-group>
       </a-form>
@@ -51,11 +51,12 @@
         </template>
 
         <template #table>
-          <a-table row-key="tagId" :columns="tableColumns" :data="postTableData" stripe column-resizable
-                   :loading="tableLoading" :pagination="false" :scroll="scroll">
+          <a-table :columns="tableColumns" :data="postTableData" :loading="tableLoading" :pagination="false"
+                   :scroll="scroll"
+                   column-resizable row-key="tagId" stripe>
             <template #coverPictureUrl="{ record }">
-              <a-image v-if="record.coverPictureUrl" :src="record.coverPictureUrl" show-loader width="100"
-                       height="100"/>
+              <a-image v-if="record.coverPictureUrl" :src="record.coverPictureUrl" height="100" show-loader
+                       width="100"/>
             </template>
             <template #tags="{ record }">
               <a-space>
@@ -95,7 +96,7 @@
              @cancel="handleCancelSave"/>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import ContentCard from "@/components/ContentCard/index.vue";
 import SearchButtonGroup from "@/components/SearchButtonGroup/index.vue"
 import SearchResult from "@/components/SearchResult/index.vue"
@@ -187,7 +188,7 @@ const scroll = {
   x: 1800
 }
 
-const page = ref<PageResponse<PageTagVO>>({pageNumber: 1, pageSize: 10, total: 0})
+const page = ref<PageResponse<TagResponse>>({pageNumber: 1, pageSize: 10, total: 0})
 
 const postTableData = ref<PagePostVO[]>([])
 

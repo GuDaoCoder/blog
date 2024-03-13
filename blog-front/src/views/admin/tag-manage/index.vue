@@ -1,16 +1,16 @@
 <template>
   <Container>
     <content-card>
-      <a-form :model="searchFormData" @submit="handleSearch">
+      <a-form :model="searchTagForm" @submit="handleSearch">
         <a-row :gutter="16">
           <a-col :span="8">
             <a-form-item label="标签名称">
-              <a-input v-model="searchFormData.tagName"/>
+              <a-input v-model="searchTagForm.tagName"/>
             </a-form-item>
           </a-col>
         </a-row>
         <search-button-group>
-          <a-button type="primary" html-type="submit">查询</a-button>
+          <a-button html-type="submit" type="primary">查询</a-button>
           <a-button type="outline" @click="reset">重置</a-button>
         </search-button-group>
       </a-form>
@@ -21,8 +21,9 @@
         </template>
 
         <template #table>
-          <a-table row-key="tagId" :columns="tableColumns" :data="tagTableData" stripe column-resizable
-                   :loading="tableLoading" :pagination="false">
+          <a-table :columns="tableColumns" :data="tagTableData" :loading="tableLoading" :pagination="false"
+                   column-resizable
+                   row-key="tagId" stripe>
             <template #tagName="{record}">
               <a-tag :color="record.color">{{ record.tagName }}</a-tag>
             </template>
@@ -45,21 +46,26 @@
     </content-card>
   </Container>
 
-  <save-tag :form-data="saveTagFormData" :visible="saveTagVisible" :title="saveTagFormData.tagId ? '编辑':'新增'+'标签'"
+  <save-tag :form-data="saveTagFormData" :title="saveTagFormData && saveTagFormData.tagId ? '编辑':'新增'+'标签'"
+            :visible="saveTagVisible"
             @cancel="handleCancelSave"/>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import Pagination from "@/components/Pagination/index.vue"
 import ContentCard from '@/components/ContentCard/index.vue'
 import {onMounted, ref} from "vue";
 import type {TableColumnData} from "@arco-design/web-vue";
-import {deleteTag, pageTag} from "@/api/tag-manage";
+import {Notification} from "@arco-design/web-vue";
+import {deleteTag, searchTag} from "@/api/admin/tag-manage";
 import SearchButtonGroup from "@/components/SearchButtonGroup/index.vue";
 import SearchResult from "@/components/SearchResult/index.vue";
 import SaveTag from "@/views/admin/tag-manage/components/save-tag.vue";
-import {Notification} from "@arco-design/web-vue";
 import {Whether} from "../../../enums";
+
+onMounted(() => {
+  fetchTableData()
+})
 
 const initSearchForm = (): SearchTagForm => {
   return {
@@ -67,18 +73,18 @@ const initSearchForm = (): SearchTagForm => {
   }
 }
 
-const searchFormData = ref<SearchTagForm>(initSearchForm())
+const searchTagForm = ref<SearchTagForm>(initSearchForm())
 
 const handleSearch = () => {
-  fetchTableData(searchFormData.value)
+  fetchTableData(searchTagForm.value)
 }
 
 /**
  * 重置按钮
  */
 const reset = () => {
-  searchFormData.value = initSearchForm();
-  fetchTableData(searchFormData.value)
+  searchTagForm.value = initSearchForm();
+  fetchTableData(searchTagForm.value)
 }
 
 const tableColumns = ref<TableColumnData[]>([
@@ -118,7 +124,7 @@ const pagination = ref<PaginationType>(
 
 const tableLoading = ref<boolean>(false)
 
-const tagTableData = ref<PageTagVO[]>([])
+const tagTableData = ref<TagResponse[]>([])
 
 const fetchTableData = async (form: SearchTagForm = {}) => {
   if (tableLoading.value) {
@@ -126,7 +132,7 @@ const fetchTableData = async (form: SearchTagForm = {}) => {
   }
   tableLoading.value = true
   try {
-    const {data} = await pageTag({
+    const {data} = await searchTag({
           pageNumber: pagination.value.pageNumber,
           pageSize: pagination.value.pageSize,
           ...form
@@ -141,12 +147,9 @@ const fetchTableData = async (form: SearchTagForm = {}) => {
   }
 }
 
-onMounted(() => {
-  fetchTableData()
-})
 
 const saveTagVisible = ref<boolean>(false)
-const saveTagFormData = ref<SaveTagForm>({})
+const saveTagFormData = ref<SaveTagForm>()
 
 const handleCreateTag = () => {
   saveTagFormData.value = {
@@ -156,7 +159,7 @@ const handleCreateTag = () => {
   saveTagVisible.value = true
 }
 
-const handleUpdateTag = (value: PageTagVO) => {
+const handleUpdateTag = (value: TagResponse) => {
   saveTagFormData.value = {...value}
   saveTagVisible.value = true
 }
@@ -168,7 +171,7 @@ const handleCancelSave = (reload: boolean) => {
   }
 }
 
-const handleDeleteTag = async (value: PageTagVO) => {
+const handleDeleteTag = async (value: TagResponse) => {
   await deleteTag(value.tagId)
   Notification.success("删除成功");
   handleSearch()
@@ -176,12 +179,12 @@ const handleDeleteTag = async (value: PageTagVO) => {
 
 const handleChangePage = (pageNumber: number) => {
   pagination.value.pageNumber = pageNumber
-  fetchTableData(searchFormData.value)
+  fetchTableData(searchTagForm.value)
 }
 
 const handleChangePageSize = (pageSize: number) => {
   pagination.value.pageSize = pageSize
-  fetchTableData(searchFormData.value)
+  fetchTableData(searchTagForm.value)
 }
 
 </script>

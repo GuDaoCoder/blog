@@ -15,7 +15,7 @@ import java.io.Serial;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class TagRequest extends CommonRequest {
+public class CreateTagRequest extends CommonRequest {
 
     @Serial
     private static final long serialVersionUID = 6475559052331430554L;

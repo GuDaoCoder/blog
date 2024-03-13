@@ -1,7 +1,8 @@
 package com.blog.biz.controller.admin;
 
+import com.blog.biz.model.request.CreateTagRequest;
 import com.blog.biz.model.request.SearchTagRequest;
-import com.blog.biz.model.request.TagRequest;
+import com.blog.biz.model.request.UpdateTagRequest;
 import com.blog.biz.model.response.TagResponse;
 import com.blog.biz.service.manager.TagManagerService;
 import com.blog.common.base.response.SearchResponse;
@@ -36,14 +37,14 @@ public class TagController {
 
     @Operation(summary = "新增标签")
     @PostMapping
-    public Result<TagResponse> create(@Validated @RequestBody TagRequest request) {
+    public Result<TagResponse> create(@Validated @RequestBody CreateTagRequest request) {
         return Result.success(tagManagerService.create(request));
     }
 
     @Operation(summary = "编辑标签")
     @PatchMapping("/{tagId}")
     public Result<TagResponse> update(@Parameter(description = "标签Id") @PathVariable Long tagId,
-                                      @Validated @RequestBody TagRequest request) {
+                                      @Validated @RequestBody UpdateTagRequest request) {
         return Result.success(tagManagerService.update(tagId, request));
     }
 

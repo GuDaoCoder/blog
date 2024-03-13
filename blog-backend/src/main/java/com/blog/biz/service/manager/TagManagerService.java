@@ -1,7 +1,8 @@
 package com.blog.biz.service.manager;
 
 import com.blog.biz.model.request.SearchTagRequest;
-import com.blog.biz.model.request.TagRequest;
+import com.blog.biz.model.request.CreateTagRequest;
+import com.blog.biz.model.request.UpdateTagRequest;
 import com.blog.biz.model.response.TagResponse;
 import com.blog.common.base.response.SearchResponse;
 
@@ -25,7 +26,7 @@ public interface TagManagerService {
      * @param request
      * @return TagResponse
      **/
-    TagResponse create(TagRequest request);
+    TagResponse create(CreateTagRequest request);
 
     /**
      * 编辑标签
@@ -34,7 +35,7 @@ public interface TagManagerService {
      * @param request
      * @return TagResponse
      **/
-    TagResponse update(Long tagId, TagRequest request);
+    TagResponse update(Long tagId, UpdateTagRequest request);
 
 
     /**

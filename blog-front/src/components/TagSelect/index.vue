@@ -1,14 +1,13 @@
 <template>
-  <a-select multiple v-model="model" :loading="loading">
-    <a-option v-for="option in options" :key="option.tagId" :value="option.tagId" :label="option.tagName"
-              :tag-props="{color:option.color}"/>
+  <a-select v-model="model" :loading="loading" multiple>
+    <a-option v-for="option in options" :key="option.tagId" :label="option.tagName" :tag-props="{color:option.color}"
+              :value="option.tagId"/>
   </a-select>
 </template>
 
-<script setup lang="ts">
-import {createTag, pageTag} from "@/api/tag-manage";
-import {onBeforeMount, onMounted, reactive, ref} from "vue";
-import type {SelectFieldNames} from "@arco-design/web-vue/es/select/interface";
+<script lang="ts" setup>
+import {createTag, searchTag} from "@/api/admin/tag-manage";
+import {onMounted, ref} from "vue";
 import {useVModel} from "@/utils/useVModel";
 
 const props = defineProps({
@@ -23,7 +22,7 @@ const emits = defineEmits(["update:modelValue"])
 // loading
 const loading = ref<boolean>(false)
 // 选项数据
-const options = ref<PageTagVO[]>([])
+const options = ref<TagResponse[]>([])
 
 onMounted(() => {
   fetchOptions()
@@ -32,7 +31,7 @@ onMounted(() => {
 const fetchOptions = async () => {
   try {
     loading.value = true
-    const {data} = await pageTag({pageNumber: 1, pageSize: 10000})
+    const {data} = await searchTag({pageNumber: 1, pageSize: 10000})
     options.value = data.items || []
     initValues.value = options.value.map(obj => obj.tagId)
   } finally {

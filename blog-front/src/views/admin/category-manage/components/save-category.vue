@@ -25,7 +25,7 @@ import type {PropType} from "vue";
 import {reactive, ref} from "vue";
 import type {ValidatedError} from "@arco-design/web-vue";
 import {Notification} from "@arco-design/web-vue";
-import {createCategory, updateCategory} from "@/api/category-manage";
+import {createCategory, updateCategory} from "@/api/admin/category-manage";
 
 defineProps({
   visible: {

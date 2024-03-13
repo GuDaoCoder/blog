@@ -8,7 +8,7 @@ interface SaveCategoryForm {
     categoryName?: string,
     parentCategoryId?: number,
     parentCategoryName?: string
-    enabled?: boolean,
+    enabled: boolean,
 }
 
 interface SearchCategoryTreeRequest {

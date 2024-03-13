@@ -54,7 +54,7 @@ import SaveCategory from "@/views/admin/category-manage/components/save-category
 import {onMounted, ref} from "vue";
 import type {TableColumnData} from "@arco-design/web-vue";
 import {Notification} from "@arco-design/web-vue";
-import {deleteCategory, searchTree} from "@/api/category-manage";
+import {deleteCategory, searchTree} from "@/api/admin/category-manage";
 import SearchButtonGroup from "@/components/SearchButtonGroup/index.vue";
 import {Whether} from "@/enums";
 

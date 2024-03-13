@@ -5,8 +5,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.blog.biz.convert.TagConverter;
 import com.blog.biz.model.entity.TagEntity;
 import com.blog.biz.model.entity.custom.TagPostCountEntity;
+import com.blog.biz.model.request.CreateTagRequest;
 import com.blog.biz.model.request.SearchTagRequest;
-import com.blog.biz.model.request.TagRequest;
+import com.blog.biz.model.request.UpdateTagRequest;
 import com.blog.biz.model.response.TagResponse;
 import com.blog.biz.service.crud.PostTagRelaCrudService;
 import com.blog.biz.service.crud.TagCrudService;
@@ -46,7 +47,7 @@ public class TagManagerServiceImpl implements TagManagerService {
     }
 
     @Override
-    public TagResponse create(TagRequest request) {
+    public TagResponse create(CreateTagRequest request) {
         TagEntity entity = TagConverter.INSTANCE.toEntity(request);
         // 校验名称是否重复
         tagCrudService.findByTagName(request.getTagName()).ifPresent(o -> {
@@ -57,7 +58,7 @@ public class TagManagerServiceImpl implements TagManagerService {
     }
 
     @Override
-    public TagResponse update(Long tagId, TagRequest request) {
+    public TagResponse update(Long tagId, UpdateTagRequest request) {
         TagEntity existEntity = tagCrudService.getOneOrThrow(tagId);
         if (!StringUtils.equals(request.getTagName(), existEntity.getTagName())) {
             tagCrudService.findByTagName(request.getTagName()).ifPresent(o -> {
