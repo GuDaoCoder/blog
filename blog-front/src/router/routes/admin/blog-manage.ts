@@ -1,4 +1,4 @@
-import {ADMIN_LAYOUT} from '../base'
+import {ADMIN_LAYOUT} from './layout'
 import type {RouteRaw} from "@/router/routes/type";
 
 const BLOG_MANGE: RouteRaw = {

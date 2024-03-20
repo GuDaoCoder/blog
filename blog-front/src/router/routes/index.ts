@@ -1,6 +1,7 @@
 import type {RouteRecordNormalized} from "vue-router";
 
-const modules = import.meta.glob('./admin/*.ts', { eager: true });
+const adminModules = import.meta.glob('./admin/*.ts', {eager: true});
+const openModules = import.meta.glob('./open/*.ts', {eager: true});
 
 function formatModules(_modules: any, result: RouteRecordNormalized[]) {
     Object.keys(_modules).forEach((key) => {
@@ -13,4 +14,8 @@ function formatModules(_modules: any, result: RouteRecordNormalized[]) {
     });
     return result;
 }
-export const adminRoutes:RouteRecordNormalized[] = formatModules(modules, []);
+
+export const adminRoutes: RouteRecordNormalized[] = [
+    ...formatModules(adminModules, []),
+    ...formatModules(openModules, [])
+];
