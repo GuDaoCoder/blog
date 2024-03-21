@@ -19,6 +19,13 @@ import MdPreview from "@/components/MdPreview/index.vue"
       </a-space>
     </div>
     <md-preview/>
+    <a-divider/>
+    <!--    <div class="post-actions">-->
+    <!--      <a-space>-->
+    <!--        <svg-icon name="like" size="40"/>-->
+    <!--        <svg-icon name="share" size="30"/>-->
+    <!--      </a-space>-->
+    <!--    </div>-->
   </div>
 </template>
 
@@ -42,5 +49,12 @@ import MdPreview from "@/components/MdPreview/index.vue"
   font-size: 16px;
   padding: 20px 40px;
   color: #909399;
+}
+
+.post-actions {
+  padding: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
