@@ -24,6 +24,7 @@ const images = ref([
           :preview="false"
           :src="image"
           fit="cover"
+          height="100%"
           width="100%"/>
     </a-carousel-item>
   </a-carousel>

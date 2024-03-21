@@ -15,8 +15,25 @@ import globalComponent from '@/components'
 import "@/request"
 // 全局通用方法
 import utils from "@/utils"
+import VMdPreview from '@kangc/v-md-editor/lib/preview';
+import '@kangc/v-md-editor/lib/style/preview.css';
+import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js';
+import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
+import createCopyCodePlugin from '@kangc/v-md-editor/lib/plugins/copy-code/index';
+import '@kangc/v-md-editor/lib/plugins/copy-code/copy-code.css';
+import createLineNumbertPlugin from '@kangc/v-md-editor/lib/plugins/line-number/index';
+import Prism from 'prismjs';
+
+VMdPreview
+    // 主题
+    .use(vuepressTheme, {Prism})
+    // 复制按钮
+    .use(createCopyCodePlugin())
+    // 行号
+    .use(createLineNumbertPlugin());
 
 createApp(App)
+    .use(VMdPreview)
     .use(router)
     .use(store)
     .use(ArcoVue)

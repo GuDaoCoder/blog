@@ -1,13 +1,18 @@
 <script lang="ts" setup>
+import {useRouter} from "vue-router";
 
+const router = useRouter();
+const toHome = () => {
+  router.push({path: "/home"})
+}
 </script>
 
 <template>
   <div class="navbar">
     <div class="left-side">
-      <img
-          alt="logo"
-          src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/dfdba5317c0c20ce20e64fac803d52bc.svg~tplv-49unhts6dw-image.image"
+      <img alt="logo"
+           src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/dfdba5317c0c20ce20e64fac803d52bc.svg~tplv-49unhts6dw-image.image"
+           @click="toHome"
       />
     </div>
 

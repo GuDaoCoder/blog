@@ -5,6 +5,7 @@ import path from 'path'
 import autoprefixer from 'autoprefixer'
 // 引入svg插件
 import {createSvgIconsPlugin} from 'vite-plugin-svg-icons'
+import prismjs from 'vite-plugin-prismjs';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
@@ -16,6 +17,9 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
             createSvgIconsPlugin({
                 iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],
                 symbolId: 'icon-[dir]-[name]',
+            }),
+            prismjs({
+                languages: ['json'],
             })
         ],
         css: {

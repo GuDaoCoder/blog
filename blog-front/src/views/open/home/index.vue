@@ -20,8 +20,6 @@ import PostList from "@/components/PostList/index.vue"
 
 <style lang="scss" scoped>
 .content-wrapper {
-  padding: 0 200px;
-  margin-top: 20px;
   display: flex;
 }
 

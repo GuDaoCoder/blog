@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import {reactive, ref} from "vue";
+import {useRouter} from "vue-router";
 
 const names = ref(['Socrates', 'Balzac', 'Plato']);
 const avatarSrc = ref([
@@ -26,6 +27,11 @@ const paginationProps = reactive({
   defaultPageSize: 10,
   total: dataSource.length
 })
+
+const router = useRouter()
+const toPost = () => {
+  router.push({path: "/post"})
+}
 </script>
 
 <template>
@@ -43,7 +49,7 @@ const paginationProps = reactive({
             <span><icon-message/>Reply</span>
           </template>
           <template #extra>
-            <div className="image-area">
+            <div>
               <a-image :preview="false" :src="item.imageSrc" fit="cover" height="100px" width="200px"/>
             </div>
           </template>
@@ -51,6 +57,9 @@ const paginationProps = reactive({
               :description="item.description"
               :title="item.title"
           >
+            <template #description>
+              <p class="hover-text" @click="toPost">asdasdasdasdas</p>
+            </template>
           </a-list-item-meta>
         </a-list-item>
       </template>
@@ -62,5 +71,17 @@ const paginationProps = reactive({
 <style lang="scss" scoped>
 .list-wrapper {
   padding: 20px 0;
+}
+
+.hover-text {
+  color: black;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.hover-text:hover {
+  cursor: pointer;
+  color: blue;
+  text-decoration: underline;
 }
 </style>

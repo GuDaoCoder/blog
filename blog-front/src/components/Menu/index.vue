@@ -1,9 +1,9 @@
 <template>
   <a-menu
-      class="menu"
-      show-collapse-button
-      level-indent.number="40"
       :collapsed="collapsed"
+      class="menu"
+      level-indent.number="40"
+      show-collapse-button
       @collapse="setCollapse"
       @menu-item-click="clickMenuItem"
   >
@@ -11,9 +11,9 @@
   </a-menu>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import MenuItem from '@/components/MenuItem/index.vue'
-import {reactive, computed} from 'vue'
+import {computed, reactive} from 'vue'
 import {useAppStore} from '@/store'
 import {useRoute, useRouter} from 'vue-router'
 import type {Menu} from './type'
@@ -67,7 +67,7 @@ const clickMenuItem = (code: string) => {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .menu {
   width: 100%;
   height: 100%;

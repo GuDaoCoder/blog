@@ -11,10 +11,10 @@ const HOME: RouteRaw = {
             name: 'home',
             path: "/home",
             component: () => import(/* webpackChunkName: "home" */ "@/views/open/home/index.vue"),
-            meta: {
-                icon: 'home',
-                title: '主页'
-            },
+        }, {
+            name: 'post',
+            path: "/post",
+            component: () => import(/* webpackChunkName: "home" */ "@/views/open/post/index.vue"),
         }]
 }
 
