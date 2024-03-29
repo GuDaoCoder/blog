@@ -3,8 +3,10 @@ package com.blog.biz.service.manager;
 import com.blog.biz.model.request.CreatePostRequest;
 import com.blog.biz.model.request.SearchPostRequest;
 import com.blog.biz.model.request.UpdatePostRequest;
+import com.blog.biz.model.request.blog.SearchPostBlogRequest;
 import com.blog.biz.model.response.PostResponse;
-import com.blog.common.base.response.SearchResponse;
+import com.blog.biz.model.response.blog.PostBlogResponse;
+import com.blog.common.base.response.PageResponse;
 
 /**
  * @author zouzhangpeng
@@ -18,7 +20,15 @@ public interface PostManagerService {
      * @param request PagePostRequest
      * @return PageResponse<PagePostResponse>
      */
-    SearchResponse<PostResponse> search(SearchPostRequest request);
+    PageResponse<PostResponse> search(SearchPostRequest request);
+
+    /**
+     * 博客页面查询文章列表
+     *
+     * @param request
+     * @return PageResponse<PostBlogResponse>
+     **/
+    PageResponse<PostBlogResponse> blogSearch(SearchPostBlogRequest request);
 
     /**
      * 创建文章

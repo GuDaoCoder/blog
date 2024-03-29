@@ -5,8 +5,9 @@ import com.blog.biz.model.entity.PostEntity;
 import com.blog.biz.model.request.CreatePostRequest;
 import com.blog.biz.model.request.SearchPostRequest;
 import com.blog.biz.model.request.UpdatePostRequest;
-import com.blog.biz.model.response.PagePostResponse;
+import com.blog.biz.model.request.blog.SearchPostBlogRequest;
 import com.blog.biz.model.response.PostResponse;
+import com.blog.biz.model.response.blog.PostBlogResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -25,6 +26,10 @@ public interface PostConverter {
 
     PostResponse toResponse(PostEntity entity);
 
+    PostBlogResponse toBlogResponse(PostEntity entity);
+
     SearchPostContext toPageContext(SearchPostRequest request);
+
+    SearchPostContext toPageContext(SearchPostBlogRequest request);
 
 }

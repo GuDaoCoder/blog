@@ -1,28 +1,30 @@
 <script lang="ts" setup>
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
+import {searchBlogPosts} from "@/api/blog/post";
 
-const images = ref([
-  'https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/cd7a1aaea8e1c5e3d26fe2591e561798.png~tplv-uwbnlip3yd-webp.webp',
-  'https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/6480dbc69be1b5de95010289787d64f1.png~tplv-uwbnlip3yd-webp.webp',
-  'https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/0265a04fddbd77a19602a15d9d55d797.png~tplv-uwbnlip3yd-webp.webp',
-]);
+const posts = ref<PostBlogResponse[]>([])
+
+onMounted(() => {
+  fetchPosts();
+})
+
+const fetchPosts = async () => {
+  const {data} = await searchBlogPosts({pageNumber: 1, pageSize: 5})
+  posts.value = data.items || []
+}
 </script>
 
 <template>
   <a-carousel
       :autoPlay="true"
-      :style="{
-      width: '100%',
-      height: '300px',
-    }"
       animation-name="card"
+      class="post-carousel"
       indicator-position="outer"
-      show-arrow="never"
   >
-    <a-carousel-item v-for="image in images" style="width: 60%">
+    <a-carousel-item v-for="post in posts" style="width: 60%">
       <a-image
           :preview="false"
-          :src="image"
+          :src="post.coverPictureUrl"
           fit="cover"
           height="100%"
           width="100%"/>
@@ -30,6 +32,9 @@ const images = ref([
   </a-carousel>
 </template>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.post-carousel {
+  width: 100%;
+  height: 300px;
+}
 </style>

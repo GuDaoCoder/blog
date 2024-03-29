@@ -3,7 +3,7 @@ import {OPEN_LAYOUT} from "@/router/routes/open/layout";
 
 const HOME: RouteRaw = {
     path: '/',
-    name: 'open',
+    name: 'blog',
     component: OPEN_LAYOUT,
     redirect: '/home',
     children: [

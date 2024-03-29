@@ -1,36 +1,33 @@
 package com.blog.biz.service.manager.impl;
 
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import cn.hutool.core.collection.CollUtil;
-import com.blog.biz.model.context.SearchPostContext;
-import com.blog.common.exception.DataNotFoundException;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.blog.biz.convert.PostConverter;
 import com.blog.biz.enums.PostSource;
 import com.blog.biz.enums.PostStatus;
+import com.blog.biz.model.context.SearchPostContext;
 import com.blog.biz.model.entity.*;
 import com.blog.biz.model.request.CreatePostRequest;
 import com.blog.biz.model.request.SearchPostRequest;
 import com.blog.biz.model.request.UpdatePostRequest;
+import com.blog.biz.model.request.blog.SearchPostBlogRequest;
 import com.blog.biz.model.response.PostResponse;
+import com.blog.biz.model.response.blog.PostBlogResponse;
 import com.blog.biz.service.crud.*;
 import com.blog.biz.service.manager.PostManagerService;
-import com.blog.common.base.response.SearchResponse;
+import com.blog.common.base.response.PageResponse;
 import com.blog.common.exception.BusinessException;
 import com.blog.common.util.PageUtil;
 import com.blog.common.util.StreamUtil;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author zouzhangpeng
@@ -52,11 +49,19 @@ public class PostManagerServiceImpl implements PostManagerService {
     private final TagCrudService tagCrudService;
 
     @Override
-    public SearchResponse<PostResponse> search(SearchPostRequest request) {
+    public PageResponse<PostResponse> search(SearchPostRequest request) {
         SearchPostContext searchPostContext = PostConverter.INSTANCE.toPageContext(request);
         searchPostContext.setPageable(PageUtil.pageable(request));
         IPage<PostEntity> page = postCrudService.page(searchPostContext);
         return PageUtil.result(page, toPostResponses(page.getRecords()));
+    }
+
+    @Override
+    public PageResponse<PostBlogResponse> blogSearch(SearchPostBlogRequest request) {
+        SearchPostContext searchPostContext = PostConverter.INSTANCE.toPageContext(request);
+        searchPostContext.setPageable(PageUtil.pageable(request));
+        IPage<PostEntity> page = postCrudService.page(searchPostContext);
+        return PageUtil.result(page, toPostBlogResponses(page.getRecords()));
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -158,20 +163,47 @@ public class PostManagerServiceImpl implements PostManagerService {
                 .orElse(null);
     }
 
+    private List<PostBlogResponse> toPostBlogResponses(List<PostEntity> postEntities) {
+        if (CollectionUtils.isEmpty(postEntities)) {
+            return new ArrayList<>();
+        }
+        Map<Long, CategoryEntity> categoryMap = categoryCrudService.listByIds(
+                postEntities.stream()
+                        .map(PostEntity::getCategoryId)
+                        .collect(Collectors.toList())
+        ).stream().collect(Collectors.toMap(CategoryEntity::getCategoryId, categoryEntity -> categoryEntity));
+
+        Map<Long, List<TagEntity>> tagMap = postTagsRela(postEntities.stream().map(PostEntity::getPostId).collect(Collectors.toList()));
+        return postEntities
+                .stream()
+                .map(postEntity -> {
+                    PostBlogResponse postBlogResponse = PostConverter.INSTANCE.toBlogResponse(postEntity);
+                    Optional.ofNullable(categoryMap.get(postEntity.getCategoryId()))
+                            .map(CategoryEntity::getCategoryName)
+                            .ifPresent(postBlogResponse::setCategoryName);
+
+                    Optional.ofNullable(tagMap.get(postEntity.getPostId())).ifPresent(list -> {
+                        List<PostBlogResponse.TagItem> tagItems = list
+                                .stream()
+                                .map(o -> new PostBlogResponse.TagItem(o.getTagId(), o.getTagName(), o.getColor()))
+                                .collect(Collectors.toList());
+                        postBlogResponse.setTags(tagItems);
+                    });
+                    return postBlogResponse;
+                }).toList();
+    }
+
     private List<PostResponse> toPostResponses(List<PostEntity> postEntities) {
         if (CollectionUtils.isEmpty(postEntities)) {
             return new ArrayList<>();
         }
-        List<Long> categoryIds = StreamUtil.mapField(postEntities, PostEntity::getCategoryId);
-        Map<Long, CategoryEntity> categoryMap = CollectionUtils.isNotEmpty(categoryIds)
-                ? categoryCrudService.listByIds(categoryIds).stream()
-                .collect(Collectors.toMap(CategoryEntity::getCategoryId, Function.identity()))
-                : new HashMap<>(0);
+        Map<Long, CategoryEntity> categoryMap = categoryCrudService.listByIds(
+                postEntities.stream()
+                        .map(PostEntity::getCategoryId)
+                        .collect(Collectors.toList())
+        ).stream().collect(Collectors.toMap(CategoryEntity::getCategoryId, categoryEntity -> categoryEntity));
 
-        List<Long> postIds = StreamUtil.mapField(postEntities, PostEntity::getPostId);
-        Map<Long, List<TagEntity>> tagMap = CollectionUtils.isNotEmpty(postIds)
-                ? postTagsRela(postIds) : new HashMap<>(0);
-
+        Map<Long, List<TagEntity>> tagMap = postTagsRela(postEntities.stream().map(PostEntity::getPostId).collect(Collectors.toList()));
         return postEntities
                 .stream()
                 .map(postEntity -> {

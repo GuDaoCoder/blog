@@ -1,12 +1,12 @@
 package com.blog.common.base.response;
 
-import java.io.Serial;
-import java.util.List;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serial;
+import java.util.List;
 
 /**
  * @author zouzhangpeng
@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @Data
-public class SearchResponse<Response> extends CommonResponse {
+public class PageResponse<Response> extends CommonResponse {
 
     @Serial
     private static final long serialVersionUID = 7162988863813899849L;

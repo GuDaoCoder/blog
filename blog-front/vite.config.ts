@@ -19,7 +19,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
                 symbolId: 'icon-[dir]-[name]',
             }),
             prismjs({
-                languages: ['json'],
+                languages: ['json', 'xml', 'java', 'sql', 'javascript'],
             })
         ],
         css: {

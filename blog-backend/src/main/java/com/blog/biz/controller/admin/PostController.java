@@ -5,7 +5,7 @@ import com.blog.biz.model.request.SearchPostRequest;
 import com.blog.biz.model.request.UpdatePostRequest;
 import com.blog.biz.model.response.PostResponse;
 import com.blog.biz.service.manager.PostManagerService;
-import com.blog.common.base.response.SearchResponse;
+import com.blog.common.base.response.PageResponse;
 import com.blog.common.domain.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -31,7 +31,7 @@ public class PostController {
 
     @Operation(summary = "查询文章列表")
     @GetMapping
-    public Result<SearchResponse<PostResponse>> search(@ParameterObject @Validated SearchPostRequest request) {
+    public Result<PageResponse<PostResponse>> search(@ParameterObject @Validated SearchPostRequest request) {
         return Result.success(postManagerService.search(request));
     }
 

@@ -1,31 +1,21 @@
 <script lang="ts" setup>
-import {reactive, ref} from "vue";
+import type {PropType} from "vue";
+import {reactive} from "vue";
 import {useRouter} from "vue-router";
+import {formatStandStr} from '@/utils/date'
 
-const names = ref(['Socrates', 'Balzac', 'Plato']);
-const avatarSrc = ref([
-  'https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a8c8cdb109cb051163646151a4a5083b.png~tplv-uwbnlip3yd-webp.webp',
-  'https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/e278888093bef8910e829486fb45dd69.png~tplv-uwbnlip3yd-webp.webp',
-  'https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/9eeb1800d9b78349b24682c3518ac4a3.png~tplv-uwbnlip3yd-webp.webp',
-]);
-const imageSrc = ref([
-  'https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/cd7a1aaea8e1c5e3d26fe2591e561798.png~tplv-uwbnlip3yd-webp.webp',
-  'https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/cd7a1aaea8e1c5e3d26fe2591e561798.png~tplv-uwbnlip3yd-webp.webp',
-  'https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/cd7a1aaea8e1c5e3d26fe2591e561798.png~tplv-uwbnlip3yd-webp.webp',
-]);
-const dataSource = new Array(15).fill(null).map((_, index) => {
-  return {
-    index: index,
-    avatar: avatarSrc.value[index % avatarSrc.value.length],
-    title: names.value[index % names.value.length],
-    description:
-        'Beijing ByteDance Technology Co., Ltd. is an enterprise located in China. ByteDance has products such as TikTok, Toutiao, volcano video and Douyin (the Chinese version of TikTok).',
-    imageSrc: imageSrc.value[index % imageSrc.value.length],
-  };
-});
+const props = defineProps({
+  data: {
+    type: Object as PropType<PostListProp>,
+    default: {
+      items: []
+    }
+  }
+})
+
 const paginationProps = reactive({
   defaultPageSize: 10,
-  total: dataSource.length
+  total: props.data?.items.length
 })
 
 const router = useRouter()
@@ -38,27 +28,38 @@ const toPost = () => {
   <div class="list-wrapper">
     <a-list
         :bordered="false"
-        :data="dataSource"
+        :data="props.data.items"
         :pagination-props="paginationProps"
     >
       <template #item="{ item }">
-        <a-list-item action-layout="vertical" class="list-demo-item">
+        <a-list-item action-layout="vertical">
           <template #actions>
             <span><icon-heart/>83</span>
-            <span><icon-star/>{{ item.index }}</span>
+            <span><icon-star/>10</span>
             <span><icon-message/>Reply</span>
           </template>
           <template #extra>
-            <div>
-              <a-image :preview="false" :src="item.imageSrc" fit="cover" height="100px" width="200px"/>
+            <a-image :preview="false" :src="item.coverPictureUrl" fit="cover" height="100px" width="200px"/>
+            <div style="flex: 1;position: relative;">
+              <span style="position: absolute;right:0; bottom: 0">{{
+                  formatStandStr(item.publishTime, "YYYY-MM-DD")
+                }}</span>
             </div>
           </template>
           <a-list-item-meta
-              :description="item.description"
+              :description="item.summary"
               :title="item.title"
           >
+            <template #title>
+              <h2>{{ item.title }}</h2>
+            </template>
             <template #description>
-              <p class="hover-text" @click="toPost">asdasdasdasdas</p>
+              <p class="hover-text" @click="toPost">{{ item.summary }}</p>
+              <div style="padding: 10px 0">
+                <a-space>
+                  <a-tag v-for="tag in item.tags" :color="tag.color" :index="tag.tagId">{{ tag.tagName }}</a-tag>
+                </a-space>
+              </div>
             </template>
           </a-list-item-meta>
         </a-list-item>
@@ -83,5 +84,10 @@ const toPost = () => {
   cursor: pointer;
   color: blue;
   text-decoration: underline;
+}
+
+::v-deep(.arco-list-item-extra) {
+  display: flex;
+  flex-direction: column;
 }
 </style>

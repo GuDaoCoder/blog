@@ -1,10 +1,10 @@
 package com.blog.biz.service.manager;
 
-import com.blog.biz.model.request.SearchTagRequest;
 import com.blog.biz.model.request.CreateTagRequest;
+import com.blog.biz.model.request.SearchTagRequest;
 import com.blog.biz.model.request.UpdateTagRequest;
 import com.blog.biz.model.response.TagResponse;
-import com.blog.common.base.response.SearchResponse;
+import com.blog.common.base.response.PageResponse;
 
 /**
  * @author zouzhangpeng
@@ -18,7 +18,7 @@ public interface TagManagerService {
      * @param request
      * @return SearchResponse<TagResponse>
      **/
-    SearchResponse<TagResponse> search(SearchTagRequest request);
+    PageResponse<TagResponse> search(SearchTagRequest request);
 
     /**
      * 新增标签

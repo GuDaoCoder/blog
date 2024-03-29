@@ -12,7 +12,7 @@ import com.blog.biz.model.response.TagResponse;
 import com.blog.biz.service.crud.PostTagRelaCrudService;
 import com.blog.biz.service.crud.TagCrudService;
 import com.blog.biz.service.manager.TagManagerService;
-import com.blog.common.base.response.SearchResponse;
+import com.blog.common.base.response.PageResponse;
 import com.blog.common.exception.BusinessException;
 import com.blog.common.util.PageUtil;
 import com.blog.common.util.StreamUtil;
@@ -41,7 +41,7 @@ public class TagManagerServiceImpl implements TagManagerService {
     private final PostTagRelaCrudService postTagRelaCrudService;
 
     @Override
-    public SearchResponse<TagResponse> search(SearchTagRequest request) {
+    public PageResponse<TagResponse> search(SearchTagRequest request) {
         IPage<TagEntity> page = tagCrudService.page(request.getTagName(), PageUtil.pageable(request));
         return PageUtil.result(page, toResponses(page.getRecords()));
     }

@@ -5,7 +5,7 @@ import com.blog.biz.model.request.SearchTagRequest;
 import com.blog.biz.model.request.UpdateTagRequest;
 import com.blog.biz.model.response.TagResponse;
 import com.blog.biz.service.manager.TagManagerService;
-import com.blog.common.base.response.SearchResponse;
+import com.blog.common.base.response.PageResponse;
 import com.blog.common.domain.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -31,7 +31,7 @@ public class TagController {
 
     @Operation(summary = "查询标签列表")
     @GetMapping
-    public Result<SearchResponse<TagResponse>> search(@ParameterObject SearchTagRequest request) {
+    public Result<PageResponse<TagResponse>> search(@ParameterObject SearchTagRequest request) {
         return Result.success(tagManagerService.search(request));
     }
 
