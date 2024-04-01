@@ -1,8 +1,8 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import MdPreview from "@/components/MdPreview/index.vue"
 import {useRouter} from "vue-router";
 import {onBeforeMount, ref} from "vue";
-import {getPostContent} from "@/api/post-manage";
+import {getPostContent} from "@/api/admin/post";
 
 const router = useRouter();
 

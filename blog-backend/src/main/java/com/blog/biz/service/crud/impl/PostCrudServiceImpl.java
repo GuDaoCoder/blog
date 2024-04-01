@@ -17,10 +17,7 @@ import com.blog.common.base.service.impl.BaseCrudServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author zouzhangpeng
@@ -61,6 +58,18 @@ public class PostCrudServiceImpl extends BaseCrudServiceImpl<PostMapper, PostEnt
             return new ArrayList<>();
         }
         return baseMapper.getCategoryPostCountEntity(categoryIds);
+    }
+
+    @Override
+    public List<PostEntity> findAll() {
+        return list();
+    }
+
+    @Override
+    public Optional<PostEntity> findByTitle(String title) {
+        LambdaQueryWrapper<PostEntity> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(PostEntity::getTitle, title);
+        return getOneOpt(queryWrapper);
     }
 
 }

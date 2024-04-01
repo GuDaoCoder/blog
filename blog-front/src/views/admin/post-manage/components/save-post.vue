@@ -1,13 +1,13 @@
 <template>
-  <a-modal unmount-on-close :visible="visible" :title="title" fullscreen :footer="false" :closable="false">
+  <a-modal :closable="false" :footer="false" :title="title" :visible="visible" fullscreen unmount-on-close>
     <div class="step-wrapper">
-      <a-steps type="navigation" :current="step" class="steps">
+      <a-steps :current="step" class="steps" type="navigation">
         <a-step>编写文章</a-step>
         <a-step>设置文章</a-step>
       </a-steps>
     </div>
     <keep-alive>
-      <md-edit ref="mdEditor" v-if="step ===1" :content="formData.content"/>
+      <md-edit v-if="step ===1" ref="mdEditor" :content="formData.content"/>
 
       <div v-else class="post-form-wrapper">
         <a-form ref="formRef" :model="formData" :rules="rules" layout="vertical">
@@ -20,7 +20,7 @@
           </a-form-item>
 
           <a-form-item label="摘要">
-            <a-textarea v-model="formData.summary" show-word-limit allow-clear auto-size :max-length="100"/>
+            <a-textarea v-model="formData.summary" :max-length="100" allow-clear auto-size show-word-limit/>
           </a-form-item>
 
           <a-form-item field="tagIds" label="标签">
@@ -41,20 +41,20 @@
     <operations-group center style="margin-top: 20px">
       <a-button v-if="step === 2" type="primary" @click="handleChangeStep(1)">上一步</a-button>
       <a-button v-if="step === 1" type="primary" @click="handleChangeStep(2)">下一步</a-button>
-      <a-button v-if="step === 2" type="primary" @click="handleSubmit" :loading="loading">保存</a-button>
+      <a-button v-if="step === 2" :loading="loading" type="primary" @click="handleSubmit">保存</a-button>
       <a-button type="outline" @click="handleCancel">返回</a-button>
     </operations-group>
   </a-modal>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import {type PropType, reactive, ref} from "vue";
 import CategorySelect from "@/components/CategorySelect/index.vue"
 import TagSelect from "@/components/TagSelect/index.vue"
 import OperationsGroup from "@/components/OperationsGroup/index.vue";
 import MdEdit from "@/components/MdEdit/index.vue";
 import {Notification, type ValidatedError} from "@arco-design/web-vue";
-import {createPost, updatePost} from "@/api/post-manage";
+import {createPost, updatePost} from "@/api/admin/post";
 
 const props = defineProps({
   visible: {
@@ -125,7 +125,7 @@ const handleCancel = () => {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .step-wrapper {
   width: 600px;
   margin: 0 auto;

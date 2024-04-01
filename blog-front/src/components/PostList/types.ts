@@ -1,3 +1,3 @@
 interface PostListProp {
-    items: PostBlogResponse[] | []
+    items: BlogPostResponse[] | []
 }

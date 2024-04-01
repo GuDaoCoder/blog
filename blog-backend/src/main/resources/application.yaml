@@ -192,6 +192,7 @@ security:
     - /v3/api-docs/**
     - /webjars/**
     - /favicon.ico
+    - /admin/blog/sync
 
 oss:
   access-key:

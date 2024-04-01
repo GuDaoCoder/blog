@@ -1,12 +1,13 @@
 package com.blog.common.mybaits;
 
-import java.time.LocalDateTime;
-
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.blog.common.context.UserContext;
+import com.blog.common.domain.UserDetail;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 
-import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.blog.common.context.UserContext;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 /**
  * @author zouzhangpeng
@@ -19,13 +20,13 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     public void insertFill(MetaObject metaObject) {
         this.strictInsertFill(metaObject, "createTime", LocalDateTime.class, LocalDateTime.now());
         this.strictUpdateFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
-        this.strictInsertFill(metaObject, "createBy", Long.class, UserContext.get().getUserId());
-        this.strictInsertFill(metaObject, "updateBy", Long.class, UserContext.get().getUserId());
+        this.strictInsertFill(metaObject, "createBy", Long.class, Optional.ofNullable(UserContext.get()).map(UserDetail::getUserId).orElse(-1L));
+        this.strictInsertFill(metaObject, "updateBy", Long.class, Optional.ofNullable(UserContext.get()).map(UserDetail::getUserId).orElse(-1L));
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
         this.strictUpdateFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
-        this.strictInsertFill(metaObject, "updateBy", Long.class, UserContext.get().getUserId());
+        this.strictInsertFill(metaObject, "updateBy", Long.class, Optional.ofNullable(UserContext.get()).map(UserDetail::getUserId).orElse(-1L));
     }
 }

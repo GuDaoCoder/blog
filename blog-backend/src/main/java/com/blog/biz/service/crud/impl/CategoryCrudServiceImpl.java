@@ -1,20 +1,21 @@
 package com.blog.biz.service.crud.impl;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
-
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.blog.biz.mapper.CategoryMapper;
 import com.blog.biz.model.entity.CategoryEntity;
 import com.blog.biz.service.crud.CategoryCrudService;
 import com.blog.common.base.service.impl.BaseCrudServiceImpl;
-
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author zouzhangpeng
@@ -38,6 +39,21 @@ public class CategoryCrudServiceImpl extends BaseCrudServiceImpl<CategoryMapper,
         queryWrapper.eq(CategoryEntity::getParentCategoryId, parentId).orderByDesc(CategoryEntity::getOrderNo)
                 .last("limit 1");
         return Optional.ofNullable(baseMapper.selectOne(queryWrapper));
+    }
+
+    @Override
+    public List<String> findAllByCategoryNames(List<String> categoryNames) {
+        if (CollectionUtils.isEmpty(categoryNames)) {
+            return new ArrayList<>();
+        }
+        LambdaQueryWrapper<CategoryEntity> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.in(CategoryEntity::getCategoryName, categoryNames);
+        return baseMapper.selectList(queryWrapper).stream().map(CategoryEntity::getCategoryName).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CategoryEntity> findAll() {
+        return list();
     }
 
     @Override

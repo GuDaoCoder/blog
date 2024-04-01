@@ -2,7 +2,7 @@
 import {onMounted, ref} from "vue";
 import {searchBlogPosts} from "@/api/blog/post";
 
-const posts = ref<PostBlogResponse[]>([])
+const posts = ref<BlogPostResponse[]>([])
 
 onMounted(() => {
   fetchPosts();

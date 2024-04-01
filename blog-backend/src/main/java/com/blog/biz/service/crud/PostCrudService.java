@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author zouzhangpeng
@@ -40,4 +41,20 @@ public interface PostCrudService extends IBaseCrudService<PostEntity> {
      * @return List<CategoryPostCountEntity>
      **/
     List<CategoryPostCountEntity> getCategoryPostCountEntity(Collection<? extends Serializable> categoryIds);
+
+    /**
+     * 查询所有文章
+     *
+     * @param
+     * @return List<PostEntity>
+     **/
+    List<PostEntity> findAll();
+
+    /**
+     * 根据标题查询文章
+     *
+     * @param title
+     * @return Optional<PostEntity>
+     **/
+    Optional<PostEntity> findByTitle(String title);
 }

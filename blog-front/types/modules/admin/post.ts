@@ -1,4 +1,4 @@
-interface SearchPostForm {
+interface AdminSearchPostForm {
     title?: string,
     status?: string,
     categoryId?: number,
@@ -6,7 +6,7 @@ interface SearchPostForm {
     enableComment?: boolean
 }
 
-interface PagePostDTO extends PageRequest {
+interface AdminSearchPostRequest extends PageRequest {
     title?: string,
     status?: string,
     categoryId?: number,
@@ -14,7 +14,7 @@ interface PagePostDTO extends PageRequest {
     enableComment?: boolean
 }
 
-interface PagePostVO {
+interface AdminPostResponse {
     postId: number,
     title: string,
     summary: string,
@@ -27,10 +27,10 @@ interface PagePostVO {
     updateTime: string,
     top: boolean,
     enableComment?: boolean,
-    tags: PagePostTagItem[]
+    tags: AdminPostTagItem[]
 }
 
-interface PagePostTagItem {
+interface AdminPostTagItem {
     tagId: number,
     tagName: string,
     color: string
@@ -45,36 +45,6 @@ interface SavePostForm {
     status?: string,
     categoryId?: number,
     categoryName?: string,
-    tagIds?: number[],
-    top?: boolean,
-    enableComment?: boolean,
-    publish?: boolean
-}
-
-interface CreatePostDTO {
-    title?: string,
-    summary?: string,
-    content?: string,
-    coverPictureUrl?: string,
-    status?: string,
-    categoryId?: number,
-    tagIds?: number[],
-    top?: boolean,
-    enableComment?: boolean,
-    publish?: boolean
-}
-
-interface CreatePostVO {
-    postId: string
-}
-
-interface UpdatePostDTO {
-    title?: string,
-    summary?: string,
-    content?: string,
-    coverPictureUrl?: string,
-    status?: string,
-    categoryId?: number,
     tagIds?: number[],
     top?: boolean,
     enableComment?: boolean,

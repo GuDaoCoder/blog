@@ -1,24 +1,30 @@
 <script lang="ts" setup>
 import MdPreview from "@/components/MdPreview/index.vue"
+import {useBlogPostPreviewStore} from "@/store";
+import {computed} from "vue";
+import {formatStandStr} from "@/utils/date"
+
+const blogPostPreviewStore = useBlogPostPreviewStore();
+const post = computed(() => blogPostPreviewStore.$state);
 </script>
 
 <template>
   <div class="post-wrapper">
     <h1 class="post-title">
-      这是一篇文章
+      {{ post.title }}
     </h1>
     <div class="post-base-info">
       <a-space>
-        <span>2023-10-29</span>
+        <span>{{ formatStandStr(post.updateTime, "YYYY-MM-DD") }}</span>
         <span>|</span>
         <span>0 评论</span>
         <span>|</span>
         <span>0 点赞</span>
         <span>|</span>
-        <span>52 阅读</span>
+        <span>0 阅读</span>
       </a-space>
     </div>
-    <md-preview/>
+    <md-preview :postId="post.postId"/>
     <a-divider/>
     <!--    <div class="post-actions">-->
     <!--      <a-space>-->

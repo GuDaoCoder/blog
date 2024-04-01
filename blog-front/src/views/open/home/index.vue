@@ -8,7 +8,7 @@ onMounted(() => {
   fetchPosts();
 })
 
-const posts = ref<PostBlogResponse[]>([])
+const posts = ref<BlogPostResponse[]>([])
 const fetchPosts = async () => {
   const {data} = await searchBlogPosts({pageNumber: 1, pageSize: 10})
   posts.value = data.items || []

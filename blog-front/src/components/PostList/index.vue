@@ -2,7 +2,8 @@
 import type {PropType} from "vue";
 import {reactive} from "vue";
 import {useRouter} from "vue-router";
-import {formatStandStr} from '@/utils/date'
+import {useBlogPostPreviewStore} from "@/store";
+import {formatStandStr} from "@/utils/date";
 
 const props = defineProps({
   data: {
@@ -19,7 +20,9 @@ const paginationProps = reactive({
 })
 
 const router = useRouter()
-const toPost = () => {
+const blogPostPreviewStore = useBlogPostPreviewStore();
+const toPost = (post: BlogPostResponse) => {
+  blogPostPreviewStore.updateBlogPostPreview(post)
   router.push({path: "/post"})
 }
 </script>
@@ -42,7 +45,7 @@ const toPost = () => {
             <a-image :preview="false" :src="item.coverPictureUrl" fit="cover" height="100px" width="200px"/>
             <div style="flex: 1;position: relative;">
               <span style="position: absolute;right:0; bottom: 0">{{
-                  formatStandStr(item.publishTime, "YYYY-MM-DD")
+                  formatStandStr(item.updateTime, "YYYY-MM-DD")
                 }}</span>
             </div>
           </template>
@@ -51,10 +54,10 @@ const toPost = () => {
               :title="item.title"
           >
             <template #title>
-              <h2>{{ item.title }}</h2>
+              <h2 class="title" @click="toPost(item)">{{ item.title }}</h2>
             </template>
             <template #description>
-              <p class="hover-text" @click="toPost">{{ item.summary }}</p>
+              <p class="summary" @click="toPost(item)">{{ item.summary }}</p>
               <div style="padding: 10px 0">
                 <a-space>
                   <a-tag v-for="tag in item.tags" :color="tag.color" :index="tag.tagId">{{ tag.tagName }}</a-tag>
@@ -74,16 +77,22 @@ const toPost = () => {
   padding: 20px 0;
 }
 
-.hover-text {
+.title {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.summary {
   color: black;
   text-decoration: none;
   transition: color 0.3s;
-}
 
-.hover-text:hover {
-  cursor: pointer;
-  color: blue;
-  text-decoration: underline;
+  &:hover {
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+  }
 }
 
 ::v-deep(.arco-list-item-extra) {

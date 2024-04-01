@@ -1,8 +1,8 @@
-interface SearchPostBlogRequest extends PageRequest {
+interface BlogSearchPostRequest extends PageRequest {
     title?: string
 }
 
-interface PostBlogResponse {
+interface BlogPostResponse {
     postId: number,
     title: string,
     summary?: string,
@@ -14,10 +14,10 @@ interface PostBlogResponse {
     publishTime?: string,
     updateTime: string,
     enableComment?: boolean,
-    tags?: PagePostTagItem[]
+    tags?: BlogPostTagItem[]
 }
 
-interface PagePostTagItem {
+interface BlogPostTagItem {
     tagId: number,
     tagName: string,
     color: string

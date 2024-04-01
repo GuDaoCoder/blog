@@ -13,14 +13,14 @@ public enum PostSource {
 
     ADD("正常新增"),
 
-    IMPORT_MD("markdown导入"),
+    MD_IMPORT("markdown导入"),
 
-    ;
+    MD_SYNC("markdown同步");;
 
     private String label;
 
     @Override
-    public String toString(){
-        return this.name()+"-"+this.label;
+    public String toString() {
+        return this.name() + "-" + this.label;
     }
 }

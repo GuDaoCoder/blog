@@ -80,4 +80,8 @@ public class PostEntity extends BaseEntity {
      */
     private LocalDateTime deleteTime;
 
+    /**
+     * 文件最后更新时间
+     */
+    private LocalDateTime fileLastUpdateTime;
 }

@@ -46,17 +46,13 @@
       <a-divider/>
 
       <search-result>
-        <template #toolbar>
-          <a-button type="primary" @click="handleCreatePost">新增文章</a-button>
-        </template>
-
         <template #table>
           <a-table :columns="tableColumns" :data="postTableData" :loading="tableLoading" :pagination="false"
                    :scroll="scroll"
                    column-resizable row-key="tagId" stripe>
             <template #coverPictureUrl="{ record }">
               <a-image v-if="record.coverPictureUrl" :src="record.coverPictureUrl" height="100" show-loader
-                       width="100"/>
+                       width="200"/>
             </template>
             <template #tags="{ record }">
               <a-space>
@@ -72,14 +68,12 @@
             <template #enableComment="{record}">
               {{ $dict(Whether, record.enableComment) }}
             </template>
+            <template #publishTime="{record}">{{ canPublish(record) ? "" : record.publishTime }}</template>
+            <template #removeTime="{record}">{{ canRemove(record) ? "" : record.removeTime }}</template>
             <template #operations="{ record }">
               <a-link @click="handlePreview(record)">预览</a-link>
-              <a-link @click="handleUpdatePost(record)">编辑</a-link>
-              <a-link v-if="record.status === 'DRAFT'" @click="handlePublishPost(record)">发布</a-link>
-              <a-link v-if="record.status === 'PUBLISHED'" @click="handleCancelPublishPost(record)">取消发布</a-link>
-              <a-popconfirm content="确认移到回收站?" @ok="handleMoveRecycleBin(record)">
-                <a-link>移到回收站</a-link>
-              </a-popconfirm>
+              <a-link v-if="canPublish(record)" @click="handlePublishPost(record)">发布</a-link>
+              <a-link v-if="canRemove(record)" @click="handleRemovePost(record)">下架</a-link>
             </template>
           </a-table>
         </template>
@@ -91,23 +85,19 @@
       </search-result>
     </content-card>
   </Container>
-
-  <save-post v-if="savePostVisible" :form-data="savePostFormData" :visible="savePostVisible" title="新增文章"
-             @cancel="handleCancelSave"/>
 </template>
 
 <script lang="ts" setup>
 import ContentCard from "@/components/ContentCard/index.vue";
 import SearchButtonGroup from "@/components/SearchButtonGroup/index.vue"
 import SearchResult from "@/components/SearchResult/index.vue"
-import SavePost from "@/views/admin/post-manage/components/save-post.vue";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import {PostStatus, Whether} from "@/enums";
 import type {TableColumnData} from "@arco-design/web-vue";
-import {moveRecycleBin, pagePost, publishPost, unpublished} from "@/api/post-manage";
+import {publishPost, removePost, searchAdminPosts} from "@/api/admin/post";
 import CategorySelect from "@/components/CategorySelect/index.vue";
 
-const initSearchForm = (): SearchPostForm => {
+const initSearchForm = (): AdminSearchPostForm => {
   return {
     title: "",
     status: "",
@@ -117,7 +107,7 @@ const initSearchForm = (): SearchPostForm => {
   }
 }
 
-const searchFormData = ref<SearchPostForm>(initSearchForm())
+const searchFormData = ref<AdminSearchPostForm>(initSearchForm())
 
 const handleSearch = () => {
   fetchTableData(searchFormData.value)
@@ -132,11 +122,13 @@ const tableColumns = ref<TableColumnData[]>([
     title: "封面",
     dataIndex: "coverPictureUrl",
     slotName: "coverPictureUrl",
-    width: 120
+    width: 220
   },
   {
     title: "文章标题",
     dataIndex: "title",
+    ellipsis: true,
+    tooltip: {position: 'left'},
     width: 200
   },
   {
@@ -157,7 +149,9 @@ const tableColumns = ref<TableColumnData[]>([
   },
   {
     title: "摘要",
-    dataIndex: "summary"
+    dataIndex: "summary",
+    ellipsis: true,
+    tooltip: {position: 'left'},
   },
   {
     title: "是否置顶",
@@ -168,6 +162,13 @@ const tableColumns = ref<TableColumnData[]>([
   {
     title: "发布时间",
     dataIndex: "publishTime",
+    slotName: "publishTime",
+    width: 180
+  },
+  {
+    title: "下架时间",
+    dataIndex: "removeTime",
+    slotName: "removeTime",
     width: 180
   },
   {
@@ -190,17 +191,21 @@ const scroll = {
 
 const page = ref<PageResponse<TagResponse>>({pageNumber: 1, pageSize: 10, total: 0})
 
-const postTableData = ref<PagePostVO[]>([])
+const postTableData = ref<AdminPostResponse[]>([])
 
 const tableLoading = ref(false)
 
-const fetchTableData = async (form: SearchPostForm = {}) => {
+onMounted(() => {
+  fetchTableData()
+})
+
+const fetchTableData = async (form: AdminSearchPostForm = {}) => {
   if (tableLoading.value) {
     return
   }
   tableLoading.value = true
   try {
-    const {data} = await pagePost({
+    const {data} = await searchAdminPosts({
       pageNumber: page.value.pageNumber,
       pageSize: page.value.pageSize,
       ...form
@@ -214,57 +219,32 @@ const fetchTableData = async (form: SearchPostForm = {}) => {
   }
 }
 
-fetchTableData()
-
-const savePostVisible = ref<boolean>(false)
-const savePostFormData = ref<SavePostForm>({})
-
-const handleCreatePost = () => {
-  savePostFormData.value = {
-    coverPictureUrl: "https://placekitten.com/800/800",
-    enableComment: false,
-    top: false,
-    publish: false
-  }
-  savePostVisible.value = true
-}
-
-const handlePreview = (record:PagePostVO) => {
+const handlePreview = (record: AdminPostResponse) => {
 
 }
-
-const handleUpdatePost = (record: PagePostVO) => {
-  savePostFormData.value = {...record, tagIds: record.tags?.map(obj => obj.tagId) || []}
-  savePostVisible.value = true
-}
-
-const handleCancelSave = (reload: boolean) => {
-  savePostVisible.value = false
-  if (reload) {
-    handleSearch()
-  }
-}
-const handlePublishPost = async (record: PagePostVO) => {
+const handlePublishPost = async (record: AdminPostResponse) => {
   await publishPost(record.postId)
   handleSearch()
 }
 
-const handleCancelPublishPost = async (record: PagePostVO) => {
-  await unpublished(record.postId)
+const handleRemovePost = async (record: AdminPostResponse) => {
+  await removePost(record.postId)
   handleSearch()
 }
-
-const handleMoveRecycleBin = async (record: PagePostVO) => {
-  await moveRecycleBin(record.postId)
-  handleSearch()
-}
-
 const handleChangePage = () => {
   fetchTableData(searchFormData.value)
 }
 
 const handleChangePageSize = () => {
   fetchTableData(searchFormData.value)
+}
+
+const canPublish = (record: AdminPostResponse): boolean => {
+  return record.status === "DRAFT" || record.status === "REMOVED";
+}
+
+const canRemove = (record: AdminPostResponse): boolean => {
+  return record.status === "PUBLISHED";
 }
 </script>
 

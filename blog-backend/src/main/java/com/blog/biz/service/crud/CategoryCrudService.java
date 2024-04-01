@@ -37,4 +37,20 @@ public interface CategoryCrudService extends IBaseCrudService<CategoryEntity> {
      */
     Optional<CategoryEntity> findLatest(Long parentId);
 
+    /**
+     * 根据文章分类名称查询所有文章分类
+     *
+     * @param categoryNames
+     * @return List<String>
+     **/
+    List<String> findAllByCategoryNames(List<String> categoryNames);
+
+    /**
+     * 查询所有文章分类
+     *
+     * @param
+     * @return List<CategoryEntity>
+     **/
+    List<CategoryEntity> findAll();
+
 }
