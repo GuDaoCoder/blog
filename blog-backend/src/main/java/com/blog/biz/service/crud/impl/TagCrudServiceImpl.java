@@ -51,4 +51,9 @@ public class TagCrudServiceImpl extends BaseCrudServiceImpl<TagMapper, TagEntity
         return baseMapper.selectList(queryWrapper);
     }
 
+    @Override
+    public List<TagEntity> findAll() {
+        return list();
+    }
+
 }

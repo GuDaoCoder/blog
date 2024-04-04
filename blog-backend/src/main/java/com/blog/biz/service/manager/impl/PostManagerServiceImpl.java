@@ -176,22 +176,26 @@ public class PostManagerServiceImpl implements PostManagerService {
     }
 
     /**
-     * 判断是否可以发布
+     * 判断文章是否可以发布。
      *
-     * @param postStatus
-     * @return boolean
-     **/
+     * @param postStatus 文章的状态，代表文章当前的状态。
+     * @return 返回一个布尔值，如果文章状态为草稿（DRAFT）或已移除（REMOVED），则可以发布，返回true；否则返回false。
+     */
     private boolean canPublish(PostStatus postStatus) {
+        // 判断文章状态是否为草稿或已移除
         return PostStatus.DRAFT.equals(postStatus) || PostStatus.REMOVED.equals(postStatus);
     }
 
+
     /**
-     * 判断是否可以下架
+     * 判断是否可以移除文章。
      *
-     * @param postStatus
-     * @return boolean
-     **/
+     * @param postStatus 文章的状态，代表文章当前的状态。
+     * @return 返回一个布尔值，如果文章状态为已发布（PUBLISHED），则返回true，否则返回false。
+     */
     private boolean canRemove(PostStatus postStatus) {
+        // 判断传入的文章状态是否等于已发布
         return PostStatus.PUBLISHED.equals(postStatus);
     }
 }
+

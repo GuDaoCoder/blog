@@ -46,6 +46,9 @@
       <a-divider/>
 
       <search-result>
+        <template #toolbar>
+          <a-button type="primary" @click="handleSyncPosts">同步</a-button>
+        </template>
         <template #table>
           <a-table :columns="tableColumns" :data="postTableData" :loading="tableLoading" :pagination="false"
                    :scroll="scroll"
@@ -55,9 +58,11 @@
                        width="200"/>
             </template>
             <template #tags="{ record }">
-              <a-space>
-                <a-tag v-for="item in record.tags" :key="item.tagName" :color="item.color">{{ item.tagName }}</a-tag>
-              </a-space>
+              <div class="tag-wrapper">
+                <a-tag v-for="item in record.tags" :key="item.tagName" :color="item.color" style="margin: 4px">
+                  {{ item.tagName }}
+                </a-tag>
+              </div>
             </template>
             <template #status="{record}">
               {{ $dict(PostStatus, record.status) }}
@@ -74,13 +79,16 @@
               <a-link @click="handlePreview(record)">预览</a-link>
               <a-link v-if="canPublish(record)" @click="handlePublishPost(record)">发布</a-link>
               <a-link v-if="canRemove(record)" @click="handleRemovePost(record)">下架</a-link>
+              <a-link @click="handleSetCoverPicture(record)">设置封面</a-link>
+              <a-link @click="handleTop(record)">{{ record.top ? "取消置顶" : "置顶" }}</a-link>
             </template>
           </a-table>
         </template>
 
         <template #pagination>
           <a-pagination v-model:current="page.pageNumber" v-model:page-size="page.pageSize" :total="page.total"
-                        show-page-size show-total @change="handleChangePage" @page-size-change="handleChangePageSize"/>
+                        show-page-size show-total @change="handleChangePage"
+                        @page-size-change="handleChangePageSize"/>
         </template>
       </search-result>
     </content-card>
@@ -94,7 +102,8 @@ import SearchResult from "@/components/SearchResult/index.vue"
 import {onMounted, ref} from "vue";
 import {PostStatus, Whether} from "@/enums";
 import type {TableColumnData} from "@arco-design/web-vue";
-import {publishPost, removePost, searchAdminPosts} from "@/api/admin/post";
+import {Message} from '@arco-design/web-vue';
+import {publishPost, removePost, searchAdminPosts, syncPost} from "@/api/admin/post";
 import CategorySelect from "@/components/CategorySelect/index.vue";
 
 const initSearchForm = (): AdminSearchPostForm => {
@@ -141,6 +150,7 @@ const tableColumns = ref<TableColumnData[]>([
     title: "标签",
     dataIndex: "tags",
     slotName: 'tags',
+    width: 200
   },
   {
     title: "分类",
@@ -219,6 +229,20 @@ const fetchTableData = async (form: AdminSearchPostForm = {}) => {
   }
 }
 
+const handleSyncPosts = async () => {
+  try {
+    tableLoading.value = true
+    await syncPost()
+    Message.success("同步成功")
+    handleSearch()
+  } finally {
+    if (tableLoading.value) {
+      tableLoading.value = false
+    }
+  }
+
+}
+
 const handlePreview = (record: AdminPostResponse) => {
 
 }
@@ -231,6 +255,14 @@ const handleRemovePost = async (record: AdminPostResponse) => {
   await removePost(record.postId)
   handleSearch()
 }
+
+const handleSetCoverPicture = async (record: AdminPostResponse) => {
+}
+
+const handleTop = async (record: AdminPostResponse) => {
+
+}
+
 const handleChangePage = () => {
   fetchTableData(searchFormData.value)
 }
@@ -248,6 +280,9 @@ const canRemove = (record: AdminPostResponse): boolean => {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.tag-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
 </style>

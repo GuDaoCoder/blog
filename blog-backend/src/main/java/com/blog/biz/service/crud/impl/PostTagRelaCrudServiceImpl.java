@@ -38,4 +38,11 @@ public class PostTagRelaCrudServiceImpl extends BaseCrudServiceImpl<PostTagRelaM
         }
         return baseMapper.getTagPostCountEntity(tagIds);
     }
+
+    @Override
+    public List<PostTagRelaEntity> findAllPostATagRelaByPostId(Long postId) {
+        LambdaQueryWrapper<PostTagRelaEntity> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(PostTagRelaEntity::getPostId, postId);
+        return list(queryWrapper);
+    }
 }

@@ -2,6 +2,7 @@ package com.blog.biz.controller.admin;
 
 import com.blog.biz.model.request.SearchPostRequest;
 import com.blog.biz.model.response.PostResponse;
+import com.blog.biz.service.manager.BlogSyncService;
 import com.blog.biz.service.manager.PostManagerService;
 import com.blog.common.base.response.PageResponse;
 import com.blog.common.domain.Result;
@@ -27,6 +28,8 @@ public class PostController {
 
     private final PostManagerService postManagerService;
 
+    private final BlogSyncService blogSyncService;
+
     @Operation(summary = "查询文章列表")
     @GetMapping
     public Result<PageResponse<PostResponse>> adminSearch(@ParameterObject @Validated SearchPostRequest request) {
@@ -50,6 +53,13 @@ public class PostController {
     @PatchMapping("/{postId}/remove")
     public Result<Void> remove(@Parameter(description = "文章Id") @PathVariable Long postId) {
         postManagerService.remove(postId);
+        return Result.success();
+    }
+
+    @Operation(summary = "同步文章")
+    @GetMapping("/sync")
+    public Result<Void> sync() {
+        blogSyncService.sync();
         return Result.success();
     }
 }

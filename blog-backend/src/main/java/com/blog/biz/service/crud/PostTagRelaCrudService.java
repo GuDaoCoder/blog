@@ -22,4 +22,6 @@ public interface PostTagRelaCrudService extends IBaseCrudService<PostTagRelaEnti
     boolean tagUsed(Long tagId);
 
     List<TagPostCountEntity> getTagPostCountEntity(List<Long> tagIds);
+
+    List<PostTagRelaEntity> findAllPostATagRelaByPostId(Long postId);
 }

@@ -42,7 +42,9 @@ const toPost = (post: BlogPostResponse) => {
             <span><icon-message/>Reply</span>
           </template>
           <template #extra>
-            <a-image :preview="false" :src="item.coverPictureUrl" fit="cover" height="100px" width="200px"/>
+            <a-image :preview="false" :src="item.coverPictureUrl" fit="cover" height="100px" style=" cursor: pointer "
+                     width="200px"
+                     @click="toPost(item )"/>
             <div style="flex: 1;position: relative;">
               <span style="position: absolute;right:0; bottom: 0">{{
                   formatStandStr(item.updateTime, "YYYY-MM-DD")

@@ -2,25 +2,23 @@ package com.blog.common.util;
 
 import com.blog.common.markdown.HeadingVisitor;
 import org.apache.commons.lang3.StringUtils;
-import org.commonmark.node.Node;
-import org.commonmark.node.Paragraph;
-import org.commonmark.node.Text;
+import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
 
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MarkdownUtil {
 
-    public static String parseSummary(Node node){
+    public static String parseSummary(Node node) {
         AtomicReference<String> summary = new AtomicReference<>(null);
-        final boolean[] find = {false};
+        AtomicReference<Boolean> find = new AtomicReference<>(false);
         HeadingVisitor headingVisitor = new HeadingVisitor(heading -> {
-            if (!find[0] && heading.getLevel() == 2 && heading.getNext() instanceof Paragraph paragraph) {
-                if (paragraph.getFirstChild() instanceof Text text){
+            if (!find.get() && heading.getLevel() == 2 && heading.getNext() instanceof Paragraph paragraph) {
+                if (paragraph.getFirstChild() instanceof Text text) {
                     String literal = text.getLiteral();
-                    if (StringUtils.isNotBlank(literal)){
+                    if (StringUtils.isNotBlank(literal)) {
                         summary.set(literal);
-                        find[0] = true;
+                        find.set(true);
                     }
                 }
             }
@@ -32,14 +30,25 @@ public class MarkdownUtil {
     }
 
     public static void main(String[] args) {
-        // 要解析的Markdown文本
-        String markdown = "# 标题1\n" +
-                "## 二级标题1\n" +
-                "这是二级标题1下的内容\n" +
-                "## 二级标题2\n" +
-                "这是二级标题2下的内容\n" +
-                "# 标题2\n" +
-                "这是标题2下的内容";
-        System.out.println(parseSummary(Parser.builder().build().parse(markdown)));
+        String markdown = "---\n"+
+                "aa:\n" +
+                "---\n" +
+                "## 二级标题2";
+
+        Parser parser = Parser.builder().build();
+        Node document = parser.parse(markdown);
+
+        // 获取ThematicBreak中的内容
+    }
+
+    public static Heading findFirstSecondTitle(Node node) {
+        if (node == null) {
+            return null;
+        }
+        if (node instanceof Heading heading && heading.getLevel() == 2) {
+            return heading;
+        } else {
+            return findFirstSecondTitle(node.getNext());
+        }
     }
 }
