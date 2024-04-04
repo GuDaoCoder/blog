@@ -35,7 +35,7 @@ const menuData = reactive<Array<Menu>>([{
       title: "分类管理"
     },
     {
-      code: "admin-tag-manage",
+      code: "admin-tag",
       title: "标签管理"
     },
     {

@@ -41,7 +41,7 @@ import Pagination from "@/components/Pagination/index.vue"
 import ContentCard from '@/components/ContentCard/index.vue'
 import {onMounted, ref} from "vue";
 import type {TableColumnData} from "@arco-design/web-vue";
-import {searchTag} from "@/api/admin/tag-manage";
+import {searchTag} from "@/api/admin/tag";
 import SearchButtonGroup from "@/components/SearchButtonGroup/index.vue";
 import SearchResult from "@/components/SearchResult/index.vue";
 

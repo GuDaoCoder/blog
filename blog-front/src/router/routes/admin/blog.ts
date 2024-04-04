@@ -2,8 +2,8 @@ import {ADMIN_LAYOUT} from './layout'
 import type {RouteRaw} from "@/router/routes/type";
 
 const BLOG_MANGE: RouteRaw = {
-    path: '/admin/blog-manage',
-    name: 'admin-blog-manage',
+    path: '/admin/blog',
+    name: 'admin-blog',
     component: ADMIN_LAYOUT,
     redirect: '/admin/category',
     meta: {
@@ -20,9 +20,9 @@ const BLOG_MANGE: RouteRaw = {
             }
         },
         {
-            name: 'admin-tag-manage',
-            path: "/admin/tag-manage",
-            component: () => import(/* webpackChunkName: "tag-manage" */ "@/views/admin/tag-manage/index.vue"),
+            name: 'admin-tag',
+            path: "/admin/tag",
+            component: () => import(/* webpackChunkName: "tag" */ "@/views/admin/tag/index.vue"),
             meta: {
                 title: '标签管理'
             }

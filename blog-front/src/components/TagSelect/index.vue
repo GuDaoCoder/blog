@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts" setup>
-import {createTag, searchTag} from "@/api/admin/tag-manage";
+import {createTag, searchTag} from "@/api/admin/tag";
 import {onMounted, ref} from "vue";
 import {useVModel} from "@/utils/useVModel";
 
