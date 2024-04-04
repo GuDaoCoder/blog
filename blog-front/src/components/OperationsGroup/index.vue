@@ -1,10 +1,12 @@
 <template>
-  <a-space :class="center ? 'center':''">
-    <slot/>
-  </a-space>
+  <div class="wrapper">
+    <a-space :class="center ? 'center':''">
+      <slot/>
+    </a-space>
+  </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 defineProps({
   center: {
     type: Boolean,
@@ -13,7 +15,11 @@ defineProps({
 })
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
+.wrapper {
+  padding: 10px 0;
+}
+
 .center {
   display: flex;
   justify-content: center

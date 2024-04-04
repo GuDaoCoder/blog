@@ -17,6 +17,22 @@ public class FileUtil {
     }
 
     /**
+     * 使用uuid重命名文件名称
+     *
+     * @param fileName
+     * @return String
+     **/
+    public static String uuidFileName(String fileName) {
+        if (StringUtils.isBlank(fileName)) {
+            throw new IllegalArgumentException("文件名称不能为空");
+        }
+        int extIndex = fileName.lastIndexOf(".");
+        String ext = fileName.substring(extIndex);
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        return uuid + ext;
+    }
+
+    /**
      * 判断文件是否存在
      *
      * @param path

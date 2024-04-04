@@ -1,6 +1,8 @@
 package com.blog.biz.controller.admin;
 
 import com.blog.biz.model.request.SearchPostRequest;
+import com.blog.biz.model.request.UpdateCategoryRequest;
+import com.blog.biz.model.request.UpdateCoverPictureRequest;
 import com.blog.biz.model.response.PostResponse;
 import com.blog.biz.service.manager.BlogSyncService;
 import com.blog.biz.service.manager.PostManagerService;
@@ -53,6 +55,14 @@ public class PostController {
     @PatchMapping("/{postId}/remove")
     public Result<Void> remove(@Parameter(description = "文章Id") @PathVariable Long postId) {
         postManagerService.remove(postId);
+        return Result.success();
+    }
+
+    @Operation(summary = "设置封面图片")
+    @PatchMapping("/{postId}/updateCoverPicture")
+    public Result<Void> updateCoverPicture(@Parameter(description = "文章Id") @PathVariable Long postId,
+                                           @RequestBody UpdateCoverPictureRequest request) {
+        postManagerService.updateCoverPicture(postId, request.getCoverPictureUrl());
         return Result.success();
     }
 

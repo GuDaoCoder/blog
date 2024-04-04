@@ -39,7 +39,7 @@ const menuData = reactive<Array<Menu>>([{
       title: "标签管理"
     },
     {
-      code: "admin-post-manage",
+      code: "admin-post",
       title: "文章管理"
     }
   ]

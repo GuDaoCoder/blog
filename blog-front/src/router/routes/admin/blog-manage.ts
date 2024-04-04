@@ -28,19 +28,11 @@ const BLOG_MANGE: RouteRaw = {
             }
         },
         {
-            name: 'admin-post-manage',
-            path: "/admin/post-manage",
-            component: () => import(/* webpackChunkName: "post-manage" */ "@/views/admin/post-manage/index.vue"),
+            name: 'admin-post',
+            path: "/admin/post",
+            component: () => import(/* webpackChunkName: "post" */ "@/views/admin/post/index.vue"),
             meta: {
                 title: '文章管理'
-            }
-        },
-        {
-            name: 'admin-post-preview',
-            path: "/admin/post-preview",
-            component: () => import(/* webpackChunkName: "post-preview" */ "@/views/admin/post-manage/preview.vue"),
-            meta: {
-                title: '文章预览'
             }
         }]
 }

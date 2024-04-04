@@ -5,6 +5,8 @@ import com.blog.common.domain.Result;
 import com.blog.common.oss.OssApiService;
 import com.blog.common.oss.OssProperties;
 import com.blog.common.util.FileUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 
+@Tag(name = "OSS管理")
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -26,14 +29,14 @@ public class OssController {
 
     private final OssProperties ossProperties;
 
-    @PostMapping("/uploadImageBed")
-    public Result<UploadImageResponse> uploadImageBed(@RequestParam("file") MultipartFile file) throws IOException {
+    @Operation(summary = "上传文件")
+    @PostMapping("/upload")
+    public Result<UploadImageResponse> upload(@RequestParam("file") MultipartFile file) throws IOException {
         String url;
         InputStream inputStream = null;
         try {
             inputStream = file.getInputStream();
-            url = ossApiService.uploadFile(inputStream, ossProperties.getImageBedDirectory(),
-                    FileUtil.resetFileName(file.getOriginalFilename()));
+            url = ossApiService.uploadFile(inputStream, ossProperties.getDirectory(), FileUtil.uuidFileName(file.getOriginalFilename()));
         } finally {
             if (inputStream != null) {
                 inputStream.close();

@@ -80,7 +80,6 @@
               <a-link v-if="canPublish(record)" @click="handlePublishPost(record)">发布</a-link>
               <a-link v-if="canRemove(record)" @click="handleRemovePost(record)">下架</a-link>
               <a-link @click="handleSetCoverPicture(record)">设置封面</a-link>
-              <a-link @click="handleTop(record)">{{ record.top ? "取消置顶" : "置顶" }}</a-link>
             </template>
           </a-table>
         </template>
@@ -93,18 +92,24 @@
       </search-result>
     </content-card>
   </Container>
+
+  <!-- 上传封面图片 -->
+  <upload-cover-picture :post-id="uploadCoverPicturePostId" :visible="uploadCoverPictureVisible"
+                        @cancel="handleCancelUploadCoverPicture"/>
 </template>
 
 <script lang="ts" setup>
 import ContentCard from "@/components/ContentCard/index.vue";
 import SearchButtonGroup from "@/components/SearchButtonGroup/index.vue"
 import SearchResult from "@/components/SearchResult/index.vue"
+import CategorySelect from "@/components/CategorySelect/index.vue";
+import UploadCoverPicture from "./components/UploadCoverPicture/index.vue"
 import {onMounted, ref} from "vue";
 import {PostStatus, Whether} from "@/enums";
 import type {TableColumnData} from "@arco-design/web-vue";
 import {Message} from '@arco-design/web-vue';
 import {publishPost, removePost, searchAdminPosts, syncPost} from "@/api/admin/post";
-import CategorySelect from "@/components/CategorySelect/index.vue";
+
 
 const initSearchForm = (): AdminSearchPostForm => {
   return {
@@ -124,6 +129,7 @@ const handleSearch = () => {
 
 const reset = () => {
   searchFormData.value = initSearchForm();
+  fetchTableData(searchFormData.value)
 }
 
 const tableColumns = ref<TableColumnData[]>([
@@ -209,7 +215,7 @@ onMounted(() => {
   fetchTableData()
 })
 
-const fetchTableData = async (form: AdminSearchPostForm = {}) => {
+const fetchTableData = async (form: AdminSearchPostForm = searchFormData.value) => {
   if (tableLoading.value) {
     return
   }
@@ -256,13 +262,6 @@ const handleRemovePost = async (record: AdminPostResponse) => {
   handleSearch()
 }
 
-const handleSetCoverPicture = async (record: AdminPostResponse) => {
-}
-
-const handleTop = async (record: AdminPostResponse) => {
-
-}
-
 const handleChangePage = () => {
   fetchTableData(searchFormData.value)
 }
@@ -277,6 +276,18 @@ const canPublish = (record: AdminPostResponse): boolean => {
 
 const canRemove = (record: AdminPostResponse): boolean => {
   return record.status === "PUBLISHED";
+}
+
+const uploadCoverPictureVisible = ref<boolean>(false)
+const uploadCoverPicturePostId = ref()
+const handleSetCoverPicture = async (record: AdminPostResponse) => {
+  uploadCoverPictureVisible.value = true
+  uploadCoverPicturePostId.value = record.postId
+}
+
+const handleCancelUploadCoverPicture = () => {
+  uploadCoverPictureVisible.value = false
+  fetchTableData()
 }
 </script>
 

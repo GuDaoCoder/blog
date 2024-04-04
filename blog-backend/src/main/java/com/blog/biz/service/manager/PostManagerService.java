@@ -49,4 +49,13 @@ public interface PostManagerService {
      * @return String
      **/
     String getPostContent(Long postId);
+
+    /**
+     * 设置封面图片
+     *
+     * @param postId
+     * @param coverPictureUrl
+     * @return void
+     **/
+    void updateCoverPicture(Long postId, String coverPictureUrl);
 }

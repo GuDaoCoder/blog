@@ -30,5 +30,5 @@ public class OssProperties {
     /**
      * 图床文件夹
      */
-    private String imageBedDirectory;
+    private String directory;
 }

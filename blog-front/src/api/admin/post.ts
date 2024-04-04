@@ -22,3 +22,7 @@ export function getPostContent(postId: number) {
 export function syncPost() {
     return axios.get(`${prefix}/sync`)
 }
+
+export function updatePostCoverPicture(postId: number, coverPictureUrl: string) {
+    return axios.patch(`${prefix}/${postId}/updateCoverPicture`, {coverPictureUrl})
+}

@@ -93,6 +93,13 @@ public class PostManagerServiceImpl implements PostManagerService {
                 .orElse(null);
     }
 
+    @Override
+    public void updateCoverPicture(Long postId, String coverPictureUrl) {
+        PostEntity postEntity = postCrudService.getOneOrThrow(postId);
+        postEntity.setCoverPictureUrl(coverPictureUrl);
+        postCrudService.updateById(postEntity);
+    }
+
     private List<PostBlogResponse> toPostBlogResponses(List<PostEntity> postEntities) {
         if (CollectionUtils.isEmpty(postEntities)) {
             return new ArrayList<>();
