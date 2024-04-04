@@ -14,27 +14,16 @@
           <a-button type="outline" @click="reset">重置</a-button>
         </search-button-group>
       </a-form>
-      <a-divider/>
-      <search-result>
-        <template #toolbar>
-          <a-button type="primary" @click="handleCreateTag">新增标签</a-button>
-        </template>
 
+      <a-divider/>
+
+      <search-result>
         <template #table>
           <a-table :columns="tableColumns" :data="tagTableData" :loading="tableLoading" :pagination="false"
                    column-resizable
                    row-key="tagId" stripe>
             <template #tagName="{record}">
               <a-tag :color="record.color">{{ record.tagName }}</a-tag>
-            </template>
-            <template #enable="{record}">
-              {{ $dict(Whether, record.enable) }}
-            </template>
-            <template #operations="{ record }">
-              <a-link @click="handleUpdateTag(record)">编辑</a-link>
-              <a-popconfirm content="确认删除?" @ok="handleDeleteTag(record)">
-                <a-link>删除</a-link>
-              </a-popconfirm>
             </template>
           </a-table>
         </template>
@@ -45,10 +34,6 @@
       </search-result>
     </content-card>
   </Container>
-
-  <save-tag :form-data="saveTagFormData" :title="saveTagFormData && saveTagFormData.tagId ? '编辑':'新增'+'标签'"
-            :visible="saveTagVisible"
-            @cancel="handleCancelSave"/>
 </template>
 
 <script lang="ts" setup>
@@ -56,12 +41,9 @@ import Pagination from "@/components/Pagination/index.vue"
 import ContentCard from '@/components/ContentCard/index.vue'
 import {onMounted, ref} from "vue";
 import type {TableColumnData} from "@arco-design/web-vue";
-import {Notification} from "@arco-design/web-vue";
-import {deleteTag, searchTag} from "@/api/admin/tag-manage";
+import {searchTag} from "@/api/admin/tag-manage";
 import SearchButtonGroup from "@/components/SearchButtonGroup/index.vue";
 import SearchResult from "@/components/SearchResult/index.vue";
-import SaveTag from "@/views/admin/tag-manage/components/save-tag.vue";
-import {Whether} from "../../../enums";
 
 onMounted(() => {
   fetchTableData()
@@ -98,20 +80,8 @@ const tableColumns = ref<TableColumnData[]>([
     dataIndex: "postCount",
   },
   {
-    title: "是否启用",
-    dataIndex: "enable",
-    slotName: "enable",
-  },
-  {
     title: "更新时间",
     dataIndex: "updateTime",
-  },
-  {
-    title: "操作",
-    dataIndex: "operations",
-    slotName: 'operations',
-    fixed: "right",
-    width: 120
   }
 ])
 
@@ -145,36 +115,6 @@ const fetchTableData = async (form: SearchTagForm = {}) => {
   } finally {
     tableLoading.value = false
   }
-}
-
-
-const saveTagVisible = ref<boolean>(false)
-const saveTagFormData = ref<SaveTagForm>()
-
-const handleCreateTag = () => {
-  saveTagFormData.value = {
-    color: "#000000",
-    enable: true
-  }
-  saveTagVisible.value = true
-}
-
-const handleUpdateTag = (value: TagResponse) => {
-  saveTagFormData.value = {...value}
-  saveTagVisible.value = true
-}
-
-const handleCancelSave = (reload: boolean) => {
-  saveTagVisible.value = false
-  if (reload) {
-    handleSearch()
-  }
-}
-
-const handleDeleteTag = async (value: TagResponse) => {
-  await deleteTag(value.tagId)
-  Notification.success("删除成功");
-  handleSearch()
 }
 
 const handleChangePage = (pageNumber: number) => {
