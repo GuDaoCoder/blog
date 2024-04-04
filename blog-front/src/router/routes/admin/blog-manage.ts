@@ -5,16 +5,16 @@ const BLOG_MANGE: RouteRaw = {
     path: '/admin/blog-manage',
     name: 'admin-blog-manage',
     component: ADMIN_LAYOUT,
-    redirect: '/admin/category-manage',
+    redirect: '/admin/category',
     meta: {
         icon: 'blog',
         title: '博客管理'
     },
     children: [
         {
-            name: 'admin-category-manage',
-            path: "/admin/category-manage",
-            component: () => import(/* webpackChunkName: "category-manage" */ "@/views/admin/category-manage/index.vue"),
+            name: 'admin-category',
+            path: "/admin/category",
+            component: () => import(/* webpackChunkName: "category" */ "@/views/admin/category/index.vue"),
             meta: {
                 title: '分类管理'
             }

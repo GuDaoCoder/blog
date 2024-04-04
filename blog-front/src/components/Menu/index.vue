@@ -31,7 +31,7 @@ const menuData = reactive<Array<Menu>>([{
   icon: "blog",
   children: [
     {
-      code: "admin-category-manage",
+      code: "admin-category",
       title: "分类管理"
     },
     {
