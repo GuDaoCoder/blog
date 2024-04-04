@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type {PropType} from "vue";
-import {reactive} from "vue";
 import {useRouter} from "vue-router";
 import {useBlogPostPreviewStore} from "@/store";
 import {formatStandStr} from "@/utils/date";
@@ -12,11 +11,6 @@ const props = defineProps({
       items: []
     }
   }
-})
-
-const paginationProps = reactive({
-  defaultPageSize: 10,
-  total: props.data?.items.length
 })
 
 const router = useRouter()
@@ -32,7 +26,6 @@ const toPost = (post: BlogPostResponse) => {
     <a-list
         :bordered="false"
         :data="props.data.items"
-        :pagination-props="paginationProps"
     >
       <template #item="{ item }">
         <a-list-item action-layout="vertical">

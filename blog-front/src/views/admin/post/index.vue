@@ -205,7 +205,7 @@ const scroll = {
   x: 1800
 }
 
-const page = ref<PageResponse<TagResponse>>({pageNumber: 1, pageSize: 10, total: 0})
+const page = ref<PageResponse<any>>({pageNumber: 1, pageSize: 10, total: 0})
 
 const postTableData = ref<AdminPostResponse[]>([])
 
