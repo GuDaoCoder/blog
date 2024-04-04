@@ -11,7 +11,4 @@ public class SearchCategoryTreeRequest extends CommonRequest {
 
     @Schema(description = "分类名称")
     private String categoryName;
-
-    @Schema(description = "是否启用")
-    private Boolean enabled;
 }

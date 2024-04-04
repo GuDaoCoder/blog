@@ -33,16 +33,12 @@ const toPost = (post: BlogPostResponse) => {
             <span><icon-heart/>83</span>
             <span><icon-star/>10</span>
             <span><icon-message/>Reply</span>
+            <span><icon-message/>{{ formatStandStr(item.updateTime, "YYYY-MM-DD") }}</span>
           </template>
           <template #extra>
             <a-image :preview="false" :src="item.coverPictureUrl" fit="cover" height="100px" style=" cursor: pointer "
                      width="200px"
                      @click="toPost(item )"/>
-            <div style="flex: 1;position: relative;">
-              <span style="position: absolute;right:0; bottom: 0">{{
-                  formatStandStr(item.updateTime, "YYYY-MM-DD")
-                }}</span>
-            </div>
           </template>
           <a-list-item-meta
               :description="item.summary"

@@ -57,10 +57,9 @@ public class CategoryCrudServiceImpl extends BaseCrudServiceImpl<CategoryMapper,
     }
 
     @Override
-    public List<CategoryEntity> findAllByCondition(String categoryName, Boolean enabled) {
+    public List<CategoryEntity> findAllByCondition(String categoryName) {
         LambdaQueryWrapper<CategoryEntity> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.like(StringUtils.isNotBlank(categoryName), CategoryEntity::getCategoryName, categoryName)
-                .eq(Objects.nonNull(enabled), CategoryEntity::getEnabled, enabled);
+        queryWrapper.like(StringUtils.isNotBlank(categoryName), CategoryEntity::getCategoryName, categoryName);
         return baseMapper.selectList(queryWrapper);
     }
 }

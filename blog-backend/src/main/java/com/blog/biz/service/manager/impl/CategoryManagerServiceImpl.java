@@ -42,7 +42,7 @@ public class CategoryManagerServiceImpl implements CategoryManagerService {
 
     @Override
     public List<CategoryTreeResponse> searchTree(SearchCategoryTreeRequest request) {
-        List<CategoryEntity> categoryEntities = categoryCrudService.findAllByCondition(request.getCategoryName(), request.getEnabled());
+        List<CategoryEntity> categoryEntities = categoryCrudService.findAllByCondition(request.getCategoryName());
         if (CollectionUtils.isNotEmpty(categoryEntities)) {
             Set<Long> categoryIds = new HashSet<>();
             categoryEntities.forEach(o -> {

@@ -1,24 +1,28 @@
-<script lang="ts" setup>
-
-</script>
+<script lang="ts" setup></script>
 
 <template>
-  <a-card hoverable>
-    <template #cover>
-      <a-image
-          :preview="false"
-          fit="cover"
-          height="180px"
-          src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp"
-          width="250px"
+  <a-card :bordered="false" hoverable>
+    <div class="avatar-wrapper">
+      <a-avatar :size="84"
+                imageUrl="http://cdn.road4code.com/blog/WechatIMG21.jpg"
       />
-    </template>
-    <div>
-      
     </div>
+
+    <div class="name-wrapper">孤岛</div>
+
   </a-card>
 </template>
 
 <style lang="scss" scoped>
+.avatar-wrapper {
+  width: 100%;
+  text-align: center;
+}
 
+.name-wrapper {
+  padding: 10px 0;
+  width: 100%;
+  text-align: center;
+  font-size: 24px;
+}
 </style>

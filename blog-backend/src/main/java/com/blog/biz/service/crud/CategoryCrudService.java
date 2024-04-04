@@ -16,10 +16,9 @@ public interface CategoryCrudService extends IBaseCrudService<CategoryEntity> {
      * 根据条件查询文章分类
      *
      * @param categoryName
-     * @param enabled
      * @return List<CategoryEntity>
      **/
-    List<CategoryEntity> findAllByCondition(String categoryName, Boolean enabled);
+    List<CategoryEntity> findAllByCondition(String categoryName);
 
     /**
      * 根据名称查询分类

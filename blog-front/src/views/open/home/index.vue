@@ -2,6 +2,8 @@
 import PostCarousel from "@/components/PostCarousel/index.vue"
 import PostList from "@/components/PostList/index.vue"
 import Pagination from "@/components/Pagination/index.vue"
+import UserCard from "@/components/UserCard/index.vue"
+import CategoryCard from "@/components/CategoryCard/index.vue"
 import {searchBlogPosts} from "@/api/blog/post";
 import {onMounted, ref} from "vue";
 
@@ -40,10 +42,10 @@ const handleChangePageSize = (pageSize: number) => {
 
 <template>
   <div class="content-wrapper">
-    <!--    <div class="card-wrapper">-->
-    <!--      <user-card/>-->
-    <!--      <tag-cloud/>-->
-    <!--    </div>-->
+    <div class="card-wrapper">
+      <user-card/>
+      <category-card/>
+    </div>
     <div class="main-wrapper">
       <post-carousel/>
       <post-list :data="{items:posts}"/>
@@ -61,6 +63,10 @@ const handleChangePageSize = (pageSize: number) => {
 
 .card-wrapper {
   width: 250px;
+}
+
+.card-wrapper > div:not(:first-child) {
+  margin-top: 10px;
 }
 
 .main-wrapper {
