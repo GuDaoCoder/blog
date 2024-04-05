@@ -3,6 +3,7 @@ import router from "@/router";
 import store from "@/store";
 import App from '@/App.vue'
 import '@/style/reset.scss'
+import '@/style/gobal.scss'
 // arco-design组件
 import ArcoVue from '@arco-design/web-vue';
 import ArcoVueIcon from '@arco-design/web-vue/es/icon';

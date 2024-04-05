@@ -4,6 +4,7 @@ import PostList from "@/components/PostList/index.vue"
 import Pagination from "@/components/Pagination/index.vue"
 import UserCard from "@/components/UserCard/index.vue"
 import CategoryCard from "@/components/CategoryCard/index.vue"
+import TagCard from "@/components/TagCard/index.vue"
 import {searchBlogPosts} from "@/api/blog/post";
 import {onMounted, ref} from "vue";
 
@@ -45,6 +46,7 @@ const handleChangePageSize = (pageSize: number) => {
     <div class="card-wrapper">
       <user-card/>
       <category-card/>
+      <tag-card/>
     </div>
     <div class="main-wrapper">
       <post-carousel/>
