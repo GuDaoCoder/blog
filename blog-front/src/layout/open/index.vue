@@ -17,9 +17,13 @@ import Content from "@/layout/open/components/Content/index.vue"
       <a-layout class="layout-content">
         <a-layout-content class="content-wrapper">
           <div class="card-wrapper">
-            <user-card/>
-            <category-card/>
-            <tag-card/>
+            <a-affix :offsetTop="80">
+              <div class="card-items">
+                <user-card/>
+                <category-card/>
+                <tag-card/>
+              </div>
+            </a-affix>
           </div>
           <div class="main-wrapper">
             <Content/>
@@ -63,7 +67,7 @@ import Content from "@/layout/open/components/Content/index.vue"
   width: 250px;
 }
 
-.card-wrapper > div:not(:first-child) {
+.card-items > div:not(:first-child) {
   margin-top: 10px;
 }
 
