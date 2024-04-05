@@ -2,7 +2,7 @@
 import type {PropType} from "vue";
 import {useRouter} from "vue-router";
 import {useBlogPostPreviewStore} from "@/store";
-import {formatStandStr} from "@/utils/date";
+import {formatStandStr} from "../../utils/date";
 
 const props = defineProps({
   data: {
@@ -30,10 +30,8 @@ const toPost = (post: BlogPostResponse) => {
       <template #item="{ item }">
         <a-list-item action-layout="vertical">
           <template #actions>
-            <span><icon-heart/>83</span>
-            <span><icon-star/>10</span>
-            <span><icon-message/>Reply</span>
-            <span><icon-message/>{{ formatStandStr(item.updateTime, "YYYY-MM-DD") }}</span>
+            <span class="action">{{ item.categoryName }}</span>
+            <span>{{ formatStandStr(item.updateTime, "YYYY-MM-DD") }}</span>
           </template>
           <template #extra>
             <a-image :preview="false" :src="item.coverPictureUrl" fit="cover" height="100px" style=" cursor: pointer "
@@ -48,10 +46,13 @@ const toPost = (post: BlogPostResponse) => {
               <h2 class="title" @click="toPost(item)">{{ item.title }}</h2>
             </template>
             <template #description>
-              <p class="summary" @click="toPost(item)">{{ item.summary }}</p>
+              <p class="summary pointer" @click="toPost(item)">{{ item.summary }}</p>
               <div style="padding: 10px 0">
                 <a-space>
-                  <a-tag v-for="tag in item.tags" :color="tag.color" :index="tag.tagId">{{ tag.tagName }}</a-tag>
+                  <a-tag v-for="tag in item.tags" :color="tag.color" :index="tag.tagId" class="pointer">{{
+                      tag.tagName
+                    }}
+                  </a-tag>
                 </a-space>
               </div>
             </template>
@@ -80,8 +81,7 @@ const toPost = (post: BlogPostResponse) => {
   transition: color 0.3s;
 
   &:hover {
-    cursor: pointer;
-    color: blue;
+    color: #60B4FE;
     text-decoration: underline;
   }
 }
@@ -90,4 +90,15 @@ const toPost = (post: BlogPostResponse) => {
   display: flex;
   flex-direction: column;
 }
+
+::v-deep(.arco-list-item-action) {
+  color: #85888E;
+}
+
+.action {
+  &:hover {
+    color: #60B4FE;
+  }
+}
+
 </style>
