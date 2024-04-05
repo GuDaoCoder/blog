@@ -3,18 +3,22 @@ interface BlogSearchPostRequest extends PageRequest {
 }
 
 interface BlogPostResponse {
-    postId: number,
-    title: string,
+    postId?: number,
+    title?: string,
     summary?: string,
     coverPictureUrl?: string,
-    status: string,
-    source: string,
+    status?: string,
+    source?: string,
     categoryId?: number,
     categoryName?: string,
     publishTime?: string,
-    updateTime: string,
+    updateTime?: string,
     enableComment?: boolean,
     tags?: BlogPostTagItem[]
+}
+
+interface PostDetailResponse extends BlogPostResponse {
+    content?: string
 }
 
 interface BlogPostTagItem {

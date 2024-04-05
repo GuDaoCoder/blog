@@ -1,17 +1,17 @@
 package com.blog.biz.service.manager.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.blog.biz.convert.PostConverter;
-import com.blog.biz.enums.PostSource;
+import com.blog.biz.convert.TagConverter;
 import com.blog.biz.enums.PostStatus;
 import com.blog.biz.model.context.SearchPostContext;
 import com.blog.biz.model.entity.*;
-import com.blog.biz.model.request.CreatePostRequest;
 import com.blog.biz.model.request.SearchPostRequest;
-import com.blog.biz.model.request.UpdatePostRequest;
 import com.blog.biz.model.request.blog.SearchPostBlogRequest;
+import com.blog.biz.model.response.PostDetailResponse;
 import com.blog.biz.model.response.PostResponse;
-import com.blog.biz.model.response.blog.PostBlogResponse;
+import com.blog.biz.model.response.TagResponse;
 import com.blog.biz.service.crud.*;
 import com.blog.biz.service.manager.PostManagerService;
 import com.blog.common.base.response.PageResponse;
@@ -22,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -57,12 +56,12 @@ public class PostManagerServiceImpl implements PostManagerService {
     }
 
     @Override
-    public PageResponse<PostBlogResponse> blogSearch(SearchPostBlogRequest request) {
+    public PageResponse<PostResponse> blogSearch(SearchPostBlogRequest request) {
         SearchPostContext searchPostContext = PostConverter.INSTANCE.toPageContext(request);
         searchPostContext.setStatus(PostStatus.PUBLISHED);
         searchPostContext.setPageable(PageUtil.pageable(request));
         IPage<PostEntity> page = postCrudService.page(searchPostContext);
-        return PageUtil.result(page, toPostBlogResponses(page.getRecords()));
+        return PageUtil.result(page, toPostResponses(page.getRecords()));
     }
 
     @Override
@@ -86,7 +85,7 @@ public class PostManagerServiceImpl implements PostManagerService {
     }
 
     @Override
-    public String getPostContent(Long postId) {
+    public String getContent(Long postId) {
         postCrudService.getOneOrThrow(postId);
         return postContentCrudService.getByField(PostContentEntity::getPostId, postId)
                 .map(PostContentEntity::getContent)
@@ -100,34 +99,17 @@ public class PostManagerServiceImpl implements PostManagerService {
         postCrudService.updateById(postEntity);
     }
 
-    private List<PostBlogResponse> toPostBlogResponses(List<PostEntity> postEntities) {
-        if (CollectionUtils.isEmpty(postEntities)) {
-            return new ArrayList<>();
-        }
-        Map<Long, CategoryEntity> categoryMap = categoryCrudService.listByIds(
-                postEntities.stream()
-                        .map(PostEntity::getCategoryId)
-                        .collect(Collectors.toList())
-        ).stream().collect(Collectors.toMap(CategoryEntity::getCategoryId, categoryEntity -> categoryEntity));
+    @Override
+    public PostDetailResponse detail(Long postId) {
+        PostEntity postEntity = postCrudService.getOneOrThrow(postId);
+        PostDetailResponse postDetailResponse = PostConverter.INSTANCE.toDetailResponse(toPostResponse(postEntity));
+        postContentCrudService.findPostContentByPostId(postId)
+                .ifPresent(postContentEntity -> postDetailResponse.setContent(postContentEntity.getContent()));
+        return postDetailResponse;
+    }
 
-        Map<Long, List<TagEntity>> tagMap = postTagsRela(postEntities.stream().map(PostEntity::getPostId).collect(Collectors.toList()));
-        return postEntities
-                .stream()
-                .map(postEntity -> {
-                    PostBlogResponse postBlogResponse = PostConverter.INSTANCE.toBlogResponse(postEntity);
-                    Optional.ofNullable(categoryMap.get(postEntity.getCategoryId()))
-                            .map(CategoryEntity::getCategoryName)
-                            .ifPresent(postBlogResponse::setCategoryName);
-
-                    Optional.ofNullable(tagMap.get(postEntity.getPostId())).ifPresent(list -> {
-                        List<PostBlogResponse.TagItem> tagItems = list
-                                .stream()
-                                .map(o -> new PostBlogResponse.TagItem(o.getTagId(), o.getTagName(), o.getColor()))
-                                .collect(Collectors.toList());
-                        postBlogResponse.setTags(tagItems);
-                    });
-                    return postBlogResponse;
-                }).toList();
+    private PostResponse toPostResponse(PostEntity postEntity) {
+        return CollUtil.getFirst(toPostResponses(List.of(postEntity)));
     }
 
     private List<PostResponse> toPostResponses(List<PostEntity> postEntities) {
@@ -150,11 +132,11 @@ public class PostManagerServiceImpl implements PostManagerService {
                             .ifPresent(postResponse::setCategoryName);
 
                     Optional.ofNullable(tagMap.get(postEntity.getPostId())).ifPresent(list -> {
-                        List<PostResponse.TagItem> tagItems = list
+                        List<TagResponse> tags = list
                                 .stream()
-                                .map(o -> new PostResponse.TagItem(o.getTagId(), o.getTagName(), o.getColor()))
+                                .map(TagConverter.INSTANCE::toResponse)
                                 .collect(Collectors.toList());
-                        postResponse.setTags(tagItems);
+                        postResponse.setTags(tags);
                     });
                     return postResponse;
                 }).toList();

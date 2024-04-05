@@ -1,6 +1,7 @@
 package com.blog.biz.controller.blog;
 
 import com.blog.biz.model.request.SearchTagRequest;
+import com.blog.biz.model.response.TagDetailResponse;
 import com.blog.biz.model.response.TagResponse;
 import com.blog.biz.service.manager.TagManagerService;
 import com.blog.common.base.response.PageResponse;
@@ -25,7 +26,7 @@ public class TagBlogController {
 
     @Operation(summary = "查询标签列表")
     @GetMapping
-    public Result<PageResponse<TagResponse>> search(@ParameterObject SearchTagRequest request) {
+    public Result<PageResponse<TagDetailResponse>> search(@ParameterObject SearchTagRequest request) {
         return Result.success(tagManagerService.search(request));
     }
 }

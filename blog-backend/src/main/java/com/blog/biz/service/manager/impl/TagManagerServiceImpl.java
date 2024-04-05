@@ -8,6 +8,7 @@ import com.blog.biz.model.entity.custom.TagPostCountEntity;
 import com.blog.biz.model.request.CreateTagRequest;
 import com.blog.biz.model.request.SearchTagRequest;
 import com.blog.biz.model.request.UpdateTagRequest;
+import com.blog.biz.model.response.TagDetailResponse;
 import com.blog.biz.model.response.TagResponse;
 import com.blog.biz.service.crud.PostTagRelaCrudService;
 import com.blog.biz.service.crud.TagCrudService;
@@ -41,50 +42,12 @@ public class TagManagerServiceImpl implements TagManagerService {
     private final PostTagRelaCrudService postTagRelaCrudService;
 
     @Override
-    public PageResponse<TagResponse> search(SearchTagRequest request) {
+    public PageResponse<TagDetailResponse> search(SearchTagRequest request) {
         IPage<TagEntity> page = tagCrudService.page(request.getTagName(), PageUtil.pageable(request));
-        return PageUtil.result(page, toResponses(page.getRecords()));
+        return PageUtil.result(page, toDetailResponses(page.getRecords()));
     }
 
-    @Override
-    public TagResponse create(CreateTagRequest request) {
-        TagEntity entity = TagConverter.INSTANCE.toEntity(request);
-        // 校验名称是否重复
-        tagCrudService.findByTagName(request.getTagName()).ifPresent(o -> {
-            throw new BusinessException("标签名称[{}]已存在", request.getTagName());
-        });
-        tagCrudService.save(entity);
-        return toResponse(entity);
-    }
-
-    @Override
-    public TagResponse update(Long tagId, UpdateTagRequest request) {
-        TagEntity existEntity = tagCrudService.getOneOrThrow(tagId);
-        if (!StringUtils.equals(request.getTagName(), existEntity.getTagName())) {
-            tagCrudService.findByTagName(request.getTagName()).ifPresent(o -> {
-                throw new BusinessException("标签名称[{}]已存在", request.getTagName());
-            });
-        }
-        TagEntity entity = TagConverter.INSTANCE.toEntity(request);
-        entity.setTagId(tagId);
-        tagCrudService.updateById(entity);
-        return toResponse(tagCrudService.getById(tagId));
-    }
-
-    @Override
-    public void delete(Long tagId) {
-        tagCrudService.getOneOrThrow(tagId);
-        if (postTagRelaCrudService.tagUsed(tagId)) {
-            throw new BusinessException("标签已被使用，无法删除");
-        }
-        tagCrudService.removeById(tagId);
-    }
-
-    private TagResponse toResponse(TagEntity tagEntity) {
-        return CollUtil.getFirst(toResponses(List.of(tagEntity)));
-    }
-
-    private List<TagResponse> toResponses(List<TagEntity> tagEntities) {
+    private List<TagDetailResponse> toDetailResponses(List<TagEntity> tagEntities) {
         if (CollectionUtils.isEmpty(tagEntities)) {
             return new ArrayList<>();
         }
@@ -97,9 +60,9 @@ public class TagManagerServiceImpl implements TagManagerService {
         return tagEntities
                 .stream()
                 .map(tagEntity -> {
-                    TagResponse tagResponse = TagConverter.INSTANCE.toResponse(tagEntity);
-                    tagResponse.setPostCount(tagPostCountMap.getOrDefault(tagEntity.getTagId(), 0L));
-                    return tagResponse;
+                    TagDetailResponse tagDetailResponse = TagConverter.INSTANCE.toDetailResponse(tagEntity);
+                    tagDetailResponse.setPostCount(tagPostCountMap.getOrDefault(tagEntity.getTagId(), 0L));
+                    return tagDetailResponse;
                 }).toList();
     }
 }

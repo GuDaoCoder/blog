@@ -3,7 +3,7 @@
 <template>
   <a-card :bordered="false" hoverable>
     <div class="avatar-wrapper">
-      <a-avatar :size="84"
+      <a-avatar :size="84" class="avatar"
                 imageUrl="http://cdn.road4code.com/blog/WechatIMG21.jpg"
       />
     </div>
@@ -17,6 +17,14 @@
 .avatar-wrapper {
   width: 100%;
   text-align: center;
+
+  .avatar {
+    transition: 0.5s;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
 }
 
 .name-wrapper {

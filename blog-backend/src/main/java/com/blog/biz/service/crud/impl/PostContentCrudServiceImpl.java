@@ -1,5 +1,6 @@
 package com.blog.biz.service.crud.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,8 @@ import com.blog.common.base.service.impl.BaseCrudServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Optional;
+
 /**
  * @author zouzhangpeng
  * @desc
@@ -18,6 +21,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class PostContentCrudServiceImpl extends BaseCrudServiceImpl<PostContentMapper, PostContentEntity> implements PostContentCrudService {
+
+    @Override
+    public Optional<PostContentEntity> findPostContentByPostId(Long postId) {
+        LambdaQueryWrapper<PostContentEntity> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(PostContentEntity::getPostId, postId);
+        return getOneOpt(queryWrapper);
+    }
 
     @Override
     public void updateContentByPostId(Long postId, String content) {

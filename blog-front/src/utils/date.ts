@@ -5,5 +5,8 @@ export function formatStr(str: string, oldFormat: string, newFormat: string): st
 }
 
 export function formatStandStr(str: string, newFormat: string): string {
-    return formatStr(str, "YYYY-MM-DD HH:mm:ss", newFormat);
+    if (str && newFormat) {
+        return formatStr(str, "YYYY-MM-DD HH:mm:ss", newFormat);
+    }
+    return ""
 }

@@ -1,11 +1,8 @@
 package com.blog.biz.model.response;
 
-import com.blog.biz.enums.PostSource;
-import com.blog.biz.enums.PostStatus;
 import com.blog.common.base.response.CommonResponse;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -29,29 +26,14 @@ public class PostResponse extends CommonResponse {
     @Schema(description = "摘要")
     private String summary;
 
-    @Schema(description = "文章内容")
-    private String content;
-
     @Schema(description = "封面图片链接")
     private String coverPictureUrl;
-
-    @Schema(description = "状态")
-    private PostStatus status;
-
-    @Schema(description = "文章来源")
-    private PostSource source;
 
     @Schema(description = "所属分类Id")
     private Long categoryId;
 
     @Schema(description = "所属分类名称")
     private String categoryName;
-
-    @Schema(description = "是否置顶")
-    private Boolean top;
-
-    @Schema(description = "是否加密")
-    private Boolean encrypt;
 
     @Schema(description = "是否开启评论")
     private Boolean enableComment;
@@ -73,19 +55,6 @@ public class PostResponse extends CommonResponse {
     private LocalDateTime removeTime;
 
     @Schema(description = "标签集合")
-    private List<PostResponse.TagItem> tags;
+    private List<TagResponse> tags;
 
-    @AllArgsConstructor
-    @Data
-    public static class TagItem {
-
-        @Schema(description = "标签Id")
-        private Long tagId;
-
-        @Schema(description = "标签名称")
-        private String tagName;
-
-        @Schema(description = "颜色")
-        private String color;
-    }
 }

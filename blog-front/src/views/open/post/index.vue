@@ -1,11 +1,23 @@
 <script lang="ts" setup>
 import MdPreview from "@/components/MdPreview/index.vue"
-import {useBlogPostPreviewStore} from "@/store";
-import {computed} from "vue";
+import {onMounted, ref} from "vue";
 import {formatStandStr} from "@/utils/date"
+import {getPostDetail} from "@/api/blog/post";
+import {useRoute} from "vue-router";
 
-const blogPostPreviewStore = useBlogPostPreviewStore();
-const post = computed(() => blogPostPreviewStore.$state);
+const route = useRoute()
+
+const post = ref<PostDetailResponse>({})
+
+onMounted(() => {
+  let postId = route.query.postId;
+  fetchPostDetail(postId);
+})
+const fetchPostDetail = async (postId: number) => {
+  const {data} = await getPostDetail(postId)
+  post.value = data
+}
+
 </script>
 
 <template>
@@ -16,15 +28,15 @@ const post = computed(() => blogPostPreviewStore.$state);
     <div class="post-base-info">
       <a-space>
         <span>{{ formatStandStr(post.updateTime, "YYYY-MM-DD") }}</span>
-        <span>|</span>
-        <span>0 评论</span>
-        <span>|</span>
-        <span>0 点赞</span>
-        <span>|</span>
-        <span>0 阅读</span>
+        <!--        <span>|</span>-->
+        <!--        <span>0 评论</span>-->
+        <!--        <span>|</span>-->
+        <!--        <span>0 点赞</span>-->
+        <!--        <span>|</span>-->
+        <!--        <span>0 阅读</span>-->
       </a-space>
     </div>
-    <md-preview :postId="post.postId"/>
+    <md-preview :text="post.content"/>
     <a-divider/>
     <!--    <div class="post-actions">-->
     <!--      <a-space>-->

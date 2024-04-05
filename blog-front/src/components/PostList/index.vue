@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import type {PropType} from "vue";
 import {useRouter} from "vue-router";
-import {useBlogPostPreviewStore} from "@/store";
-import {formatStandStr} from "../../utils/date";
+import {formatStandStr} from "@/utils/date";
 
 const props = defineProps({
   data: {
@@ -14,10 +13,8 @@ const props = defineProps({
 })
 
 const router = useRouter()
-const blogPostPreviewStore = useBlogPostPreviewStore();
 const toPost = (post: BlogPostResponse) => {
-  blogPostPreviewStore.updateBlogPostPreview(post)
-  router.push({path: "/post"})
+  router.push({path: "/post", query: {postId: post.postId}})
 }
 </script>
 
@@ -43,10 +40,10 @@ const toPost = (post: BlogPostResponse) => {
               :title="item.title"
           >
             <template #title>
-              <h2 class="title" @click="toPost(item)">{{ item.title }}</h2>
+              <span class="title text-animation pointer" @click="toPost(item)">{{ item.title }}</span>
             </template>
             <template #description>
-              <p class="summary pointer" @click="toPost(item)">{{ item.summary }}</p>
+              <span class="summary pointer text-animation" @click="toPost(item)">{{ item.summary }}</span>
               <div style="padding: 10px 0">
                 <a-space>
                   <a-tag v-for="tag in item.tags" :color="tag.color" :index="tag.tagId" class="pointer">{{
@@ -69,21 +66,23 @@ const toPost = (post: BlogPostResponse) => {
   padding: 20px 0;
 }
 
-.title {
+.text-animation {
+  background: linear-gradient(to right, #60B4FE, #60B4FE) no-repeat right bottom;
+  background-size: 0 2px;
+  transition: background-size 0.5s;
+
   &:hover {
-    cursor: pointer;
+    background-position-x: left;
+    background-size: 100% 2px;
   }
 }
 
-.summary {
-  color: black;
-  text-decoration: none;
-  transition: color 0.3s;
+.title {
+  font-size: 18px;
+}
 
-  &:hover {
-    color: #60B4FE;
-    text-decoration: underline;
-  }
+.summary {
+  color: #85888E;
 }
 
 ::v-deep(.arco-list-item-extra) {

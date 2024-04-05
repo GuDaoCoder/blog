@@ -2,8 +2,8 @@ package com.blog.biz.service.manager;
 
 import com.blog.biz.model.request.SearchPostRequest;
 import com.blog.biz.model.request.blog.SearchPostBlogRequest;
+import com.blog.biz.model.response.PostDetailResponse;
 import com.blog.biz.model.response.PostResponse;
-import com.blog.biz.model.response.blog.PostBlogResponse;
 import com.blog.common.base.response.PageResponse;
 
 /**
@@ -24,9 +24,17 @@ public interface PostManagerService {
      * 博客页面查询文章列表
      *
      * @param request
-     * @return PageResponse<PostBlogResponse>
+     * @return PageResponse<PostResponse>
      **/
-    PageResponse<PostBlogResponse> blogSearch(SearchPostBlogRequest request);
+    PageResponse<PostResponse> blogSearch(SearchPostBlogRequest request);
+
+    /**
+     * 查询文章详情
+     *
+     * @param postId
+     * @return PostDetailResponse
+     **/
+    PostDetailResponse detail(Long postId);
 
     /**
      * 发布文章
@@ -48,7 +56,7 @@ public interface PostManagerService {
      * @param postId
      * @return String
      **/
-    String getPostContent(Long postId);
+    String getContent(Long postId);
 
     /**
      * 设置封面图片
@@ -58,4 +66,6 @@ public interface PostManagerService {
      * @return void
      **/
     void updateCoverPicture(Long postId, String coverPictureUrl);
+
+
 }

@@ -1,7 +1,6 @@
 package com.blog.biz.controller.admin;
 
 import com.blog.biz.model.request.SearchPostRequest;
-import com.blog.biz.model.request.UpdateCategoryRequest;
 import com.blog.biz.model.request.UpdateCoverPictureRequest;
 import com.blog.biz.model.response.PostResponse;
 import com.blog.biz.service.manager.BlogSyncService;
@@ -41,7 +40,7 @@ public class PostController {
     @Operation(summary = "查询文章内容")
     @GetMapping("/{postId}/content")
     public Result<String> getPostContent(@Parameter(description = "文章Id") @PathVariable Long postId) {
-        return Result.success(postManagerService.getPostContent(postId));
+        return Result.success(postManagerService.getContent(postId));
     }
 
     @Operation(summary = "发布文章")

@@ -30,12 +30,6 @@ public class TagResponse extends CommonResponse {
     @Schema(description = "颜色")
     private String color;
 
-    @Schema(description = "是否启用")
-    private Boolean enable;
-
-    @Schema(description = "文章数")
-    private Long postCount;
-
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Schema(description = "创建时间")
     private LocalDateTime createTime;
