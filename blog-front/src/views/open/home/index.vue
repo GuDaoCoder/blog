@@ -2,9 +2,6 @@
 import PostCarousel from "@/components/PostCarousel/index.vue"
 import PostList from "@/components/PostList/index.vue"
 import Pagination from "@/components/Pagination/index.vue"
-import UserCard from "@/components/UserCard/index.vue"
-import CategoryCard from "@/components/CategoryCard/index.vue"
-import TagCard from "@/components/TagCard/index.vue"
 import {searchBlogPosts} from "@/api/blog/post";
 import {onMounted, ref} from "vue";
 
@@ -42,41 +39,14 @@ const handleChangePageSize = (pageSize: number) => {
 </script>
 
 <template>
-  <div class="content-wrapper">
-    <div class="card-wrapper">
-      <user-card/>
-      <category-card/>
-      <tag-card/>
-    </div>
-    <div class="main-wrapper">
-      <post-carousel/>
-      <post-list :data="{items:posts}"/>
-      <div class="pagination-wrapper">
-        <Pagination :pagination="pagination" @change="handleChangePage" @page-size-change="handleChangePageSize"/>
-      </div>
-    </div>
+  <post-carousel/>
+  <post-list :data="{items:posts}"/>
+  <div class="pagination-wrapper">
+    <Pagination :pagination="pagination" @change="handleChangePage" @page-size-change="handleChangePageSize"/>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.content-wrapper {
-  display: flex;
-}
-
-.card-wrapper {
-  width: 250px;
-}
-
-.card-wrapper > div:not(:first-child) {
-  margin-top: 10px;
-}
-
-.main-wrapper {
-  flex: 1;
-  margin-left: 20px;
-  background-color: #FFFFFF;
-}
-
 .pagination-wrapper {
   padding: 10px 20px;
   text-align: right;
