@@ -38,12 +38,6 @@ const fetchPostDetail = async (postId: number) => {
     </div>
     <md-preview :text="post.content"/>
     <a-divider/>
-    <!--    <div class="post-actions">-->
-    <!--      <a-space>-->
-    <!--        <svg-icon name="like" size="40"/>-->
-    <!--        <svg-icon name="share" size="30"/>-->
-    <!--      </a-space>-->
-    <!--    </div>-->
   </div>
 </template>
 

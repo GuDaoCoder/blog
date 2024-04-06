@@ -5,6 +5,10 @@ import TagCard from "@/components/TagCard/index.vue";
 import UserCard from "@/components/UserCard/index.vue";
 import CategoryCard from "@/components/CategoryCard/index.vue";
 import Content from "@/layout/open/components/Content/index.vue"
+
+const backTopEl = () => {
+  return document.getElementById("return-flag")
+}
 </script>
 
 <template>
@@ -14,7 +18,7 @@ import Content from "@/layout/open/components/Content/index.vue"
       <NavBar/>
     </div>
     <a-layout>
-      <a-layout class="layout-content">
+      <a-layout id="return-flag" class="layout-content">
         <a-layout-content class="content-wrapper">
           <div class="card-wrapper">
             <a-affix :offsetTop="80">
@@ -33,6 +37,10 @@ import Content from "@/layout/open/components/Content/index.vue"
       <Footer/>
     </a-layout>
   </a-layout>
+
+  <a-back-top style="bottom: 70px;right: 40px">
+    <svg-icon :size="60" class="back-top-button pointer" name="back-top"/>
+  </a-back-top>
 </template>
 
 <style lang="scss" scoped>
@@ -60,11 +68,12 @@ import Content from "@/layout/open/components/Content/index.vue"
 
 .content-wrapper {
   padding: 20px 200px;
-  display: flex;
 }
 
 .card-wrapper {
   width: 250px;
+  float: left;
+  margin-right: 20px;
 }
 
 .card-items > div:not(:first-child) {
@@ -72,8 +81,15 @@ import Content from "@/layout/open/components/Content/index.vue"
 }
 
 .main-wrapper {
-  flex: 1;
-  margin-left: 20px;
+  overflow: hidden;
   background-color: #FFFFFF;
+}
+
+.back-top-button {
+  transition: 0.3s;
+
+  &:hover {
+    transform: scale(1.3);
+  }
 }
 </style>
