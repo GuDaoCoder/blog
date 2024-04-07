@@ -5,10 +5,15 @@ import TagCard from "@/components/TagCard/index.vue";
 import UserCard from "@/components/UserCard/index.vue";
 import CategoryCard from "@/components/CategoryCard/index.vue";
 import Content from "@/layout/open/components/Content/index.vue"
+import AnchorCard from "@/components/AnchorCard/index.vue"
+import {computed} from "vue";
+import {useRoute} from "vue-router";
 
-const backTopEl = () => {
-  return document.getElementById("return-flag")
-}
+const route = useRoute();
+const showAnchorCard = computed(() => {
+  return route.name === "post"
+})
+
 </script>
 
 <template>
@@ -24,6 +29,9 @@ const backTopEl = () => {
             <a-affix :offsetTop="80">
               <div class="card-items">
                 <user-card/>
+                <transition name="slide-up">
+                  <anchor-card v-if="showAnchorCard"/>
+                </transition>
                 <category-card/>
                 <tag-card/>
               </div>
@@ -90,6 +98,27 @@ const backTopEl = () => {
 
   &:hover {
     transform: scale(1.3);
+  }
+}
+
+.slide-up-enter-active, .slide-up-leave-active {
+  transition: transform 0.5s ease;
+}
+
+.slide-up-enter, .slide-up-leave-to {
+  transform: translateY(100%);
+}
+
+.slide-up-enter-active {
+  animation: slideUp 0.5s ease forwards;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
   }
 }
 </style>
