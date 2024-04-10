@@ -15,9 +15,7 @@ onMounted(() => {
 
 <template>
   <a-card :bordered="false" hoverable title="文章分类">
-    <a-tree :data="categoryTreeData " :expanded-keys="categoryTreeData.map((item) => item.categoryId)"
-            :field-names="{key:'categoryId', title:'categoryName' }"
-            show-line/>
+    <a-tree :data="categoryTreeData " :field-names="{key:'categoryId', title:'categoryName' }" show-line/>
   </a-card>
 </template>
 

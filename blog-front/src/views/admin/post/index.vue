@@ -65,21 +65,21 @@
               </div>
             </template>
             <template #status="{record}">
-              {{ $dict(PostStatus, record.status) }}
+              {{ dictLabel(PostStatus, record.status) }}
             </template>
             <template #top="{record}">
-              {{ $dict(Whether, record.top) }}
+              {{ dictLabel(Whether, record.top) }}
             </template>
             <template #enableComment="{record}">
-              {{ $dict(Whether, record.enableComment) }}
+              {{ dictLabel(Whether, record.enableComment) }}
             </template>
             <template #publishTime="{record}">{{ canPublish(record) ? "" : record.publishTime }}</template>
             <template #removeTime="{record}">{{ canRemove(record) ? "" : record.removeTime }}</template>
             <template #operations="{ record }">
-              <a-link @click="handlePreview(record)">预览</a-link>
+              <!--              <a-link @click="handlePreview(record)">预览</a-link>-->
+              <a-link @click="handleSetCoverPicture(record)">设置封面</a-link>
               <a-link v-if="canPublish(record)" @click="handlePublishPost(record)">发布</a-link>
               <a-link v-if="canRemove(record)" @click="handleRemovePost(record)">下架</a-link>
-              <a-link @click="handleSetCoverPicture(record)">设置封面</a-link>
             </template>
           </a-table>
         </template>
@@ -109,6 +109,7 @@ import {PostStatus, Whether} from "@/enums";
 import type {TableColumnData} from "@arco-design/web-vue";
 import {Message} from '@arco-design/web-vue';
 import {publishPost, removePost, searchAdminPosts, syncPost} from "@/api/admin/post";
+import {dictLabel} from "@/utils/dict"
 
 
 const initSearchForm = (): AdminSearchPostForm => {

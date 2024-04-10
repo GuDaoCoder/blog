@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import {useRouter} from "vue-router";
+import logo from "@/assets/logo.png"
 
 const router = useRouter();
 const toHome = () => {
@@ -10,16 +11,14 @@ const toHome = () => {
 <template>
   <div class="navbar">
     <div class="left-side">
-      <img alt="logo"
-           src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/dfdba5317c0c20ce20e64fac803d52bc.svg~tplv-49unhts6dw-image.image"
-           @click="toHome"
+      <a-image :preview="false" :src="logo" class="pointer" height="40px" width="150px" @click="toHome"
       />
     </div>
 
     <div class="right-side">
-      <a-space>
-        <a-input placeholder="请输入内容"/>
-      </a-space>
+      <!--      <a-space>-->
+      <!--        <a-input placeholder="请输入内容"/>-->
+      <!--      </a-space>-->
     </div>
   </div>
 </template>

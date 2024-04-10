@@ -33,9 +33,4 @@ public class TagEntity extends BaseEntity {
      */
     private String color;
 
-    /**
-     * 是否启用
-     */
-    private Boolean enable;
-
 }

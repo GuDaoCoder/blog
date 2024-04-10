@@ -22,6 +22,9 @@
           <a-table :columns="tableColumns" :data="categoryTreeData" :loading="tableLoading" :pagination="false"
                    column-resizable
                    hide-expand-button-on-empty row-key="categoryId" stripe>
+            <template #postCount="{record}">
+              {{ record.children && record.children.length > 0 ? "-" : record.postCount }}
+            </template>
           </a-table>
         </template>
       </search-result>
@@ -74,7 +77,8 @@ const tableColumns = ref<TableColumnData[]>([
   },
   {
     title: "文章数量",
-    dataIndex: "postCount"
+    dataIndex: "postCount",
+    slotName: "postCount"
   },
   {
     title: "更新时间",

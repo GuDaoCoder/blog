@@ -71,4 +71,8 @@ public class AuthManagerServiceImpl implements AuthManagerService {
         return StringUtils.equals(password,
             SaSecureUtil.rsaDecryptByPrivate(securityProperties.getRsa().getPrivateKey(), encodePassword));
     }
+
+    public static void main(String[] args) {
+        System.out.println(SaSecureUtil.rsaEncryptByPublic("MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC/w2Y49BBaaCTSHnTxIdI0MGrhwTxFb2uNiHDjHw/w4bhXEy1X8WcPoqqNwqlHWZvrImvSprh3OtUS4GcWT/6UKQD/VA1iHhZ3m1xQ/CERpivZhOXRznWKGdpufCoYdjFZO7bqm4tGzyPkNGjblIQTRmWrG6lEwmE74EGVl/9q+QIDAQAB", "136415Zzp++"));
+    }
 }

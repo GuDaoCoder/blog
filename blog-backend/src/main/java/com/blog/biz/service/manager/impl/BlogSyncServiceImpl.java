@@ -108,8 +108,7 @@ public class BlogSyncServiceImpl implements BlogSyncService {
                     categoryEntity.setParentCategoryId(Objects.isNull(parentCategoryEntity) ? 0L : parentCategoryEntity.getCategoryId())
                             .setCategoryName(category.getCategoryName())
                             .setFullId(Objects.isNull(parentCategoryEntity) ? "0" : (parentCategoryEntity.getFullId() + parentCategoryEntity.getCategoryId()))
-                            .setOrderNo(category.getOrderNo()).setLevel(category.getLevel())
-                            .setEnabled(Boolean.TRUE);
+                            .setOrderNo(category.getOrderNo()).setLevel(category.getLevel());
                     categoryCrudService.save(categoryEntity);
                     allCategoryEntities.add(categoryEntity);
                 }
@@ -181,8 +180,7 @@ public class BlogSyncServiceImpl implements BlogSyncService {
                     .map(tagName -> {
                         TagEntity tagEntity = new TagEntity();
                         tagEntity.setTagName(tagName)
-                                .setColor(ColorUtil.generateHexColor())
-                                .setEnable(Boolean.TRUE);
+                                .setColor(ColorUtil.generateHexColor());
                         return tagEntity;
                     }).collect(Collectors.toList());
             tagCrudService.saveBatch(toCreateTagEntities);

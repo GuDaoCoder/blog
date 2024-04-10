@@ -15,7 +15,6 @@ import globalComponent from '@/components'
 // axios
 import "@/request"
 // 全局通用方法
-import utils from "@/utils"
 import VMdPreview from '@kangc/v-md-editor/lib/preview';
 import '@kangc/v-md-editor/lib/style/preview.css';
 import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js';
@@ -40,5 +39,4 @@ createApp(App)
     .use(ArcoVue)
     .use(ArcoVueIcon)
     .use(globalComponent)
-    .use(utils)
     .mount('#app')

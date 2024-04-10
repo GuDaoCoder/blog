@@ -1,18 +1,8 @@
 <template>
   <div class="navbar">
     <div class="left-side">
-      <a-space>
-        <img
-            alt="logo"
-            src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/dfdba5317c0c20ce20e64fac803d52bc.svg~tplv-49unhts6dw-image.image"
-        />
-        <a-typography-title
-            :style="{ margin: 0, fontSize: '18px' }"
-            :heading="5"
-        >
-          博客管理系统
-        </a-typography-title>
-      </a-space>
+      <a-image :preview="false" :src="logo" class="pointer" height="40px" width="150px" @click="toHome"
+      />
     </div>
     <div class="right-side">
       <a-space>
@@ -32,7 +22,7 @@
               :size="32"
               :style="{cursor: 'pointer' }"
           >
-            <img alt="avatar" :src="avatar"/>
+            <img :src="avatar" alt="avatar"/>
           </a-avatar>
           <template #content>
             <a-doption>
@@ -57,11 +47,12 @@
     </div>
   </div>
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 import {ref} from "vue";
 import {useRouter} from "vue-router";
 import {logout} from "@/api/admin/login";
 import {clearToken} from "@/utils/auth";
+import logo from "@/assets/logo.png"
 
 const router = useRouter()
 
@@ -73,8 +64,12 @@ const handleLogout = () => {
     router.push({name: "login"})
   })
 }
+
+const toHome = () => {
+  router.push({name: "admin-home"})
+}
 </script>
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .navbar {
   display: flex;
   justify-content: space-between;

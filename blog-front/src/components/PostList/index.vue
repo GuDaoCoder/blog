@@ -67,7 +67,7 @@ const toPost = (post: BlogPostResponse) => {
 }
 
 .text-animation {
-  background: linear-gradient(to right, #60B4FE, #60B4FE) no-repeat right bottom;
+  background: linear-gradient(to right, #2D5CF6, #2D5CF6) no-repeat right bottom;
   background-size: 0 2px;
   transition: background-size 0.5s;
 
@@ -96,7 +96,7 @@ const toPost = (post: BlogPostResponse) => {
 
 .action {
   &:hover {
-    color: #60B4FE;
+    color: #2D5CF6;
   }
 }
 

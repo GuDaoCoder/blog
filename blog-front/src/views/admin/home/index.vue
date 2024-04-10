@@ -1,11 +1,11 @@
-<template>
-  <Container>
-    <span>主页</span>
-  </Container>
-</template>
+<script lang="ts" setup>
 
-<script setup>
 </script>
 
-<style scoped>
+<template>
+  <p>带建设。。。</p>
+</template>
+
+<style lang="scss" scoped>
+
 </style>
