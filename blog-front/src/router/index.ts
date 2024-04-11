@@ -1,7 +1,7 @@
 import {createRouter, createWebHistory} from "vue-router";
 import {adminRoutes} from './routes'
 import {getToken} from "@/utils/auth";
-import {startProgress, closeProgress} from '@/plugin/nprogress'
+import {closeProgress, startProgress} from '@/plugin/nprogress'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,16 +9,20 @@ const router = createRouter({
         ...adminRoutes
     ]
 });
-
+const whiteUrls = ['/', '/login', '/home', '/post']
 /**
  * 导航守卫
  */
 router.beforeEach((to, from, next) => {
     startProgress()
-    if (to.name !== "login" && !getToken()) {
-        next({name: 'login'})
-    } else {
+    if (whiteUrls.indexOf(to.path) != -1) {
         next()
+    } else {
+        if (getToken()) {
+            next()
+        } else {
+            next({name: 'login'})
+        }
     }
 })
 
