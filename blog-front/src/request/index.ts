@@ -1,4 +1,4 @@
-import type {AxiosRequestConfig, AxiosResponse} from 'axios';
+import type {AxiosResponse, InternalAxiosRequestConfig} from 'axios';
 import axios from 'axios';
 import {Notification} from '@arco-design/web-vue';
 import {getToken} from "@/utils/auth";
@@ -9,12 +9,9 @@ axios.defaults.timeout = 30000
 
 // 请求拦截器
 axios.interceptors.request.use(
-    (config: AxiosRequestConfig) => {
+    (config: InternalAxiosRequestConfig) => {
         const token = getToken();
         if (token) {
-            if (!config.headers) {
-                config.headers = {};
-            }
             config.headers['Authorization'] = token;
         }
         return config;
@@ -27,7 +24,7 @@ axios.interceptors.request.use(
 
 // 响应拦截器
 axios.interceptors.response.use(
-    (response: AxiosResponse<BaseResponse>) => {
+    (response: AxiosResponse) => {
         return response.data;
     },
     (error: any) => {

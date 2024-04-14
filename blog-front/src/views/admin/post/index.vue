@@ -65,13 +65,13 @@
               </div>
             </template>
             <template #status="{record}">
-              {{ dictLabel(PostStatus, record.status) }}
+              {{ useDict(PostStatus, record.status) }}
             </template>
             <template #top="{record}">
-              {{ dictLabel(Whether, record.top) }}
+              {{ useDict(Whether, record.top) }}
             </template>
             <template #enableComment="{record}">
-              {{ dictLabel(Whether, record.enableComment) }}
+              {{ useDict(Whether, record.enableComment) }}
             </template>
             <template #publishTime="{record}">{{ canPublish(record) ? "" : record.publishTime }}</template>
             <template #removeTime="{record}">{{ canRemove(record) ? "" : record.removeTime }}</template>
@@ -109,7 +109,7 @@ import {PostStatus, Whether} from "@/enums";
 import type {TableColumnData} from "@arco-design/web-vue";
 import {Message} from '@arco-design/web-vue';
 import {publishPost, removePost, searchAdminPosts, syncPost} from "@/api/admin/post";
-import {dictLabel} from "@/utils/dict"
+import {useDict} from "@/utils/dict"
 
 
 const initSearchForm = (): AdminSearchPostForm => {

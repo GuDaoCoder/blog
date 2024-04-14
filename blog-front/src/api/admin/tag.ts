@@ -1,17 +1,8 @@
+import type {AxiosResponse} from "axios";
 import axios from "axios";
 
-export function searchTag(params: SearchTagRequest) {
-    return axios.get<PageResponse<TagResponse>>("/admin/tag", {params})
-}
+const prefix = "/admin/tag";
 
-export function createTag(data: CreateTagRequest) {
-    return axios.post<TagResponse>("/admin/tag", data)
-}
-
-export function updateTag(tagId: number, data: UpdateTagRequest) {
-    return axios.patch<TagResponse>(`/admin/tag/${tagId}`, data)
-}
-
-export function deleteTag(tagId: number) {
-    return axios.delete(`/admin/tag/${tagId}`)
+export function searchTag(params: SearchTagRequest): Promise<AxiosResponse<PageResponse<TagResponse>>> {
+    return axios.get<PageResponse<TagResponse>>(prefix, {params})
 }

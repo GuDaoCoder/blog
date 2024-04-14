@@ -11,7 +11,9 @@ const post = ref<PostDetailResponse>({})
 
 onMounted(() => {
   let postId = route.query.postId;
-  fetchPostDetail(postId);
+  if (postId) {
+    fetchPostDetail(postId);
+  }
 })
 const fetchPostDetail = async (postId: number) => {
   const {data} = await getPostDetail(postId)

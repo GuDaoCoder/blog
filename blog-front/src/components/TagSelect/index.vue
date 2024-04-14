@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts" setup>
-import {createTag, searchTag} from "@/api/admin/tag";
+import {searchTag} from "@/api/admin/tag";
 import {onMounted, ref} from "vue";
 import {useVModel} from "@/utils/useVModel";
 
@@ -40,25 +40,7 @@ const fetchOptions = async () => {
 }
 
 const initValues = ref<Number[]>([])
-
 const model = useVModel(props, "modelValue", emits)
-
-const handleChange = (checkedValues: string[]) => {
-  const addValues = checkedValues.filter(element => !initValues.value.includes(element));
-  if (addValues && addValues.length > 0) {
-    handleCreateTag(addValues[0]);
-    fetchOptions();
-  }
-}
-
-const handleCreateTag = async (tagName: string) => {
-  loading.value = true;
-  try {
-    await createTag({tagName: tagName, enable: true})
-  } finally {
-    loading.value = false;
-  }
-}
 </script>
 
 <style scoped>

@@ -12,7 +12,7 @@ interface BlogPostResponse {
     categoryId?: number,
     categoryName?: string,
     publishTime?: string,
-    updateTime?: string,
+    updateTime: string,
     enableComment?: boolean,
     tags?: BlogPostTagItem[]
 }
