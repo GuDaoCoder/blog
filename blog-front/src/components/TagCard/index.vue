@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 
 import {onMounted, ref} from "vue";
-import {blogSearchTag} from "@/api/blog/tag";
+import {blogSearchTag} from "@/api/portal/tag";
 
 onMounted(() => {
   fetchAllTags()

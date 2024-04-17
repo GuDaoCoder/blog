@@ -2,7 +2,7 @@
 import PostCarousel from "@/components/PostCarousel/index.vue"
 import PostList from "@/components/PostList/index.vue"
 import Pagination from "@/components/Pagination/index.vue"
-import {searchBlogPosts} from "@/api/blog/post";
+import {searchBlogPosts} from "@/api/portal/post";
 import {onMounted, ref} from "vue";
 
 onMounted(() => {

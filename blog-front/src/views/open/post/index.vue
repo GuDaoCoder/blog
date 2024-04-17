@@ -2,7 +2,7 @@
 import MdPreview from "@/components/MdPreview/index.vue"
 import {onMounted, ref} from "vue";
 import {formatStandStr} from "@/utils/date"
-import {getPostDetail} from "@/api/blog/post";
+import {getPostDetail} from "@/api/portal/post";
 import {useRoute} from "vue-router";
 
 const route = useRoute()

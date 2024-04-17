@@ -2,12 +2,12 @@ import {ADMIN_LAYOUT} from './layout'
 import type {RouteRaw} from "@/router/routes/type";
 
 const BLOG_MANGE: RouteRaw = {
-    path: '/admin/blog',
+    path: '/admin/portal',
     name: 'admin-blog',
     component: ADMIN_LAYOUT,
     redirect: '/admin/category',
     meta: {
-        icon: 'blog',
+        icon: 'portal',
         title: '博客管理'
     },
     children: [

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {onMounted, ref} from "vue";
-import {searchBlogPosts} from "@/api/blog/post";
+import {searchBlogPosts} from "@/api/portal/post";
 import {useRouter} from "vue-router";
 
 const posts = ref<BlogPostResponse[]>([])

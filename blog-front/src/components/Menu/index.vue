@@ -26,9 +26,9 @@ const menuData = reactive<Array<Menu>>([{
   title: "主页",
   icon: "home"
 }, {
-  code: "admin-blog-manage",
+  code: "admin-portal-manage",
   title: "博客管理",
-  icon: "blog",
+  icon: "portal",
   children: [
     {
       code: "admin-category",

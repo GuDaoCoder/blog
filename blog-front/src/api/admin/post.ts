@@ -3,7 +3,7 @@ import axios from "axios";
 const prefix = "/admin/posts";
 
 export function searchAdminPosts(params: AdminSearchPostRequest) {
-    return axios.get<PageResponse<AdminPostResponse>>(`${prefix}`, {params})
+    return axios.get<PageResponse<AdminPostResponse>>(prefix, {params})
 }
 
 export function publishPost(postId: number) {
