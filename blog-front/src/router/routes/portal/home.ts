@@ -1,5 +1,5 @@
 import type {RouteRaw} from "@/router/routes/type";
-import {OPEN_LAYOUT} from "@/router/routes/open/layout";
+import {OPEN_LAYOUT} from "@/router/routes/portal/layout";
 
 const HOME: RouteRaw = {
     path: '/',
@@ -10,11 +10,11 @@ const HOME: RouteRaw = {
         {
             name: 'home',
             path: "/home",
-            component: () => import(/* webpackChunkName: "home" */ "@/views/open/home/index.vue"),
+            component: () => import(/* webpackChunkName: "home" */ "@/views/portal/home/index.vue"),
         }, {
             name: 'post',
             path: "/post",
-            component: () => import(/* webpackChunkName: "home" */ "@/views/open/post/index.vue"),
+            component: () => import(/* webpackChunkName: "home" */ "@/views/portal/post/index.vue"),
         }]
 }
 

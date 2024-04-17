@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import NavBar from "@/layout/open/components/NavBar/index.vue";
-import Footer from "@/layout/open/components/Footer/index.vue"
+import NavBar from "@/layout/portal/components/NavBar/index.vue";
+import Footer from "@/layout/portal/components/Footer/index.vue"
 import TagCard from "@/components/TagCard/index.vue";
 import UserCard from "@/components/UserCard/index.vue";
 import CategoryCard from "@/components/CategoryCard/index.vue";
-import Content from "@/layout/open/components/Content/index.vue"
+import Content from "@/layout/portal/components/Content/index.vue"
 import AnchorCard from "@/components/AnchorCard/index.vue"
 import {computed} from "vue";
 import {useRoute} from "vue-router";

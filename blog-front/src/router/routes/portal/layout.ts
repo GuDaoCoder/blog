@@ -1,0 +1,1 @@
+export const OPEN_LAYOUT = () => import("@/layout/portal/index.vue")
