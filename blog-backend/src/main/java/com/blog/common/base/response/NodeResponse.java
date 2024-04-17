@@ -1,9 +1,9 @@
 package com.blog.common.base.response;
 
-import java.util.List;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @author zouzhangpeng

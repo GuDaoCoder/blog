@@ -2,7 +2,10 @@ package com.blog.common.util;
 
 import com.blog.common.markdown.HeadingVisitor;
 import org.apache.commons.lang3.StringUtils;
-import org.commonmark.node.*;
+import org.commonmark.node.Heading;
+import org.commonmark.node.Node;
+import org.commonmark.node.Paragraph;
+import org.commonmark.node.Text;
 import org.commonmark.parser.Parser;
 
 import java.util.concurrent.atomic.AtomicReference;

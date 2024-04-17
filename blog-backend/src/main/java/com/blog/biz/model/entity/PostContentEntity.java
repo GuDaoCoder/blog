@@ -2,7 +2,6 @@ package com.blog.biz.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.blog.common.base.entity.BaseEntity;
-
 import lombok.Data;
 import lombok.experimental.Accessors;
 

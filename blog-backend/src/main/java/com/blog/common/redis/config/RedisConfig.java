@@ -1,12 +1,6 @@
 package com.blog.common.redis.config;
 
-import org.redisson.client.codec.StringCodec;
-import org.redisson.codec.CompositeCodec;
-import org.redisson.codec.TypedJsonJacksonCodec;
-import org.redisson.spring.starter.RedissonAutoConfigurationCustomizer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
+import cn.hutool.core.util.ObjectUtil;
 import com.blog.common.redis.handler.KeyPrefixHandler;
 import com.blog.common.redis.property.RedissonProperty;
 import com.blog.common.util.JacksonUtil;
@@ -14,10 +8,14 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
-
-import cn.hutool.core.util.ObjectUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.client.codec.StringCodec;
+import org.redisson.codec.CompositeCodec;
+import org.redisson.codec.TypedJsonJacksonCodec;
+import org.redisson.spring.starter.RedissonAutoConfigurationCustomizer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author zouzhangpeng

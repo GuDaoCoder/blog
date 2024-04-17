@@ -1,20 +1,25 @@
 package com.blog.biz.model.request;
 
-import java.time.LocalDateTime;
-
 import com.blog.biz.enums.PostSource;
 import com.blog.biz.enums.PostStatus;
 import com.blog.common.base.request.PageRequest;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import java.io.Serial;
+import java.time.LocalDateTime;
 
 /**
  * @author zouzhangpeng
  * @desc
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class SearchPostRequest extends PageRequest {
+public class PostSearchRequest extends PageRequest {
+
+    @Serial
+    private static final long serialVersionUID = -7135763634790416208L;
 
     @Schema(description = "标题")
     private String title;

@@ -1,15 +1,12 @@
 package com.blog.biz.convert;
 
+import com.blog.biz.model.entity.CategoryEntity;
 import com.blog.biz.model.request.CreateCategoryRequest;
 import com.blog.biz.model.request.UpdateCategoryRequest;
 import com.blog.biz.model.response.CategoryResponse;
 import com.blog.biz.model.response.CategoryTreeResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-
-import com.blog.biz.model.entity.CategoryEntity;
-
-import java.util.List;
 
 /**
  * @author zouzhangpeng

@@ -1,15 +1,13 @@
 package com.blog.common.initialize;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Optional;
-
-import javax.annotation.PostConstruct;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import lombok.extern.slf4j.Slf4j;
+import javax.annotation.PostConstruct;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Optional;
 
 /**
  * @author zouzhangpeng

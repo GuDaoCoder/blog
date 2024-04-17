@@ -1,6 +1,6 @@
 package com.blog.biz.controller.admin;
 
-import com.blog.biz.model.request.SearchPostRequest;
+import com.blog.biz.model.request.PostSearchRequest;
 import com.blog.biz.model.request.UpdateCoverPictureRequest;
 import com.blog.biz.model.response.PostResponse;
 import com.blog.biz.service.manager.BlogSyncService;
@@ -20,12 +20,11 @@ import org.springframework.web.bind.annotation.*;
  * @author zouzhangpeng
  * @desc
  */
-@Slf4j
-@RequiredArgsConstructor
 @Tag(name = "文章管理")
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/admin/posts")
-public class PostController {
+public class PostAdminController {
 
     private final PostManagerService postManagerService;
 
@@ -33,8 +32,8 @@ public class PostController {
 
     @Operation(summary = "查询文章列表")
     @GetMapping
-    public Result<PageResponse<PostResponse>> adminSearch(@ParameterObject @Validated SearchPostRequest request) {
-        return Result.success(postManagerService.adminSearch(request));
+    public Result<PageResponse<PostResponse>> search(@ParameterObject @Validated PostSearchRequest request) {
+        return Result.success(postManagerService.search(request));
     }
 
     @Operation(summary = "查询文章内容")

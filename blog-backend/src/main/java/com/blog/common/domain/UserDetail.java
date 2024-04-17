@@ -1,7 +1,6 @@
 package com.blog.common.domain;
 
 import com.blog.biz.enums.Gender;
-
 import lombok.Data;
 
 /**

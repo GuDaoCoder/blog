@@ -1,7 +1,7 @@
 package com.blog.biz.service.manager;
 
-import com.blog.biz.model.request.SearchPostRequest;
-import com.blog.biz.model.request.blog.SearchPostBlogRequest;
+import com.blog.biz.model.request.PostSearchRequest;
+import com.blog.biz.model.request.PostPortalSearchRequest;
 import com.blog.biz.model.response.PostDetailResponse;
 import com.blog.biz.model.response.PostResponse;
 import com.blog.common.base.response.PageResponse;
@@ -18,7 +18,7 @@ public interface PostManagerService {
      * @param request PagePostRequest
      * @return PageResponse<PagePostResponse>
      */
-    PageResponse<PostResponse> adminSearch(SearchPostRequest request);
+    PageResponse<PostResponse> search(PostSearchRequest request);
 
     /**
      * 博客页面查询文章列表
@@ -26,7 +26,7 @@ public interface PostManagerService {
      * @param request
      * @return PageResponse<PostResponse>
      **/
-    PageResponse<PostResponse> blogSearch(SearchPostBlogRequest request);
+    PageResponse<PostResponse> blogSearch(PostPortalSearchRequest request);
 
     /**
      * 查询文章详情

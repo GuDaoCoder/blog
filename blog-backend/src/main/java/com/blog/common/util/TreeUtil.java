@@ -1,14 +1,13 @@
 package com.blog.common.util;
 
+import com.blog.common.base.response.NodeResponse;
+import com.blog.common.tree.TreeNode;
+import org.apache.commons.collections4.CollectionUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
-
-import com.blog.common.tree.TreeNode;
-import org.apache.commons.collections4.CollectionUtils;
-
-import com.blog.common.base.response.NodeResponse;
 
 /**
  * @author zouzhangpeng

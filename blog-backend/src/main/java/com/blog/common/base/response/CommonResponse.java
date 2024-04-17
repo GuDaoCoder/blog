@@ -1,9 +1,9 @@
 package com.blog.common.base.response;
 
+import lombok.Data;
+
 import java.io.Serial;
 import java.io.Serializable;
-
-import lombok.Data;
 
 /**
  * @author zouzhangpeng

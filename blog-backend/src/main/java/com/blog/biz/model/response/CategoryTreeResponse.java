@@ -1,14 +1,11 @@
 package com.blog.biz.model.response;
 
-import com.blog.common.base.response.CommonResponse;
 import com.blog.common.tree.TreeNode;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**

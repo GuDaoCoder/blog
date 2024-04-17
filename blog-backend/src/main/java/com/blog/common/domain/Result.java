@@ -1,7 +1,6 @@
 package com.blog.common.domain;
 
 import com.blog.common.util.DateTimeUtil;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

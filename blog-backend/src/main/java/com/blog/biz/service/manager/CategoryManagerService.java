@@ -1,12 +1,12 @@
 package com.blog.biz.service.manager;
 
-import java.util.List;
-
-import com.blog.biz.model.request.SearchCategoryTreeRequest;
 import com.blog.biz.model.request.CreateCategoryRequest;
+import com.blog.biz.model.request.CategoryAdminTreeRequest;
 import com.blog.biz.model.request.UpdateCategoryRequest;
-import com.blog.biz.model.response.CategoryTreeResponse;
 import com.blog.biz.model.response.CategoryResponse;
+import com.blog.biz.model.response.CategoryTreeResponse;
+
+import java.util.List;
 
 /**
  * @author zouzhangpeng
@@ -20,7 +20,7 @@ public interface CategoryManagerService {
      * @param request
      * @return List<TreeCategoryResponse>
      **/
-    List<CategoryTreeResponse> searchTree(SearchCategoryTreeRequest request);
+    List<CategoryTreeResponse> tree(CategoryAdminTreeRequest request);
 
     /**
      * 新增分类

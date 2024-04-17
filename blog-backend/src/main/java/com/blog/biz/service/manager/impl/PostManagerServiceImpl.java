@@ -7,8 +7,8 @@ import com.blog.biz.convert.TagConverter;
 import com.blog.biz.enums.PostStatus;
 import com.blog.biz.model.context.SearchPostContext;
 import com.blog.biz.model.entity.*;
-import com.blog.biz.model.request.SearchPostRequest;
-import com.blog.biz.model.request.blog.SearchPostBlogRequest;
+import com.blog.biz.model.request.PostSearchRequest;
+import com.blog.biz.model.request.PostPortalSearchRequest;
 import com.blog.biz.model.response.PostDetailResponse;
 import com.blog.biz.model.response.PostResponse;
 import com.blog.biz.model.response.TagResponse;
@@ -48,7 +48,7 @@ public class PostManagerServiceImpl implements PostManagerService {
     private final TagCrudService tagCrudService;
 
     @Override
-    public PageResponse<PostResponse> adminSearch(SearchPostRequest request) {
+    public PageResponse<PostResponse> search(PostSearchRequest request) {
         SearchPostContext searchPostContext = PostConverter.INSTANCE.toPageContext(request);
         searchPostContext.setPageable(PageUtil.pageable(request));
         IPage<PostEntity> page = postCrudService.page(searchPostContext);
@@ -56,7 +56,7 @@ public class PostManagerServiceImpl implements PostManagerService {
     }
 
     @Override
-    public PageResponse<PostResponse> blogSearch(SearchPostBlogRequest request) {
+    public PageResponse<PostResponse> blogSearch(PostPortalSearchRequest request) {
         SearchPostContext searchPostContext = PostConverter.INSTANCE.toPageContext(request);
         searchPostContext.setStatus(PostStatus.PUBLISHED);
         searchPostContext.setPageable(PageUtil.pageable(request));

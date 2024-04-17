@@ -5,8 +5,8 @@ import com.blog.biz.constant.BizConstant;
 import com.blog.biz.convert.CategoryConverter;
 import com.blog.biz.model.entity.CategoryEntity;
 import com.blog.biz.model.entity.custom.CategoryPostCountEntity;
-import com.blog.biz.model.request.SearchCategoryTreeRequest;
 import com.blog.biz.model.request.CreateCategoryRequest;
+import com.blog.biz.model.request.CategoryAdminTreeRequest;
 import com.blog.biz.model.request.UpdateCategoryRequest;
 import com.blog.biz.model.response.CategoryResponse;
 import com.blog.biz.model.response.CategoryTreeResponse;
@@ -15,7 +15,6 @@ import com.blog.biz.service.crud.PostCrudService;
 import com.blog.biz.service.manager.CategoryManagerService;
 import com.blog.common.constant.SymbolConstants;
 import com.blog.common.exception.BusinessException;
-import com.blog.common.util.StreamUtil;
 import com.blog.common.util.TreeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +40,7 @@ public class CategoryManagerServiceImpl implements CategoryManagerService {
     private final PostCrudService postCrudService;
 
     @Override
-    public List<CategoryTreeResponse> searchTree(SearchCategoryTreeRequest request) {
+    public List<CategoryTreeResponse> tree(CategoryAdminTreeRequest request) {
         List<CategoryEntity> categoryEntities = categoryCrudService.findAllByCondition(request.getCategoryName());
         if (CollectionUtils.isNotEmpty(categoryEntities)) {
             Set<Long> categoryIds = new HashSet<>();

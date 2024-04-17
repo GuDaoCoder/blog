@@ -1,10 +1,7 @@
 package com.blog.common.exception;
 
-import java.util.Objects;
-
-import org.slf4j.helpers.MessageFormatter;
-
 import lombok.Getter;
+import org.slf4j.helpers.MessageFormatter;
 
 /**
  * @author zouzhangpeng

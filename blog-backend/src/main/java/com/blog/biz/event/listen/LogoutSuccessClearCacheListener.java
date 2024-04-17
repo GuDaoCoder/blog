@@ -1,14 +1,12 @@
 package com.blog.biz.event.listen;
 
-import org.springframework.context.ApplicationListener;
-import org.springframework.stereotype.Component;
-
 import com.blog.biz.constant.RedisKeyConstant;
 import com.blog.biz.event.model.LogoutSuccessEvent;
 import com.blog.common.redis.util.RedisUtil;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationListener;
+import org.springframework.stereotype.Component;
 
 /**
  * @author zouzhangpeng

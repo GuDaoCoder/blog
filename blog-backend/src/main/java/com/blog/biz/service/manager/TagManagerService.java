@@ -1,10 +1,7 @@
 package com.blog.biz.service.manager;
 
-import com.blog.biz.model.request.CreateTagRequest;
-import com.blog.biz.model.request.SearchTagRequest;
-import com.blog.biz.model.request.UpdateTagRequest;
+import com.blog.biz.model.request.TagSearchRequest;
 import com.blog.biz.model.response.TagDetailResponse;
-import com.blog.biz.model.response.TagResponse;
 import com.blog.common.base.response.PageResponse;
 
 /**
@@ -19,5 +16,5 @@ public interface TagManagerService {
      * @param request
      * @return PageResponse<TagDetailResponse>
      **/
-    PageResponse<TagDetailResponse> search(SearchTagRequest request);
+    PageResponse<TagDetailResponse> search(TagSearchRequest request);
 }

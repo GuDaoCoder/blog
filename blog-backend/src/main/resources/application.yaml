@@ -144,7 +144,7 @@ springdoc:
       packages-to-scan: com.blog.biz.controller.admin
     - group: '博客页面'
       paths-to-match: '/**'
-      packages-to-scan: com.blog.biz.controller.blog
+      packages-to-scan: com.blog.biz.controller.portal
   default-flat-param-object: false
 # knife4j的增强配置，不需要增强可以不配
 knife4j:
@@ -185,14 +185,13 @@ security:
     public-key: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC/w2Y49BBaaCTSHnTxIdI0MGrhwTxFb2uNiHDjHw/w4bhXEy1X8WcPoqqNwqlHWZvrImvSprh3OtUS4GcWT/6UKQD/VA1iHhZ3m1xQ/CERpivZhOXRznWKGdpufCoYdjFZO7bqm4tGzyPkNGjblIQTRmWrG6lEwmE74EGVl/9q+QIDAQAB
   # 白名单
   white-urls:
-    - /blog/**
+    - /portal/**
     - /login
     - /swagger-ui.html
     - /doc.html
     - /v3/api-docs/**
     - /webjars/**
     - /favicon.ico
-    - /admin/blog/sync
 
 oss:
   access-key:

@@ -1,6 +1,6 @@
-package com.blog.biz.controller.blog;
+package com.blog.biz.controller.portal;
 
-import com.blog.biz.model.request.SearchCategoryTreeRequest;
+import com.blog.biz.model.request.CategoryAdminTreeRequest;
 import com.blog.biz.model.response.CategoryTreeResponse;
 import com.blog.biz.service.manager.CategoryManagerService;
 import com.blog.common.domain.Result;
@@ -19,14 +19,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "分类管理")
 @RestController
-@RequestMapping("/blog/categories")
-public class CategoryBlogController {
+@RequestMapping("/portal/categories")
+public class CategoryPortalController {
 
     private final CategoryManagerService categoryManagerService;
 
     @Operation(summary = "查询文章分类树")
     @GetMapping
-    public Result<List<CategoryTreeResponse>> searchTree(@ParameterObject SearchCategoryTreeRequest request) {
-        return Result.success(categoryManagerService.searchTree(request));
+    public Result<List<CategoryTreeResponse>> tree(@ParameterObject CategoryAdminTreeRequest request) {
+        return Result.success(categoryManagerService.tree(request));
     }
 }

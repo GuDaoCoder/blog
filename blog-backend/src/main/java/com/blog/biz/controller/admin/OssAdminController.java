@@ -19,11 +19,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @Tag(name = "OSS管理")
-@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/admin/oss")
-public class OssController {
+public class OssAdminController {
 
     private final OssApiService ossApiService;
 

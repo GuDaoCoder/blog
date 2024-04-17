@@ -1,17 +1,15 @@
 package com.blog.common.interceptor;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import cn.dev33.satoken.stp.StpUtil;
+import com.blog.common.base.service.UserDetailLoadService;
+import com.blog.common.context.UserContext;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import com.blog.common.base.service.UserDetailLoadService;
-import com.blog.common.context.UserContext;
-
-import cn.dev33.satoken.stp.StpUtil;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author zouzhangpeng

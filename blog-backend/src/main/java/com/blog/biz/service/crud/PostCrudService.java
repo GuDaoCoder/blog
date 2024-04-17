@@ -5,7 +5,6 @@ import com.blog.biz.model.context.SearchPostContext;
 import com.blog.biz.model.entity.PostEntity;
 import com.blog.biz.model.entity.custom.CategoryPostCountEntity;
 import com.blog.common.base.service.IBaseCrudService;
-import org.apache.ibatis.annotations.Param;
 
 import java.io.Serializable;
 import java.util.Collection;

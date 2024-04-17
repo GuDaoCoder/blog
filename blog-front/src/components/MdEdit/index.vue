@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import Vditor from 'vditor'
 import 'vditor/dist/index.css';
-import {ref, onMounted} from 'vue';
+import {onMounted, ref} from 'vue';
 import {getToken} from "@/utils/auth";
 
 var props = defineProps({

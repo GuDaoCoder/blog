@@ -1,16 +1,14 @@
 package com.blog.biz.model.request;
 
-import java.util.List;
+import com.blog.common.base.request.CommonRequest;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-
-import com.blog.common.base.request.CommonRequest;
-
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import java.util.List;
 
 /**
  * @author zouzhangpeng

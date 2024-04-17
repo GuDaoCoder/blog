@@ -1,6 +1,6 @@
-package com.blog.biz.controller.blog;
+package com.blog.biz.controller.portal;
 
-import com.blog.biz.model.request.blog.SearchPostBlogRequest;
+import com.blog.biz.model.request.PostPortalSearchRequest;
 import com.blog.biz.model.response.PostDetailResponse;
 import com.blog.biz.model.response.PostResponse;
 import com.blog.biz.service.manager.PostManagerService;
@@ -22,14 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Tag(name = "文章管理")
 @RestController
-@RequestMapping("/blog/posts")
-public class PostBlogController {
+@RequestMapping("/portal/posts")
+public class PostPortalController {
 
     private final PostManagerService postManagerService;
 
     @Operation(summary = "查询文章列表")
     @GetMapping
-    public Result<PageResponse<PostResponse>> search(@ParameterObject @Validated SearchPostBlogRequest request) {
+    public Result<PageResponse<PostResponse>> search(@ParameterObject @Validated PostPortalSearchRequest request) {
         return Result.success(postManagerService.blogSearch(request));
     }
 

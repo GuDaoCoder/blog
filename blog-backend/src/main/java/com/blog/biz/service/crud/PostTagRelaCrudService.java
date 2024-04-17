@@ -3,7 +3,6 @@ package com.blog.biz.service.crud;
 import com.blog.biz.model.entity.PostTagRelaEntity;
 import com.blog.biz.model.entity.custom.TagPostCountEntity;
 import com.blog.common.base.service.IBaseCrudService;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 

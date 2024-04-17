@@ -1,16 +1,15 @@
 package com.blog.common.util;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Objects;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Objects;
 
 /**
  * @author zouzhangpeng

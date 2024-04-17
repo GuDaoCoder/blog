@@ -1,10 +1,13 @@
 package com.blog.common.exception.handler;
 
-import java.util.Optional;
-
-import javax.servlet.http.HttpServletRequest;
-
+import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.exception.NotPermissionException;
+import cn.hutool.core.collection.CollUtil;
+import com.blog.common.domain.Result;
+import com.blog.common.exception.BusinessException;
 import com.blog.common.exception.DataNotFoundException;
+import com.blog.common.exception.InvalidCredentialsException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
@@ -14,14 +17,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.blog.common.domain.Result;
-import com.blog.common.exception.BusinessException;
-import com.blog.common.exception.InvalidCredentialsException;
-
-import cn.dev33.satoken.exception.NotLoginException;
-import cn.dev33.satoken.exception.NotPermissionException;
-import cn.hutool.core.collection.CollUtil;
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 /**
  * @author zouzhangpeng

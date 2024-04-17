@@ -1,10 +1,9 @@
 package com.blog.common.util;
 
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author zouzhangpeng

@@ -5,13 +5,12 @@ package com.blog.common.exception;
  * @desc
  */
 
+import com.blog.common.domain.Result;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.blog.common.domain.Result;
 
 /**
  * @author zouzhangpeng

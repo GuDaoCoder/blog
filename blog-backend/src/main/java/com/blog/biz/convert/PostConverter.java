@@ -2,8 +2,8 @@ package com.blog.biz.convert;
 
 import com.blog.biz.model.context.SearchPostContext;
 import com.blog.biz.model.entity.PostEntity;
-import com.blog.biz.model.request.SearchPostRequest;
-import com.blog.biz.model.request.blog.SearchPostBlogRequest;
+import com.blog.biz.model.request.PostSearchRequest;
+import com.blog.biz.model.request.PostPortalSearchRequest;
 import com.blog.biz.model.response.PostDetailResponse;
 import com.blog.biz.model.response.PostResponse;
 import org.mapstruct.Mapper;
@@ -22,8 +22,8 @@ public interface PostConverter {
 
     PostDetailResponse toDetailResponse(PostResponse postResponse);
 
-    SearchPostContext toPageContext(SearchPostRequest request);
+    SearchPostContext toPageContext(PostSearchRequest request);
 
-    SearchPostContext toPageContext(SearchPostBlogRequest request);
+    SearchPostContext toPageContext(PostPortalSearchRequest request);
 
 }

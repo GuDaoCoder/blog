@@ -1,14 +1,12 @@
 package com.blog.biz.event.publish;
 
+import com.blog.biz.event.model.LoginSuccessEvent;
+import com.blog.common.domain.UserDetail;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.stereotype.Component;
-
-import com.blog.biz.event.model.LoginSuccessEvent;
-import com.blog.common.domain.UserDetail;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author zouzhangpeng

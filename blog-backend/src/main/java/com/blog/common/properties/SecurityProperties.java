@@ -1,10 +1,9 @@
 package com.blog.common.properties;
 
-import java.util.Set;
-
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import lombok.Data;
+import java.util.Set;
 
 /**
  * @author zouzhangpeng

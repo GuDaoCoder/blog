@@ -1,11 +1,9 @@
 package com.blog.biz.event.model;
 
-import org.springframework.context.ApplicationEvent;
-
 import com.blog.common.domain.UserDetail;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.ApplicationEvent;
 
 /**
  * @author zouzhangpeng

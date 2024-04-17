@@ -1,10 +1,9 @@
 package com.blog.biz.event.listen;
 
+import com.blog.biz.event.model.LoginSuccessEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
-
-import com.blog.biz.event.model.LoginSuccessEvent;
 import org.springframework.stereotype.Component;
 
 /**

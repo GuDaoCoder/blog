@@ -1,8 +1,7 @@
-package com.blog.biz.controller.blog;
+package com.blog.biz.controller.admin;
 
-import com.blog.biz.model.request.SearchTagRequest;
+import com.blog.biz.model.request.TagSearchRequest;
 import com.blog.biz.model.response.TagDetailResponse;
-import com.blog.biz.model.response.TagResponse;
 import com.blog.biz.service.manager.TagManagerService;
 import com.blog.common.base.response.PageResponse;
 import com.blog.common.domain.Result;
@@ -15,18 +14,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Slf4j
-@RequiredArgsConstructor
+/**
+ * @author zouzhangpeng
+ * @desc
+ */
 @Tag(name = "标签管理")
+@RequiredArgsConstructor
 @RestController
-@RequestMapping("/blog/tags")
-public class TagBlogController {
+@RequestMapping("/admin/tag")
+public class TagAdminController {
 
     private final TagManagerService tagManagerService;
 
     @Operation(summary = "查询标签列表")
     @GetMapping
-    public Result<PageResponse<TagDetailResponse>> search(@ParameterObject SearchTagRequest request) {
+    public Result<PageResponse<TagDetailResponse>> search(@ParameterObject TagSearchRequest request) {
         return Result.success(tagManagerService.search(request));
     }
 }
