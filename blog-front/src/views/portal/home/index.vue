@@ -2,8 +2,9 @@
 import PostCarousel from "@/components/PostCarousel/index.vue"
 import PostList from "@/components/PostList/index.vue"
 import Pagination from "@/components/Pagination/index.vue"
-import {searchBlogPosts} from "@/api/portal/post";
+import postApi from "@/api/post/index";
 import {onMounted, ref} from "vue";
+import type {PostResponse} from "@/api/post/types";
 
 onMounted(() => {
   fetchPosts();
@@ -15,9 +16,9 @@ const pagination = ref<PaginationType>(
       pageSize: 10,
       total: 0
     })
-const posts = ref<BlogPostResponse[]>([])
+const posts = ref<PostResponse[]>([])
 const fetchPosts = async () => {
-  const {data} = await searchBlogPosts({
+  const {data} = await postApi.portalQueryBlogPost({
     pageNumber: pagination.value.pageNumber,
     pageSize: pagination.value.pageSize,
   })

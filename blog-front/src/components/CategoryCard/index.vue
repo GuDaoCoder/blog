@@ -1,16 +1,17 @@
 <script lang="ts" setup>
 import {onMounted, ref} from "vue";
-import {blogSearchCategoryTree} from "@/api/portal/category";
-
-const categoryTreeData = ref<CategoryTreeResponse[]>([])
-const fetchCategoryTree = async () => {
-  const {data} = await blogSearchCategoryTree({})
-  categoryTreeData.value = data;
-}
+import categoryApi from "@/api/category/index";
+import type {CategoryTreeResponse} from "@/api/category/types";
 
 onMounted(() => {
   fetchCategoryTree()
 })
+
+const categoryTreeData = ref<CategoryTreeResponse[]>([])
+const fetchCategoryTree = async () => {
+  const {data} = await categoryApi.portalQueryCategoryTree({})
+  categoryTreeData.value = data;
+}
 </script>
 
 <template>

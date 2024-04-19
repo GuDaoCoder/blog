@@ -44,8 +44,9 @@
 import {Notification, type ValidatedError} from '@arco-design/web-vue';
 import {useRouter} from "vue-router";
 import {reactive, ref} from "vue";
-import {login} from '@/api/admin/login'
 import {setToken} from "@/utils/auth";
+import loginApi from "@/api/login/index"
+import type {LoginForm, LoginRequest} from "@/api/login/types";
 
 const router = useRouter()
 
@@ -76,7 +77,7 @@ const handleLogin = async ({values, errors}: {
   if (!errors) {
     loading.value = true
     try {
-      const {data: {token}} = await login(values as LoginRequest)
+      const {data: {token}} = await loginApi.login(values as LoginRequest)
       setToken(token)
       Notification.success("欢迎进入博客管理系统");
       await router.push({name: "admin"})

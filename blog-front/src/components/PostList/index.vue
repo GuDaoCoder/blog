@@ -2,6 +2,8 @@
 import type {PropType} from "vue";
 import {useRouter} from "vue-router";
 import {formatStandStr} from "@/utils/date";
+import type {PostResponse} from "@/api/post/types";
+import type {PostListProp} from "@/components/PostList/types";
 
 const props = defineProps({
   data: {
@@ -13,7 +15,7 @@ const props = defineProps({
 })
 
 const router = useRouter()
-const toPost = (post: BlogPostResponse) => {
+const toPost = (post: PostResponse) => {
   router.push({path: "/post", query: {postId: post.postId}})
 }
 </script>

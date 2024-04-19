@@ -1,11 +1,11 @@
 <template>
   <Container>
     <content-card>
-      <a-form :model="searchTagForm" @submit="handleSearch">
+      <a-form :model="queryForm" @submit="handleSearch">
         <a-row :gutter="16">
           <a-col :span="8">
             <a-form-item label="标签名称">
-              <a-input v-model="searchTagForm.tagName"/>
+              <a-input v-model="queryForm.tagName"/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -41,32 +41,29 @@ import Pagination from "@/components/Pagination/index.vue"
 import ContentCard from '@/components/ContentCard/index.vue'
 import {onMounted, ref} from "vue";
 import type {TableColumnData} from "@arco-design/web-vue";
-import {searchTag} from "@/api/admin/tag";
 import SearchButtonGroup from "@/components/SearchButtonGroup/index.vue";
 import SearchResult from "@/components/SearchResult/index.vue";
+import tagApi from "@/api/tag/index"
+import type {SearchTagForm, TagDetailResponse} from "@/api/tag/types";
 
-onMounted(() => {
-  fetchTableData()
-})
-
-const initSearchForm = (): SearchTagForm => {
+const initQueryForm = (): SearchTagForm => {
   return {
     tagName: ""
   }
 }
 
-const searchTagForm = ref<SearchTagForm>(initSearchForm())
+const queryForm = ref<SearchTagForm>(initQueryForm())
 
 const handleSearch = () => {
-  fetchTableData(searchTagForm.value)
+  fetchTableData()
 }
 
 /**
  * 重置按钮
  */
 const reset = () => {
-  searchTagForm.value = initSearchForm();
-  fetchTableData(searchTagForm.value)
+  queryForm.value = initQueryForm();
+  fetchTableData()
 }
 
 const tableColumns = ref<TableColumnData[]>([
@@ -92,22 +89,26 @@ const pagination = ref<PaginationType>(
       total: 0
     })
 
+onMounted(() => {
+  fetchTableData()
+})
+
 const tableLoading = ref<boolean>(false)
 
-const tagTableData = ref<TagResponse[]>([])
+const tagTableData = ref<TagDetailResponse[]>([])
 
-const fetchTableData = async (form: SearchTagForm = {}) => {
+const fetchTableData = async () => {
   if (tableLoading.value) {
     return
   }
   tableLoading.value = true
   try {
-    const {data} = await searchTag({
-          pageNumber: pagination.value.pageNumber,
-          pageSize: pagination.value.pageSize,
-          ...form
-        }
-    )
+    let params = {
+      pageNumber: pagination.value.pageNumber,
+      pageSize: pagination.value.pageSize,
+      ...queryForm.value
+    }
+    const {data} = await tagApi.searchTag(params)
     tagTableData.value = data.items || []
     pagination.value.pageNumber = data.pageNumber
     pagination.value.pageSize = data.pageSize
@@ -119,12 +120,12 @@ const fetchTableData = async (form: SearchTagForm = {}) => {
 
 const handleChangePage = (pageNumber: number) => {
   pagination.value.pageNumber = pageNumber
-  fetchTableData(searchTagForm.value)
+  fetchTableData()
 }
 
 const handleChangePageSize = (pageSize: number) => {
   pagination.value.pageSize = pageSize
-  fetchTableData(searchTagForm.value)
+  fetchTableData()
 }
 
 </script>

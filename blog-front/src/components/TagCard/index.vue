@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 
 import {onMounted, ref} from "vue";
-import {blogSearchTag} from "@/api/portal/tag";
+import tagApi from "@/api/tag/index";
+import type {TagResponse} from "@/api/tag/types";
 
 onMounted(() => {
   fetchAllTags()
@@ -10,7 +11,7 @@ onMounted(() => {
 const tags = ref<TagResponse[]>([])
 const fetchAllTags = async () => {
 
-  const {data} = await blogSearchTag({
+  const {data} = await tagApi.portalSearchTag({
         pageNumber: 1,
         pageSize: 9999
       }

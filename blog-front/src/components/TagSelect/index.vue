@@ -6,9 +6,10 @@
 </template>
 
 <script lang="ts" setup>
-import {searchTag} from "@/api/admin/tag";
+import tagApi from "@/api/tag/index"
 import {onMounted, ref} from "vue";
 import {useVModel} from "@/utils/useVModel";
+import type {TagDetailResponse} from "@/api/tag/types";
 
 const props = defineProps({
   modelValue: {
@@ -22,7 +23,7 @@ const emits = defineEmits(["update:modelValue"])
 // loading
 const loading = ref<boolean>(false)
 // 选项数据
-const options = ref<TagResponse[]>([])
+const options = ref<TagDetailResponse[]>([])
 
 onMounted(() => {
   fetchOptions()
@@ -31,7 +32,7 @@ onMounted(() => {
 const fetchOptions = async () => {
   try {
     loading.value = true
-    const {data} = await searchTag({pageNumber: 1, pageSize: 10000})
+    const {data} = await tagApi.searchTag({pageNumber: 1, pageSize: 10000})
     options.value = data.items || []
     initValues.value = options.value.map(obj => obj.tagId)
   } finally {

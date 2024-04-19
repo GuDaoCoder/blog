@@ -1,11 +1,11 @@
 <template>
   <Container>
     <content-card>
-      <a-form :model="searchCategoryForm" @submit="handleSearch">
+      <a-form :model="queryCategoryForm" @submit="handleSearch">
         <a-row :gutter="16">
           <a-col :span="8">
             <a-form-item label="分类名称">
-              <a-input v-model="searchCategoryForm.categoryName"/>
+              <a-input v-model="queryCategoryForm.categoryName"/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -35,37 +35,33 @@
 import ContentCard from '@/components/ContentCard/index.vue'
 import {onMounted, ref} from "vue";
 import type {TableColumnData} from "@arco-design/web-vue";
-import {searchTree} from "@/api/admin/category";
 import SearchButtonGroup from "@/components/SearchButtonGroup/index.vue";
 import SearchResult from "@/components/SearchResult/index.vue";
+import categoryApi from "@/api/category/index"
+import type {CategoryTreeResponse, QueryCategoryTreeRequest} from "@/api/category/types";
 
-const initSearchForm = (): SearchCategoryForm => {
+const initQueryForm = (): QueryCategoryTreeRequest => {
   return {
-    categoryName: "",
-    enabled: undefined
+    categoryName: ""
   }
 }
 
-const searchCategoryForm = ref<SearchCategoryForm>(initSearchForm())
+const queryCategoryForm = ref<QueryCategoryTreeRequest>(initQueryForm())
 
 /**
  * 查询按钮
  */
 const handleSearch = () => {
-  fetchTableData(searchCategoryForm.value)
+  fetchTableData()
 }
 
 /**
  * 重置按钮
  */
 const reset = () => {
-  searchCategoryForm.value = initSearchForm();
-  fetchTableData(searchCategoryForm.value)
+  queryCategoryForm.value = initQueryForm();
+  fetchTableData()
 }
-
-onMounted(() => {
-  fetchTableData(searchCategoryForm.value)
-})
 
 /**
  * 列表列配置
@@ -86,6 +82,10 @@ const tableColumns = ref<TableColumnData[]>([
   }
 ])
 
+onMounted(() => {
+  fetchTableData()
+})
+
 const tableLoading = ref<boolean>(false)
 const categoryTreeData = ref<CategoryTreeResponse[]>([])
 
@@ -93,10 +93,10 @@ const categoryTreeData = ref<CategoryTreeResponse[]>([])
  * 查询文章分类列表
  * @param form
  */
-const fetchTableData = async (form: SearchCategoryForm) => {
+const fetchTableData = async () => {
   tableLoading.value = true
   try {
-    const {data} = await searchTree(form as CreateCategoryRequest)
+    const {data} = await categoryApi.queryCategoryTree({...queryCategoryForm.value})
     categoryTreeData.value = data
   } finally {
     tableLoading.value = false

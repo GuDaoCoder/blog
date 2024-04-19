@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type {FileItem} from "@arco-design/web-vue";
 import {Message} from "@arco-design/web-vue";
-import {updatePostCoverPicture} from "@/api/admin/post";
+import postApi from "@/api/post/index"
 
 const props = defineProps({
   visible: {
@@ -18,7 +18,7 @@ const emit = defineEmits(["cancel"]);
 
 const handleSuccessUpload = async (fileItem: FileItem) => {
   const coverPictureUrl = fileItem.response.data.url;
-  await updatePostCoverPicture(props.postId, coverPictureUrl);
+  await postApi.updatePostCoverPicture(props.postId, coverPictureUrl);
   Message.success('封面上传成功');
   handleCancel()
 }

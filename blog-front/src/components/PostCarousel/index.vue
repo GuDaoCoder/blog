@@ -1,21 +1,22 @@
 <script lang="ts" setup>
 import {onMounted, ref} from "vue";
-import {searchBlogPosts} from "@/api/portal/post";
+import postApi from "@/api/post/index";
 import {useRouter} from "vue-router";
+import type {PostResponse} from "@/api/post/types";
 
-const posts = ref<BlogPostResponse[]>([])
+const posts = ref<PostResponse[]>([])
 
 onMounted(() => {
   fetchPosts();
 })
 
 const fetchPosts = async () => {
-  const {data} = await searchBlogPosts({pageNumber: 1, pageSize: 5})
+  const {data} = await postApi.portalQueryBlogPost({pageNumber: 1, pageSize: 5})
   posts.value = data.items || []
 }
 
 const router = useRouter()
-const toPost = (post: BlogPostResponse) => {
+const toPost = (post: PostResponse) => {
   router.push({path: "/post", query: {postId: post.postId}})
 }
 </script>

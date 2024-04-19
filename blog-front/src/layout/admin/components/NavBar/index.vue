@@ -50,16 +50,16 @@
 <script lang="ts" setup>
 import {ref} from "vue";
 import {useRouter} from "vue-router";
-import {logout} from "@/api/admin/login";
 import {clearToken} from "@/utils/auth";
+import loginApi from "@/api/login/index"
 import logo from "@/assets/logo.png"
 
 const router = useRouter()
 
 const avatar = ref('https://img.touxiangwu.com/zb_users/upload/2023/06/202306191687149562582619.jpg')
 
-const handleLogout = () => {
-  logout().then(() => {
+const handleLogout = async () => {
+  await loginApi.logout().then(() => {
     clearToken()
     router.push({name: "login"})
   })

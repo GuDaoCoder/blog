@@ -1,16 +1,16 @@
 <template>
   <Container>
     <content-card>
-      <a-form :model="searchFormData" @submit="handleSearch">
+      <a-form :model="queryForm" @submit="handleSearch">
         <a-row :gutter="16">
           <a-col :span="8">
             <a-form-item label="文章标题">
-              <a-input v-model="searchFormData.title"/>
+              <a-input v-model="queryForm.title"/>
             </a-form-item>
           </a-col>
           <a-col :span="8">
             <a-form-item label="状态">
-              <a-select v-model="searchFormData.status" placeholder="全部">
+              <a-select v-model="queryForm.status" placeholder="全部">
                 <a-option v-for="[key,value] in Object.entries(PostStatus)" :key="key" :value="key">{{ value }}
                 </a-option>
               </a-select>
@@ -18,19 +18,19 @@
           </a-col>
           <a-col :span="8">
             <a-form-item label="文章分类">
-              <category-select v-model="searchFormData.categoryId"/>
+              <category-select v-model="queryForm.categoryId"/>
             </a-form-item>
           </a-col>
           <a-col :span="8">
             <a-form-item label="置顶">
-              <a-select v-model="searchFormData.top" placeholder="全部">
+              <a-select v-model="queryForm.top" placeholder="全部">
                 <a-option v-for="[key,value] in Object.entries(Whether)" :key="key" :value="key">{{ value }}</a-option>
               </a-select>
             </a-form-item>
           </a-col>
           <a-col :span="8">
             <a-form-item label="开启评论">
-              <a-select v-model="searchFormData.enableComment" placeholder="全部">
+              <a-select v-model="queryForm.enableComment" placeholder="全部">
                 <a-option v-for="[key,value] in Object.entries(Whether)" :key="key" :value="key">{{ value }}</a-option>
               </a-select>
             </a-form-item>
@@ -85,7 +85,8 @@
         </template>
 
         <template #pagination>
-          <a-pagination v-model:current="page.pageNumber" v-model:page-size="page.pageSize" :total="page.total"
+          <a-pagination v-model:current="pagination.pageNumber" v-model:page-size="pagination.pageSize"
+                        :total="pagination.total"
                         show-page-size show-total @change="handleChangePage"
                         @page-size-change="handleChangePageSize"/>
         </template>
@@ -108,11 +109,12 @@ import {onMounted, ref} from "vue";
 import {PostStatus, Whether} from "@/enums";
 import type {TableColumnData} from "@arco-design/web-vue";
 import {Message} from '@arco-design/web-vue';
-import {publishPost, removePost, searchAdminPosts, syncPost} from "@/api/admin/post";
 import {useDict} from "@/utils/dict"
+import postApi from "@/api/post/index"
+import type {PostResponse, QueryPostForm} from "@/api/post/types";
 
 
-const initSearchForm = (): AdminSearchPostForm => {
+const initQueryForm = (): QueryPostForm => {
   return {
     title: "",
     status: "",
@@ -122,15 +124,15 @@ const initSearchForm = (): AdminSearchPostForm => {
   }
 }
 
-const searchFormData = ref<AdminSearchPostForm>(initSearchForm())
+const queryForm = ref<QueryPostForm>(initQueryForm())
 
 const handleSearch = () => {
-  fetchTableData(searchFormData.value)
+  fetchTableData()
 }
 
 const reset = () => {
-  searchFormData.value = initSearchForm();
-  fetchTableData(searchFormData.value)
+  queryForm.value = initQueryForm();
+  fetchTableData()
 }
 
 const tableColumns = ref<TableColumnData[]>([
@@ -206,31 +208,31 @@ const scroll = {
   x: 1800
 }
 
-const page = ref<PageResponse<any>>({pageNumber: 1, pageSize: 10, total: 0})
-
-const postTableData = ref<AdminPostResponse[]>([])
-
-const tableLoading = ref(false)
-
 onMounted(() => {
   fetchTableData()
 })
 
-const fetchTableData = async (form: AdminSearchPostForm = searchFormData.value) => {
+const pagination = ref<PaginationType>({pageNumber: 1, pageSize: 10, total: 0})
+
+const postTableData = ref<PostResponse[]>([])
+
+const tableLoading = ref<boolean>(false)
+
+const fetchTableData = async () => {
   if (tableLoading.value) {
     return
   }
   tableLoading.value = true
   try {
-    const {data} = await searchAdminPosts({
-      pageNumber: page.value.pageNumber,
-      pageSize: page.value.pageSize,
-      ...form
+    const {data} = await postApi.queryPost({
+      pageNumber: pagination.value.pageNumber,
+      pageSize: pagination.value.pageSize,
+      ...queryForm.value
     })
     postTableData.value = data.items || []
-    page.value.pageNumber = data.pageNumber
-    page.value.pageSize = data.pageSize
-    page.value.total = data.total
+    pagination.value.pageNumber = data.pageNumber
+    pagination.value.pageSize = data.pageSize
+    pagination.value.total = data.total
   } finally {
     tableLoading.value = false
   }
@@ -239,7 +241,7 @@ const fetchTableData = async (form: AdminSearchPostForm = searchFormData.value) 
 const handleSyncPosts = async () => {
   try {
     tableLoading.value = true
-    await syncPost()
+    await postApi.syncPost()
     Message.success("同步成功")
     handleSearch()
   } finally {
@@ -250,38 +252,38 @@ const handleSyncPosts = async () => {
 
 }
 
-const handlePreview = (record: AdminPostResponse) => {
+const handlePreview = (record: PostResponse) => {
 
 }
-const handlePublishPost = async (record: AdminPostResponse) => {
-  await publishPost(record.postId)
+const handlePublishPost = async (record: PostResponse) => {
+  await postApi.publishPost(record.postId)
   handleSearch()
 }
 
-const handleRemovePost = async (record: AdminPostResponse) => {
-  await removePost(record.postId)
+const handleRemovePost = async (record: PostResponse) => {
+  await postApi.removePost(record.postId)
   handleSearch()
 }
 
 const handleChangePage = () => {
-  fetchTableData(searchFormData.value)
+  fetchTableData()
 }
 
 const handleChangePageSize = () => {
-  fetchTableData(searchFormData.value)
+  fetchTableData()
 }
 
-const canPublish = (record: AdminPostResponse): boolean => {
+const canPublish = (record: PostResponse): boolean => {
   return record.status === "DRAFT" || record.status === "REMOVED";
 }
 
-const canRemove = (record: AdminPostResponse): boolean => {
+const canRemove = (record: PostResponse): boolean => {
   return record.status === "PUBLISHED";
 }
 
 const uploadCoverPictureVisible = ref<boolean>(false)
 const uploadCoverPicturePostId = ref()
-const handleSetCoverPicture = async (record: AdminPostResponse) => {
+const handleSetCoverPicture = async (record: PostResponse) => {
   uploadCoverPictureVisible.value = true
   uploadCoverPicturePostId.value = record.postId
 }

@@ -15,10 +15,11 @@
 </template>
 
 <script lang="ts" setup>
-import {ref} from "vue";
-import {searchTree} from "@/api/admin/category";
+import {onMounted, ref} from "vue";
 import type {TreeNodeData} from "@arco-design/web-vue";
 import {useVModel} from "@/utils/useVModel";
+import categoryApi from "@/api/category/index";
+import type {CategoryTreeResponse} from "@/api/category/types";
 
 const props = defineProps({
   modelValue: {
@@ -31,11 +32,13 @@ const emits = defineEmits(["update:modelValue"])
 
 const categoryTreeData = ref<CategoryTreeResponse[]>([])
 const fetchCategoryTree = async () => {
-  const {data} = await searchTree({})
+  const {data} = await categoryApi.queryCategoryTree({})
   categoryTreeData.value = data;
 }
 
-fetchCategoryTree();
+onMounted(() => {
+  fetchCategoryTree();
+})
 
 const filterTreeNode = (searchValue: string, nodeData: TreeNodeData) => {
   return nodeData.title?.toLowerCase().includes(searchValue.toLowerCase()) || false;

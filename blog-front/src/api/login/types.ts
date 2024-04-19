@@ -1,13 +1,13 @@
-interface LoginForm {
+export interface LoginForm {
     username: string,
     password: string
 }
 
-interface LoginRequest {
+export interface LoginRequest {
     username: string,
     password: string
 }
 
-interface LoginResponse {
+export interface LoginResponse {
     token: string
 }

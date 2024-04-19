@@ -2,8 +2,9 @@
 import MdPreview from "@/components/MdPreview/index.vue"
 import {onMounted, ref} from "vue";
 import {formatStandStr} from "@/utils/date"
-import {getPostDetail} from "@/api/portal/post";
+import postApi from "@/api/post/index";
 import {useRoute} from "vue-router";
+import type {PostDetailResponse} from "@/api/post/types";
 
 const route = useRoute()
 
@@ -16,7 +17,7 @@ onMounted(() => {
   }
 })
 const fetchPostDetail = async (postId: number) => {
-  const {data} = await getPostDetail(postId)
+  const {data} = await postApi.portalGetPostDetail(postId)
   post.value = data
 }
 
