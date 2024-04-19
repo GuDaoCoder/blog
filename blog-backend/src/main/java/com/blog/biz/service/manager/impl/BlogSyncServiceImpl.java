@@ -152,6 +152,14 @@ public class BlogSyncServiceImpl implements BlogSyncService {
             postCrudService.save(postEntity);
         } else {
             if (postParserContext.getFileLastUpdate().isAfter(postEntity.getFileLastUpdateTime())) {
+                postEntity.setTitle(postParserContext.getTitle())
+                        .setSummary(postParserContext.getSummary())
+                        .setCoverPictureUrl(postParserContext.getCoverPictureUrl())
+                        .setFileLastUpdateTime(postParserContext.getFileLastUpdate());
+                if (Objects.nonNull(categoryEntity)) {
+                    postEntity.setCategoryId(categoryEntity.getCategoryId());
+                }
+                postCrudService.updateById(postEntity);
                 update = true;
             }
         }

@@ -23,6 +23,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 public class MarkdownParser {
@@ -54,7 +55,10 @@ public class MarkdownParser {
                 .setFileLastUpdate(getFileLastUpdate(file));
         parseExtraYaml(fileContent)
                 .ifPresent(yaml -> context.setTags(yaml.getTags())
-                        .setCoverPictureUrl(StringUtils.isNotBlank(yaml.getCoverPictureUrl()) ? yaml.getCoverPictureUrl() : DEFAULT_COVER_PICTURE_URL));
+                        .setCoverPictureUrl(yaml.getCoverPictureUrl()));
+        if (StringUtils.isBlank(context.getCoverPictureUrl())) {
+            context.setCoverPictureUrl(DEFAULT_COVER_PICTURE_URL + "?t=" + UUID.randomUUID());
+        }
         return context;
     }
 
