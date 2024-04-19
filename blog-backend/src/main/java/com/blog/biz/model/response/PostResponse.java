@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serial;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,6 +17,9 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class PostResponse extends CommonResponse {
+
+    @Serial
+    private static final long serialVersionUID = 7878817447911921297L;
 
     @Schema(description = "主键")
     private Long postId;

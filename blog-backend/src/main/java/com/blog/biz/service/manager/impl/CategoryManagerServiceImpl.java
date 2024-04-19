@@ -3,16 +3,18 @@ package com.blog.biz.service.manager.impl;
 import cn.hutool.core.collection.CollUtil;
 import com.blog.biz.constant.BizConstant;
 import com.blog.biz.convert.CategoryConverter;
+import com.blog.biz.enums.OverviewType;
 import com.blog.biz.model.entity.CategoryEntity;
 import com.blog.biz.model.entity.custom.CategoryPostCountEntity;
-import com.blog.biz.model.request.CreateCategoryRequest;
 import com.blog.biz.model.request.CategoryAdminTreeRequest;
+import com.blog.biz.model.request.CreateCategoryRequest;
 import com.blog.biz.model.request.UpdateCategoryRequest;
 import com.blog.biz.model.response.CategoryResponse;
 import com.blog.biz.model.response.CategoryTreeResponse;
 import com.blog.biz.service.crud.CategoryCrudService;
 import com.blog.biz.service.crud.PostCrudService;
 import com.blog.biz.service.manager.CategoryManagerService;
+import com.blog.biz.service.manager.OverviewStatisticService;
 import com.blog.common.constant.SymbolConstants;
 import com.blog.common.exception.BusinessException;
 import com.blog.common.util.TreeUtil;
@@ -33,7 +35,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class CategoryManagerServiceImpl implements CategoryManagerService {
+public class CategoryManagerServiceImpl implements CategoryManagerService, OverviewStatisticService {
 
     private final CategoryCrudService categoryCrudService;
 
@@ -128,6 +130,16 @@ public class CategoryManagerServiceImpl implements CategoryManagerService {
         }
 
         categoryCrudService.removeById(categoryId);
+    }
+
+    @Override
+    public OverviewType overviewType() {
+        return OverviewType.CATEGORY;
+    }
+
+    @Override
+    public Long overviewCount() {
+        return categoryCrudService.count();
     }
 
     private CategoryResponse toResponse(CategoryEntity categoryEntity) {

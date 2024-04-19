@@ -4,15 +4,17 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.blog.biz.convert.PostConverter;
 import com.blog.biz.convert.TagConverter;
+import com.blog.biz.enums.OverviewType;
 import com.blog.biz.enums.PostStatus;
 import com.blog.biz.model.context.SearchPostContext;
 import com.blog.biz.model.entity.*;
-import com.blog.biz.model.request.PostSearchRequest;
 import com.blog.biz.model.request.PostPortalSearchRequest;
+import com.blog.biz.model.request.PostSearchRequest;
 import com.blog.biz.model.response.PostDetailResponse;
 import com.blog.biz.model.response.PostResponse;
 import com.blog.biz.model.response.TagResponse;
 import com.blog.biz.service.crud.*;
+import com.blog.biz.service.manager.OverviewStatisticService;
 import com.blog.biz.service.manager.PostManagerService;
 import com.blog.common.base.response.PageResponse;
 import com.blog.common.exception.BusinessException;
@@ -35,7 +37,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class PostManagerServiceImpl implements PostManagerService {
+public class PostManagerServiceImpl implements PostManagerService, OverviewStatisticService {
 
     private final CategoryCrudService categoryCrudService;
 
@@ -185,6 +187,16 @@ public class PostManagerServiceImpl implements PostManagerService {
     private boolean canRemove(PostStatus postStatus) {
         // 判断传入的文章状态是否等于已发布
         return PostStatus.PUBLISHED.equals(postStatus);
+    }
+
+    @Override
+    public OverviewType overviewType() {
+        return OverviewType.POST;
+    }
+
+    @Override
+    public Long overviewCount() {
+        return postCrudService.count();
     }
 }
 
