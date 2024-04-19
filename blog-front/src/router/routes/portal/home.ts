@@ -1,4 +1,4 @@
-import type {RouteRaw} from "@/router/routes/type";
+import type {RouteRaw} from "@/router/routes/types";
 import {OPEN_LAYOUT} from "@/router/routes/portal/layout";
 
 const HOME: RouteRaw = {

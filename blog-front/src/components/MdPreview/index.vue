@@ -6,7 +6,7 @@
 <script lang="ts" setup>
 import {onUpdated, ref} from "vue";
 import {Message} from '@arco-design/web-vue';
-import type {Anchor} from "@/store/modules/anchor/type";
+import type {Anchor} from "@/store/modules/anchor/types";
 import useAnchorStore from "@/store/modules/anchor";
 
 const props = defineProps({

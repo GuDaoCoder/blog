@@ -1,4 +1,4 @@
-import type {RouteRaw} from "@/router/routes/type";
+import type {RouteRaw} from "@/router/routes/types";
 
 const LOGIN: RouteRaw = {
     path: '/login',

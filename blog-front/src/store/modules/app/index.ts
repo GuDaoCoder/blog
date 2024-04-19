@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 import defaultSettings from '@/config/settings.json';
-import type {AppState} from "@/store/modules/app/type";
+import type {AppState} from "@/store/modules/app/types";
 
 const useAppStore = defineStore('app', {
     state: (): AppState => ({...defaultSettings}),

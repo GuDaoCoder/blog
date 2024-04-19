@@ -1,5 +1,5 @@
 import {ADMIN_LAYOUT} from './layout'
-import type {RouteRaw} from "@/router/routes/type";
+import type {RouteRaw} from "@/router/routes/types";
 
 const HOME: RouteRaw = {
     path: '/admin',

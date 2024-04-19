@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {computed} from "vue";
-import type {Anchor, AnchorState} from "@/store/modules/anchor/type";
+import type {Anchor, AnchorState} from "@/store/modules/anchor/types";
 import useAnchorStore from "@/store/modules/anchor";
 
 const useAnchor = useAnchorStore();
