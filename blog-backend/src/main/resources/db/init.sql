@@ -101,3 +101,20 @@ create table t_user
 )
     comment '用户信息表';
 
+-- auto-generated definition
+create table t_blog_git_repository
+(
+    repository_id bigint auto_increment comment '主键'
+        primary key,
+    url           varchar(256) not null comment '仓库地址',
+    local_path    varchar(256) not null comment '本地下载路径',
+    username      varchar(256) null comment '用户名',
+    password      varchar(512) null comment '密码',
+    branch        varchar(64)  null comment '分支',
+    create_by     bigint       not null comment '创建人Id',
+    create_time   datetime     not null comment '创建时间',
+    update_by     bigint       not null comment '更新人Id',
+    update_time   datetime     not null comment '更新时间'
+)
+    comment '博客git仓库地址';
+
