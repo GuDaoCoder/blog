@@ -242,7 +242,7 @@ const handleSyncPosts = async () => {
   try {
     tableLoading.value = true
     await postApi.syncPost()
-    Message.success("同步成功")
+    Message.success("执行成功，请稍后查看同步结果")
     handleSearch()
   } finally {
     if (tableLoading.value) {

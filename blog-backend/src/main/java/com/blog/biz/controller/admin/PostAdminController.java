@@ -13,8 +13,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.api.annotations.ParameterObject;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 /**
  * @author zouzhangpeng
@@ -29,6 +33,9 @@ public class PostAdminController {
     private final PostManagerService postManagerService;
 
     private final BlogSyncService blogSyncService;
+
+    @Qualifier("threadPoolTaskExecutor")
+    private final Executor executor;
 
     @Operation(summary = "查询文章列表")
     @GetMapping
@@ -67,7 +74,7 @@ public class PostAdminController {
     @Operation(summary = "同步文章")
     @GetMapping("/sync")
     public Result<Void> sync() {
-        blogSyncService.sync();
+        CompletableFuture.runAsync(blogSyncService::sync, executor);
         return Result.success();
     }
 }
