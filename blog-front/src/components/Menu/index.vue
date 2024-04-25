@@ -21,29 +21,43 @@ import type {Menu} from './type'
 const appStore = useAppStore();
 const router = useRouter();
 useRoute();
-const menuData = reactive<Array<Menu>>([{
-  code: "admin-home",
-  title: "主页",
-  icon: "home"
-}, {
-  code: "admin-portal-manage",
-  title: "博客管理",
-  icon: "portal",
-  children: [
-    {
-      code: "admin-category",
-      title: "分类管理"
-    },
-    {
-      code: "admin-tag",
-      title: "标签管理"
-    },
-    {
-      code: "admin-post",
-      title: "文章管理"
-    }
-  ]
-}]);
+const menuData = reactive<Array<Menu>>([
+  {
+    code: "admin-home",
+    title: "主页",
+    icon: "home"
+  },
+  {
+    code: "admin-portal-manage",
+    title: "博客管理",
+    icon: "portal",
+    children: [
+      {
+        code: "admin-category",
+        title: "分类管理"
+      },
+      {
+        code: "admin-tag",
+        title: "标签管理"
+      },
+      {
+        code: "admin-post",
+        title: "文章管理"
+      }
+    ]
+  },
+  {
+    code: "admin-setting",
+    title: "系统设置",
+    icon: "setting",
+    children: [
+      {
+        code: "blog-setting",
+        title: "博客设置"
+      }
+    ]
+  }
+]);
 
 /**
  * 菜单是否折叠

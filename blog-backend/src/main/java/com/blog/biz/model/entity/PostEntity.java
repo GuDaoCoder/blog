@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.io.Serial;
 import java.time.LocalDateTime;
 
 @EqualsAndHashCode(callSuper = true)
@@ -15,6 +16,9 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 @TableName("t_post")
 public class PostEntity extends BaseEntity {
+
+    @Serial
+    private static final long serialVersionUID = 2333646362314890858L;
 
     /**
      * 主键

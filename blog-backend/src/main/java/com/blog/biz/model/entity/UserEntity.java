@@ -6,18 +6,24 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.blog.biz.enums.Gender;
 import com.blog.common.base.entity.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.io.Serial;
 import java.time.LocalDateTime;
 
 /**
  * @author zouzhangpeng
  * @desc
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 @TableName("t_user")
 public class UserEntity extends BaseEntity {
+
+    @Serial
+    private static final long serialVersionUID = -3648600719223231438L;
 
     /**
      * 用户Id

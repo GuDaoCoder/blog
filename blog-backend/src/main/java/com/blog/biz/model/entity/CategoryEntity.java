@@ -5,16 +5,23 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.blog.common.base.entity.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serial;
 
 /**
  * @author zouzhangpeng
  * @desc
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 @TableName("t_category")
 public class CategoryEntity extends BaseEntity {
+
+    @Serial
+    private static final long serialVersionUID = -4741675516178730101L;
 
     @TableId(type = IdType.AUTO)
     private Long categoryId;
