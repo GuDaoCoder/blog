@@ -22,7 +22,7 @@ const fetchOverviewStatistic = async () => {
     <content-card>
       <div class="overview-quantity-wrapper">
         <a-row :gutter="24">
-          <a-col v-for="item in overviewStatistics" :key="item.name" :span="6">
+          <a-col v-for="item in overviewStatistics" :key="item.name" :span="8">
             <overview-quantity-card :label="item.label" :name="item.name"
                                     :quantity="item.quantity"/>
           </a-col>
