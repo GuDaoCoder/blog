@@ -18,7 +18,7 @@ const props = defineProps({
 <template>
   <a-card class="wrapper">
     <div class="content">
-      <svg-icon :name="props.name?.toLowerCase()" size="60"/>
+      <svg-icon :name="props.name?.toLowerCase()" :size="60"/>
       <a-statistic :title="props.label" :value="props.quantity" animation/>
     </div>
   </a-card>

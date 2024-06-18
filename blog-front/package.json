@@ -21,6 +21,7 @@
     "vditor": "^3.9.9",
     "vite-plugin-prismjs": "^0.0.11",
     "vue": "^3.3.11",
+    "vue-cropper": "^1.1.2",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {

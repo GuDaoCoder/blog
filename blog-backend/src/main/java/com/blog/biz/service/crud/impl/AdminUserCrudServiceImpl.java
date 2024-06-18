@@ -2,9 +2,9 @@ package com.blog.biz.service.crud.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.blog.biz.mapper.UserMapper;
-import com.blog.biz.model.entity.UserEntity;
-import com.blog.biz.service.crud.UserCrudService;
+import com.blog.biz.mapper.AdminUserMapper;
+import com.blog.biz.model.entity.AdminUserEntity;
+import com.blog.biz.service.crud.AdminUserCrudService;
 import com.blog.common.base.service.impl.BaseCrudServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,12 +19,12 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class UserCrudServiceImpl extends BaseCrudServiceImpl<UserMapper, UserEntity> implements UserCrudService {
+public class AdminUserCrudServiceImpl extends BaseCrudServiceImpl<AdminUserMapper, AdminUserEntity> implements AdminUserCrudService {
 
     @Override
-    public Optional<UserEntity> findByUsername(String username) {
-        LambdaQueryWrapper<UserEntity> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.eq(UserEntity::getUsername, username);
+    public Optional<AdminUserEntity> findByUsername(String username) {
+        LambdaQueryWrapper<AdminUserEntity> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(AdminUserEntity::getUsername, username);
         return Optional.ofNullable(baseMapper.selectOne(queryWrapper));
     }
 }

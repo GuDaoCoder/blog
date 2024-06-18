@@ -19,8 +19,8 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName("t_user")
-public class UserEntity extends BaseEntity {
+@TableName("t_admin_user")
+public class AdminUserEntity extends BaseEntity {
 
     @Serial
     private static final long serialVersionUID = -3648600719223231438L;

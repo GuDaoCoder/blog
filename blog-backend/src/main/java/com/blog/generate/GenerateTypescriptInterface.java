@@ -1,7 +1,6 @@
 package com.blog.generate;
 
-import com.blog.biz.model.request.GitRepositoryRequest;
-import com.blog.biz.model.response.GitRepositoryResponse;
+import com.blog.biz.model.request.AdminUserRequest;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -11,7 +10,7 @@ public class GenerateTypescriptInterface {
     private static final List<String> ingoredFileds = List.of("serialVersionUID", "createTime", "updateTime");
 
     public static void main(String[] args) {
-        Class<?> clazz = GitRepositoryRequest.class;
+        Class<?> clazz = AdminUserRequest.class;
         Field[] fields = clazz.getDeclaredFields();
         System.out.println("export interface " + clazz.getSimpleName() + " {");
         for (Field field : fields) {

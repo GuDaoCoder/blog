@@ -3,12 +3,12 @@ import {onMounted, ref} from "vue";
 import type {GitRepositoryForm} from "@/api/git-repository/types";
 import gitRepositoryApi from "@/api/git-repository";
 import type {ValidatedError} from "@arco-design/web-vue";
-import {Notification} from "@arco-design/web-vue";
+import {FieldRule, Notification} from "@arco-design/web-vue";
 
 const formLoading = ref(false)
 const loading = ref(false)
 const form = ref<GitRepositoryForm>({})
-const rules = ref({
+const rules = ref<Record<string, FieldRule[]>>({
   url: [
     {
       type: 'url',

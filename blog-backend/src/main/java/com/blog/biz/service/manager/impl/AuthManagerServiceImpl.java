@@ -2,13 +2,13 @@ package com.blog.biz.service.manager.impl;
 
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
-import com.blog.biz.convert.UserConverter;
+import com.blog.biz.convert.AdminUserConverter;
 import com.blog.biz.event.publish.LoginSuccessEventPublisher;
 import com.blog.biz.event.publish.LogoutSuccessEventPublisher;
-import com.blog.biz.model.entity.UserEntity;
+import com.blog.biz.model.entity.AdminUserEntity;
 import com.blog.biz.model.request.LoginRequest;
 import com.blog.biz.model.response.LoginResponse;
-import com.blog.biz.service.crud.UserCrudService;
+import com.blog.biz.service.crud.AdminUserCrudService;
 import com.blog.biz.service.manager.AuthManagerService;
 import com.blog.common.context.UserContext;
 import com.blog.common.domain.UserDetail;
@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthManagerServiceImpl implements AuthManagerService {
 
-    private final UserCrudService userCrudService;
+    private final AdminUserCrudService adminUserCrudService;
 
     private final SecurityProperties securityProperties;
 
@@ -36,15 +36,15 @@ public class AuthManagerServiceImpl implements AuthManagerService {
 
     @Override
     public LoginResponse login(LoginRequest request) {
-        UserEntity userEntity =
-            userCrudService.findByUsername(request.getUsername()).orElseThrow(() -> new InvalidCredentialsException());
-        if (matchPassword(request.getPassword(), userEntity.getPassword())) {
-            StpUtil.login(userEntity.getUsername());
+        AdminUserEntity adminUserEntity =
+            adminUserCrudService.findByUsername(request.getUsername()).orElseThrow(() -> new InvalidCredentialsException());
+        if (matchPassword(request.getPassword(), adminUserEntity.getPassword())) {
+            StpUtil.login(adminUserEntity.getUsername());
         } else {
             throw new InvalidCredentialsException();
         }
         // 用户登录成功事件
-        UserDetail userDetail = UserConverter.INSTANCE.toUserDetail(userEntity);
+        UserDetail userDetail = AdminUserConverter.INSTANCE.toUserDetail(adminUserEntity);
         loginSuccessEventPublisher.publish(userDetail);
         return new LoginResponse(StpUtil.getTokenValue());
     }
