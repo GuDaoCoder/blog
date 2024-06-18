@@ -194,9 +194,9 @@ security:
     - /favicon.ico
 
 oss:
-  access-key:
-  secret-key:
-  bucket-name:
-  domain:
-  image-bed-directory:
+  access-key: ${oss_access_key:}
+  secret-key: ${oss_secret_key:}
+  bucket-name: ${oss_bucket_name:}
+  domain: ${oss_domain:}
+  image-bed-directory: ${oss_image-bed-directory:}
 
