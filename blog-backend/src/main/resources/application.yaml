@@ -197,6 +197,6 @@ oss:
   access-key: ${oss_access_key:}
   secret-key: ${oss_secret_key:}
   bucket-name: ${oss_bucket_name:}
+  directory: ${oss_directory:}
   domain: ${oss_domain:}
-  image-bed-directory: ${oss_image-bed-directory:}
 
