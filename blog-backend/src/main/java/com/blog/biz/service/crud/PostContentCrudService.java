@@ -11,22 +11,22 @@ import java.util.Optional;
  */
 public interface PostContentCrudService extends IBaseCrudService<PostContentEntity> {
 
-	Optional<PostContentEntity> findPostContentByPostId(Long postId);
+    Optional<PostContentEntity> findPostContentByPostId(Long postId);
 
-	/**
-	 * 更新文章内容
-	 * @param postId
-	 * @param content
-	 * @return void
-	 **/
-	void updateContentByPostId(Long postId, String content);
+    /**
+     * 更新文章内容
+     * @param postId
+     * @param content
+     * @return void
+     **/
+    void updateContentByPostId(Long postId, String content);
 
-	/**
-	 * 保存文章内容
-	 * @param postId
-	 * @param content
-	 * @return Long
-	 **/
-	Long saveContent(Long postId, String content);
+    /**
+     * 保存文章内容
+     * @param postId
+     * @param content
+     * @return Long
+     **/
+    Long saveContent(Long postId, String content);
 
 }

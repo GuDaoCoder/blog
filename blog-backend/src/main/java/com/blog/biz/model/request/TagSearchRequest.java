@@ -15,10 +15,10 @@ import java.io.Serial;
 @Data
 public class TagSearchRequest extends PageRequest {
 
-	@Serial
-	private static final long serialVersionUID = -5932485187665352003L;
+    @Serial
+    private static final long serialVersionUID = -5932485187665352003L;
 
-	@Schema(description = "标签名称")
-	private String tagName;
+    @Schema(description = "标签名称")
+    private String tagName;
 
 }

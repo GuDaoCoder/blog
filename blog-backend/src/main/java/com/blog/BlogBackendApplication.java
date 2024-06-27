@@ -12,8 +12,8 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @MapperScan(basePackages = { "com.blog.biz.mapper" })
 public class BlogBackendApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(BlogBackendApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(BlogBackendApplication.class, args);
+    }
 
 }

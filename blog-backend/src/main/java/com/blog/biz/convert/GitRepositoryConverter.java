@@ -9,10 +9,10 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface GitRepositoryConverter {
 
-	GitRepositoryConverter INSTANCE = Mappers.getMapper(GitRepositoryConverter.class);
+    GitRepositoryConverter INSTANCE = Mappers.getMapper(GitRepositoryConverter.class);
 
-	GitRepositoryResponse toResponse(GitRepositoryEntity entity);
+    GitRepositoryResponse toResponse(GitRepositoryEntity entity);
 
-	GitRepositoryEntity toEntity(GitRepositoryRequest request);
+    GitRepositoryEntity toEntity(GitRepositoryRequest request);
 
 }

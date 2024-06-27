@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
  */
 public class StreamUtil {
 
-	public static <D, T> List<D> mapField(Collection<T> coll, Function<T, D> function) {
-		if (CollectionUtils.isEmpty(coll)) {
-			return new ArrayList<>();
-		}
-		return coll.stream().map(function).filter(Objects::nonNull).distinct().collect(Collectors.toList());
-	}
+    public static <D, T> List<D> mapField(Collection<T> coll, Function<T, D> function) {
+        if (CollectionUtils.isEmpty(coll)) {
+            return new ArrayList<>();
+        }
+        return coll.stream().map(function).filter(Objects::nonNull).distinct().collect(Collectors.toList());
+    }
 
 }

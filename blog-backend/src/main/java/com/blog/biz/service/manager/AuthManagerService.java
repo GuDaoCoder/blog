@@ -9,17 +9,17 @@ import com.blog.biz.model.response.LoginResponse;
  */
 public interface AuthManagerService {
 
-	/**
-	 * 登录
-	 * @param request LoginRequest
-	 * @return com.blog.biz.model.vo.LoginResponse
-	 */
-	LoginResponse login(LoginRequest request);
+    /**
+     * 登录
+     * @param request LoginRequest
+     * @return com.blog.biz.model.vo.LoginResponse
+     */
+    LoginResponse login(LoginRequest request);
 
-	/**
-	 * 登出
-	 * @param
-	 */
-	void logout();
+    /**
+     * 登出
+     * @param
+     */
+    void logout();
 
 }

@@ -11,10 +11,10 @@ import java.io.Serial;
 @Data
 public class PostPortalSearchRequest extends PageRequest {
 
-	@Serial
-	private static final long serialVersionUID = -8794622033265901828L;
+    @Serial
+    private static final long serialVersionUID = -8794622033265901828L;
 
-	@Schema(description = "标题")
-	private String title;
+    @Schema(description = "标题")
+    private String title;
 
 }

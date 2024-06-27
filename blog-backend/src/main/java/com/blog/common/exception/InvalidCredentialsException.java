@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class InvalidCredentialsException extends RuntimeException {
 
-	public InvalidCredentialsException(String message, Object... args) {
-		super(StrUtil.format(message, args));
-	}
+    public InvalidCredentialsException(String message, Object... args) {
+        super(StrUtil.format(message, args));
+    }
 
 }

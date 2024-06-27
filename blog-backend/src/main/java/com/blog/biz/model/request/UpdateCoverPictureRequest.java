@@ -8,9 +8,9 @@ import lombok.EqualsAndHashCode;
 @Data
 public class UpdateCoverPictureRequest extends CommonRequest {
 
-	/**
-	 * 封面图片
-	 */
-	private String coverPictureUrl;
+    /**
+     * 封面图片
+     */
+    private String coverPictureUrl;
 
 }

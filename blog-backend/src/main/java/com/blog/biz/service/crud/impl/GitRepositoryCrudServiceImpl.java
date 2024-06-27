@@ -10,6 +10,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class GitRepositoryCrudServiceImpl extends BaseCrudServiceImpl<GitRepositoryMapper, GitRepositoryEntity>
-		implements GitRepositoryCrudService {
+        implements GitRepositoryCrudService {
 
 }

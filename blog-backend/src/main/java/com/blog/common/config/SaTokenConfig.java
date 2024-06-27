@@ -16,14 +16,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class SaTokenConfig implements WebMvcConfigurer {
 
-	private final SecurityProperties securityProperties;
+    private final SecurityProperties securityProperties;
 
-	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-		// 注册 Sa-Token 拦截器，校验规则为 StpUtil.checkLogin() 登录校验。
-		registry.addInterceptor(new SaInterceptor(handle -> StpUtil.checkLogin()))
-			.addPathPatterns("/**")
-			.excludePathPatterns(securityProperties.getWhiteUrls().toArray(new String[0]));
-	}
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        // 注册 Sa-Token 拦截器，校验规则为 StpUtil.checkLogin() 登录校验。
+        registry.addInterceptor(new SaInterceptor(handle -> StpUtil.checkLogin()))
+            .addPathPatterns("/**")
+            .excludePathPatterns(securityProperties.getWhiteUrls().toArray(new String[0]));
+    }
 
 }

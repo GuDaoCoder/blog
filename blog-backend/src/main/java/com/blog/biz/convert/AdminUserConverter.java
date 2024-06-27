@@ -14,12 +14,12 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface AdminUserConverter {
 
-	AdminUserConverter INSTANCE = Mappers.getMapper(AdminUserConverter.class);
+    AdminUserConverter INSTANCE = Mappers.getMapper(AdminUserConverter.class);
 
-	UserDetail toUserDetail(AdminUserEntity entity);
+    UserDetail toUserDetail(AdminUserEntity entity);
 
-	AdminUserResponse toUserResponse(AdminUserEntity entity);
+    AdminUserResponse toUserResponse(AdminUserEntity entity);
 
-	AdminUserEntity toEntity(AdminUserRequest request);
+    AdminUserEntity toEntity(AdminUserRequest request);
 
 }

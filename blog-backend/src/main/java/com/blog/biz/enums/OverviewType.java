@@ -7,17 +7,17 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum OverviewType {
 
-	CATEGORY("分类"),
+    CATEGORY("分类"),
 
-	TAG("标签"),
+    TAG("标签"),
 
-	POST("文章");
+    POST("文章");
 
-	private final String label;
+    private final String label;
 
-	@Override
-	public String toString() {
-		return this.name() + "-" + this.label;
-	}
+    @Override
+    public String toString() {
+        return this.name() + "-" + this.label;
+    }
 
 }

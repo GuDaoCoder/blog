@@ -13,28 +13,28 @@ import java.util.Optional;
  */
 public interface TagCrudService extends IBaseCrudService<TagEntity> {
 
-	/**
-	 * 根据名称查询标签
-	 * @param tagName String
-	 * @return java.util.Optional<com.blog.biz.model.entity.TagEntity>
-	 */
-	Optional<TagEntity> findByTagName(String tagName);
+    /**
+     * 根据名称查询标签
+     * @param tagName String
+     * @return java.util.Optional<com.blog.biz.model.entity.TagEntity>
+     */
+    Optional<TagEntity> findByTagName(String tagName);
 
-	/**
-	 * 分页查询标签
-	 * @param tagName String
-	 * @param pageable IPage<TagEntity>
-	 * @return IPage<TagEntity>
-	 */
-	IPage<TagEntity> page(String tagName, IPage<TagEntity> pageable);
+    /**
+     * 分页查询标签
+     * @param tagName String
+     * @param pageable IPage<TagEntity>
+     * @return IPage<TagEntity>
+     */
+    IPage<TagEntity> page(String tagName, IPage<TagEntity> pageable);
 
-	List<TagEntity> findAllByTagNames(List<String> tagNames);
+    List<TagEntity> findAllByTagNames(List<String> tagNames);
 
-	/**
-	 * 查询所有标签
-	 * @param
-	 * @return List<TagEntity>
-	 **/
-	List<TagEntity> findAll();
+    /**
+     * 查询所有标签
+     * @param
+     * @return List<TagEntity>
+     **/
+    List<TagEntity> findAll();
 
 }

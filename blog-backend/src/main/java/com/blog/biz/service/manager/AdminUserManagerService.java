@@ -11,18 +11,18 @@ import java.util.List;
  */
 public interface AdminUserManagerService {
 
-	/**
-	 * 查询所有管理员用户信息
-	 * @param
-	 * @return List<UserResponse>
-	 **/
-	List<AdminUserResponse> list();
+    /**
+     * 查询所有管理员用户信息
+     * @param
+     * @return List<UserResponse>
+     **/
+    List<AdminUserResponse> list();
 
-	/**
-	 * 保存管理员用户信息
-	 * @param request
-	 * @return void
-	 **/
-	void saveOrUpdate(AdminUserRequest request);
+    /**
+     * 保存管理员用户信息
+     * @param request
+     * @return void
+     **/
+    void saveOrUpdate(AdminUserRequest request);
 
 }

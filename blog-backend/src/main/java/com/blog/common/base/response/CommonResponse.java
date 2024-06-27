@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Data
 public abstract class CommonResponse implements Serializable {
 
-	@Serial
-	private static final long serialVersionUID = 5031608270970621589L;
+    @Serial
+    private static final long serialVersionUID = 5031608270970621589L;
 
 }

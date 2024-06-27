@@ -17,16 +17,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class LogoutSuccessEventPublisher implements ApplicationEventPublisherAware {
 
-	private ApplicationEventPublisher applicationEventPublisher;
+    private ApplicationEventPublisher applicationEventPublisher;
 
-	@Override
-	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
-		this.applicationEventPublisher = applicationEventPublisher;
-	}
+    @Override
+    public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+        this.applicationEventPublisher = applicationEventPublisher;
+    }
 
-	public void publish(UserDetail userDetail) {
-		LogoutSuccessEvent event = new LogoutSuccessEvent(this, userDetail);
-		applicationEventPublisher.publishEvent(event);
-	}
+    public void publish(UserDetail userDetail) {
+        LogoutSuccessEvent event = new LogoutSuccessEvent(this, userDetail);
+        applicationEventPublisher.publishEvent(event);
+    }
 
 }

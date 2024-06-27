@@ -25,18 +25,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/portal/posts")
 public class PostPortalController {
 
-	private final PostManagerService postManagerService;
+    private final PostManagerService postManagerService;
 
-	@Operation(summary = "查询文章列表")
-	@GetMapping
-	public Result<PageResponse<PostResponse>> search(@ParameterObject @Validated PostPortalSearchRequest request) {
-		return Result.success(postManagerService.blogSearch(request));
-	}
+    @Operation(summary = "查询文章列表")
+    @GetMapping
+    public Result<PageResponse<PostResponse>> search(@ParameterObject @Validated PostPortalSearchRequest request) {
+        return Result.success(postManagerService.blogSearch(request));
+    }
 
-	@Operation(summary = "查询文章详情")
-	@GetMapping("/{postId}")
-	public Result<PostDetailResponse> detail(@Parameter(description = "文章Id") @PathVariable Long postId) {
-		return Result.success(postManagerService.detail(postId));
-	}
+    @Operation(summary = "查询文章详情")
+    @GetMapping("/{postId}")
+    public Result<PostDetailResponse> detail(@Parameter(description = "文章Id") @PathVariable Long postId) {
+        return Result.success(postManagerService.detail(postId));
+    }
 
 }

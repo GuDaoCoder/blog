@@ -23,12 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/admin/tags")
 public class TagAdminController {
 
-	private final TagManagerService tagManagerService;
+    private final TagManagerService tagManagerService;
 
-	@Operation(summary = "查询标签列表")
-	@GetMapping
-	public Result<PageResponse<TagDetailResponse>> search(@ParameterObject TagSearchRequest request) {
-		return Result.success(tagManagerService.search(request));
-	}
+    @Operation(summary = "查询标签列表")
+    @GetMapping
+    public Result<PageResponse<TagDetailResponse>> search(@ParameterObject TagSearchRequest request) {
+        return Result.success(tagManagerService.search(request));
+    }
 
 }

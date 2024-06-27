@@ -11,19 +11,19 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum Gender {
 
-	MALE("男性"),
+    MALE("男性"),
 
-	FEMALE("女性"),
+    FEMALE("女性"),
 
-	UNKNOWN("未知"),
+    UNKNOWN("未知"),
 
-	;
+    ;
 
-	private String label;
+    private String label;
 
-	@Override
-	public String toString() {
-		return this.name() + "-" + this.label;
-	}
+    @Override
+    public String toString() {
+        return this.name() + "-" + this.label;
+    }
 
 }

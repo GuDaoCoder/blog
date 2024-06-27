@@ -23,31 +23,31 @@ import java.util.stream.Collectors;
 @Component
 public class StatisticManagerServiceImpl implements StatisticManagerService {
 
-	private final List<OverviewStatisticService> overviewStatisticServices;
+    private final List<OverviewStatisticService> overviewStatisticServices;
 
-	@Qualifier("threadPoolTaskExecutor")
-	private final Executor executor;
+    @Qualifier("threadPoolTaskExecutor")
+    private final Executor executor;
 
-	@SneakyThrows
-	@Override
-	public List<QuantityStatisticsResponse> statisticOverview() {
-		List<CompletableFuture<QuantityStatisticsResponse>> tasks = new ArrayList<>();
-		if (CollectionUtils.isEmpty(overviewStatisticServices)) {
-			return new ArrayList<>();
-		}
-		for (OverviewStatisticService service : overviewStatisticServices) {
-			CompletableFuture<QuantityStatisticsResponse> task = CompletableFuture
-				.supplyAsync(() -> new QuantityStatisticsResponse(service.overviewType().name(),
-						service.overviewType().getLabel(), service.overviewCount()), executor);
-			tasks.add(task);
-		}
+    @SneakyThrows
+    @Override
+    public List<QuantityStatisticsResponse> statisticOverview() {
+        List<CompletableFuture<QuantityStatisticsResponse>> tasks = new ArrayList<>();
+        if (CollectionUtils.isEmpty(overviewStatisticServices)) {
+            return new ArrayList<>();
+        }
+        for (OverviewStatisticService service : overviewStatisticServices) {
+            CompletableFuture<QuantityStatisticsResponse> task = CompletableFuture
+                .supplyAsync(() -> new QuantityStatisticsResponse(service.overviewType().name(),
+                        service.overviewType().getLabel(), service.overviewCount()), executor);
+            tasks.add(task);
+        }
 
-		CompletableFuture<Void> allTasks = CompletableFuture.allOf(tasks.toArray(new CompletableFuture[0]));
+        CompletableFuture<Void> allTasks = CompletableFuture.allOf(tasks.toArray(new CompletableFuture[0]));
 
-		CompletableFuture<List<QuantityStatisticsResponse>> allResults = allTasks
-			.thenApply(v -> tasks.stream().map(CompletableFuture::join).collect(Collectors.toList()));
+        CompletableFuture<List<QuantityStatisticsResponse>> allResults = allTasks
+            .thenApply(v -> tasks.stream().map(CompletableFuture::join).collect(Collectors.toList()));
 
-		return allResults.get().stream().filter(Objects::nonNull).toList();
-	}
+        return allResults.get().stream().filter(Objects::nonNull).toList();
+    }
 
 }

@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface StatisticManagerService {
 
-	/**
-	 * 统计总览
-	 * @param
-	 * @return List<QuantityStatisticsResponse>
-	 **/
-	List<QuantityStatisticsResponse> statisticOverview();
+    /**
+     * 统计总览
+     * @param
+     * @return List<QuantityStatisticsResponse>
+     **/
+    List<QuantityStatisticsResponse> statisticOverview();
 
 }

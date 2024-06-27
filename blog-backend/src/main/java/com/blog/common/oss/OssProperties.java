@@ -7,29 +7,29 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "oss")
 public class OssProperties {
 
-	/**
-	 * ak
-	 */
-	private String accessKey;
+    /**
+     * ak
+     */
+    private String accessKey;
 
-	/**
-	 * sk
-	 */
-	private String secretKey;
+    /**
+     * sk
+     */
+    private String secretKey;
 
-	/**
-	 * bucket
-	 */
-	private String bucketName;
+    /**
+     * bucket
+     */
+    private String bucketName;
 
-	/**
-	 * 域名
-	 */
-	private String domain;
+    /**
+     * 域名
+     */
+    private String domain;
 
-	/**
-	 * 图床文件夹
-	 */
-	private String directory;
+    /**
+     * 图床文件夹
+     */
+    private String directory;
 
 }

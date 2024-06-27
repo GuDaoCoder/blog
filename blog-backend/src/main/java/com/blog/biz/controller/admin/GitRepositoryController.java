@@ -17,18 +17,18 @@ import java.util.List;
 @RequestMapping("/admin/gitRepositories")
 public class GitRepositoryController {
 
-	private final GitRepositoryManagerService gitRepositoryManagerService;
+    private final GitRepositoryManagerService gitRepositoryManagerService;
 
-	@Operation(summary = "查询Git仓库信息")
-	@GetMapping
-	public Result<List<GitRepositoryResponse>> list() throws InterruptedException {
-		return Result.success(gitRepositoryManagerService.list());
-	}
+    @Operation(summary = "查询Git仓库信息")
+    @GetMapping
+    public Result<List<GitRepositoryResponse>> list() throws InterruptedException {
+        return Result.success(gitRepositoryManagerService.list());
+    }
 
-	@Operation(summary = "新增Git仓库信息")
-	@PostMapping
-	public Result<Long> save(@RequestBody GitRepositoryRequest request) {
-		return Result.success(gitRepositoryManagerService.save(request));
-	}
+    @Operation(summary = "新增Git仓库信息")
+    @PostMapping
+    public Result<Long> save(@RequestBody GitRepositoryRequest request) {
+        return Result.success(gitRepositoryManagerService.save(request));
+    }
 
 }

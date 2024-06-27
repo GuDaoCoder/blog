@@ -12,15 +12,15 @@ import java.util.List;
  */
 public interface PostTagRelaCrudService extends IBaseCrudService<PostTagRelaEntity> {
 
-	/**
-	 * 查询标签是否被使用
-	 * @param tagId Long
-	 * @return boolean
-	 */
-	boolean tagUsed(Long tagId);
+    /**
+     * 查询标签是否被使用
+     * @param tagId Long
+     * @return boolean
+     */
+    boolean tagUsed(Long tagId);
 
-	List<TagPostCountEntity> getTagPostCountEntity(List<Long> tagIds);
+    List<TagPostCountEntity> getTagPostCountEntity(List<Long> tagIds);
 
-	List<PostTagRelaEntity> findAllPostATagRelaByPostId(Long postId);
+    List<PostTagRelaEntity> findAllPostATagRelaByPostId(Long postId);
 
 }

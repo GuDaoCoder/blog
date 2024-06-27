@@ -13,15 +13,15 @@ import org.springframework.context.ApplicationEvent;
 @Getter
 public class LoginSuccessEvent extends ApplicationEvent {
 
-	private UserDetail userDetail;
+    private UserDetail userDetail;
 
-	public LoginSuccessEvent(Object source) {
-		super(source);
-	}
+    public LoginSuccessEvent(Object source) {
+        super(source);
+    }
 
-	public LoginSuccessEvent(Object source, UserDetail userDetail) {
-		super(source);
-		this.userDetail = userDetail;
-	}
+    public LoginSuccessEvent(Object source, UserDetail userDetail) {
+        super(source);
+        this.userDetail = userDetail;
+    }
 
 }

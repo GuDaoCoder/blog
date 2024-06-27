@@ -16,16 +16,16 @@ import java.util.List;
  */
 public interface PostMapper extends IBaseMapper<PostEntity> {
 
-	@Select("""
-			<script>
-			select category_id,count(*) as post_count from t_post
-			where category_id in
-			<foreach item="item" index="index" collection="categoryIds" open="(" separator="," close=")" >
-			 #{item}
-			</foreach>
-			group by category_id
-			</script>""")
-	List<CategoryPostCountEntity> getCategoryPostCountEntity(
-			@Param("categoryIds") Collection<? extends Serializable> categoryIds);
+    @Select("""
+            <script>
+            select category_id,count(*) as post_count from t_post
+            where category_id in
+            <foreach item="item" index="index" collection="categoryIds" open="(" separator="," close=")" >
+             #{item}
+            </foreach>
+            group by category_id
+            </script>""")
+    List<CategoryPostCountEntity> getCategoryPostCountEntity(
+            @Param("categoryIds") Collection<? extends Serializable> categoryIds);
 
 }

@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OssConfig {
 
-	@Bean
-	public OssApiService ossApiService(OssProperties ossProperties, UploadManager uploadManager, Auth auth) {
-		return new QiniuOssApiServiceImpl(ossProperties, uploadManager, auth);
-	}
+    @Bean
+    public OssApiService ossApiService(OssProperties ossProperties, UploadManager uploadManager, Auth auth) {
+        return new QiniuOssApiServiceImpl(ossProperties, uploadManager, auth);
+    }
 
 }

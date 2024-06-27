@@ -18,12 +18,12 @@ import java.util.List;
 @RequestMapping("/admin/statistics")
 public class StatisticsController {
 
-	private final StatisticManagerService statisticManagerService;
+    private final StatisticManagerService statisticManagerService;
 
-	@Operation(summary = "统计总览")
-	@GetMapping("/statisticOverview")
-	public Result<List<QuantityStatisticsResponse>> statisticOverview() {
-		return Result.success(statisticManagerService.statisticOverview());
-	}
+    @Operation(summary = "统计总览")
+    @GetMapping("/statisticOverview")
+    public Result<List<QuantityStatisticsResponse>> statisticOverview() {
+        return Result.success(statisticManagerService.statisticOverview());
+    }
 
 }

@@ -20,13 +20,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class AdminUserCrudServiceImpl extends BaseCrudServiceImpl<AdminUserMapper, AdminUserEntity>
-		implements AdminUserCrudService {
+        implements AdminUserCrudService {
 
-	@Override
-	public Optional<AdminUserEntity> findByUsername(String username) {
-		LambdaQueryWrapper<AdminUserEntity> queryWrapper = Wrappers.lambdaQuery();
-		queryWrapper.eq(AdminUserEntity::getUsername, username);
-		return Optional.ofNullable(baseMapper.selectOne(queryWrapper));
-	}
+    @Override
+    public Optional<AdminUserEntity> findByUsername(String username) {
+        LambdaQueryWrapper<AdminUserEntity> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(AdminUserEntity::getUsername, username);
+        return Optional.ofNullable(baseMapper.selectOne(queryWrapper));
+    }
 
 }

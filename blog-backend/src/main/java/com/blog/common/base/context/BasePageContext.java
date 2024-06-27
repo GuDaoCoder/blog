@@ -12,9 +12,9 @@ import lombok.Data;
 @Data
 public class BasePageContext<Entity> {
 
-	/**
-	 * 分页信息
-	 */
-	private IPage<Entity> pageable;
+    /**
+     * 分页信息
+     */
+    private IPage<Entity> pageable;
 
 }

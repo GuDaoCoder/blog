@@ -20,35 +20,35 @@ import java.io.Serial;
 @TableName("t_category")
 public class CategoryEntity extends BaseEntity {
 
-	@Serial
-	private static final long serialVersionUID = -4741675516178730101L;
+    @Serial
+    private static final long serialVersionUID = -4741675516178730101L;
 
-	@TableId(type = IdType.AUTO)
-	private Long categoryId;
+    @TableId(type = IdType.AUTO)
+    private Long categoryId;
 
-	/**
-	 * 分类名称
-	 */
-	private String categoryName;
+    /**
+     * 分类名称
+     */
+    private String categoryName;
 
-	/**
-	 * 上级分类
-	 */
-	private Long parentCategoryId;
+    /**
+     * 上级分类
+     */
+    private Long parentCategoryId;
 
-	/**
-	 * 全路径Id
-	 */
-	private String fullId;
+    /**
+     * 全路径Id
+     */
+    private String fullId;
 
-	/**
-	 * 顺序
-	 */
-	private Integer orderNo;
+    /**
+     * 顺序
+     */
+    private Integer orderNo;
 
-	/**
-	 * 级别
-	 */
-	private Integer level;
+    /**
+     * 级别
+     */
+    private Integer level;
 
 }

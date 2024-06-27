@@ -15,14 +15,14 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface CategoryConverter {
 
-	CategoryConverter INSTANCE = Mappers.getMapper(CategoryConverter.class);
+    CategoryConverter INSTANCE = Mappers.getMapper(CategoryConverter.class);
 
-	CategoryEntity toEntity(CreateCategoryRequest request);
+    CategoryEntity toEntity(CreateCategoryRequest request);
 
-	CategoryEntity toEntity(UpdateCategoryRequest request);
+    CategoryEntity toEntity(UpdateCategoryRequest request);
 
-	CategoryResponse toResponse(CategoryEntity entity);
+    CategoryResponse toResponse(CategoryEntity entity);
 
-	CategoryTreeResponse toTreeResponse(CategoryResponse categoryResponse);
+    CategoryTreeResponse toTreeResponse(CategoryResponse categoryResponse);
 
 }

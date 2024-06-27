@@ -11,25 +11,25 @@ import java.io.Serial;
 @Data
 public class GitRepositoryRequest extends CommonRequest {
 
-	@Serial
-	private static final long serialVersionUID = 6507612400889517432L;
+    @Serial
+    private static final long serialVersionUID = 6507612400889517432L;
 
-	@Schema(description = "主键")
-	private Long gitRepositoryId;
+    @Schema(description = "主键")
+    private Long gitRepositoryId;
 
-	@Schema(description = "仓库地址")
-	private String url;
+    @Schema(description = "仓库地址")
+    private String url;
 
-	@Schema(description = "本地下载路径")
-	private String localPath;
+    @Schema(description = "本地下载路径")
+    private String localPath;
 
-	@Schema(description = "用户名")
-	private String username;
+    @Schema(description = "用户名")
+    private String username;
 
-	@Schema(description = "密码")
-	private String password;
+    @Schema(description = "密码")
+    private String password;
 
-	@Schema(description = "分支")
-	private String branch;
+    @Schema(description = "分支")
+    private String branch;
 
 }

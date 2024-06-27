@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 @Data
 public class PostDetailResponse extends PostResponse {
 
-	@Schema(description = "文章内容")
-	private String content;
+    @Schema(description = "文章内容")
+    private String content;
 
 }

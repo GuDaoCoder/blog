@@ -14,15 +14,15 @@ import java.util.List;
  */
 public interface PostTagRelaMapper extends IBaseMapper<PostTagRelaEntity> {
 
-	@Select("""
-			<script>
-			select tag_id,count(*) as post_count from t_post_tag_rela
-			where tag_id in
-			<foreach item="item" index="index" collection="tagIds" open="(" separator="," close=")" >
-			 #{item}
-			</foreach>
-			group by tag_id
-			</script>""")
-	List<TagPostCountEntity> getTagPostCountEntity(@Param("tagIds") List<Long> tagIds);
+    @Select("""
+            <script>
+            select tag_id,count(*) as post_count from t_post_tag_rela
+            where tag_id in
+            <foreach item="item" index="index" collection="tagIds" open="(" separator="," close=")" >
+             #{item}
+            </foreach>
+            group by tag_id
+            </script>""")
+    List<TagPostCountEntity> getTagPostCountEntity(@Param("tagIds") List<Long> tagIds);
 
 }

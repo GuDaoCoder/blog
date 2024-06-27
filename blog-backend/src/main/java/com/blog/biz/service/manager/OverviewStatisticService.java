@@ -4,8 +4,8 @@ import com.blog.biz.enums.OverviewType;
 
 public interface OverviewStatisticService {
 
-	OverviewType overviewType();
+    OverviewType overviewType();
 
-	Long overviewCount();
+    Long overviewCount();
 
 }

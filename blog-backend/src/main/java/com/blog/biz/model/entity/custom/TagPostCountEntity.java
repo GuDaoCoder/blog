@@ -5,14 +5,14 @@ import lombok.Data;
 @Data
 public class TagPostCountEntity {
 
-	/**
-	 * 标签Id
-	 */
-	private Long tagId;
+    /**
+     * 标签Id
+     */
+    private Long tagId;
 
-	/**
-	 * 文章数量
-	 */
-	private Long postCount;
+    /**
+     * 文章数量
+     */
+    private Long postCount;
 
 }

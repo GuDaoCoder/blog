@@ -28,48 +28,48 @@ import java.util.Optional;
 @Service
 public class PostCrudServiceImpl extends BaseCrudServiceImpl<PostMapper, PostEntity> implements PostCrudService {
 
-	@Override
-	public IPage<PostEntity> page(SearchPostContext context) {
-		LambdaQueryWrapper<PostEntity> queryWrapper = Wrappers.lambdaQuery();
-		queryWrapper.like(StringUtils.isNotBlank(context.getTitle()), PostEntity::getTitle, context.getTitle())
-			.eq(context.getStatus() != null, PostEntity::getStatus, context.getStatus())
-			.eq(context.getSource() != null, PostEntity::getSource, context.getSource())
-			.eq(context.getCategoryId() != null, PostEntity::getCategoryId, context.getCategoryId())
-			.ge(context.getPublishStartTime() != null, PostEntity::getPublishTime, context.getPublishStartTime())
-			.le(context.getPublishEndTime() != null, PostEntity::getPublishTime, context.getPublishEndTime())
-			.ge(context.getCreateStartTime() != null, PostEntity::getCreateTime, context.getCreateStartTime())
-			.le(context.getCreateEndTime() != null, PostEntity::getCreateTime, context.getCreateEndTime())
-			.eq(context.getTop() != null, PostEntity::getTop, context.getTop())
-			.eq(context.getEnableComment() != null, PostEntity::getEnableComment, context.getEnableComment())
-			.orderByDesc(PostEntity::getCreateTime);
-		return baseMapper.selectPage(context.getPageable(), queryWrapper);
-	}
+    @Override
+    public IPage<PostEntity> page(SearchPostContext context) {
+        LambdaQueryWrapper<PostEntity> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.like(StringUtils.isNotBlank(context.getTitle()), PostEntity::getTitle, context.getTitle())
+            .eq(context.getStatus() != null, PostEntity::getStatus, context.getStatus())
+            .eq(context.getSource() != null, PostEntity::getSource, context.getSource())
+            .eq(context.getCategoryId() != null, PostEntity::getCategoryId, context.getCategoryId())
+            .ge(context.getPublishStartTime() != null, PostEntity::getPublishTime, context.getPublishStartTime())
+            .le(context.getPublishEndTime() != null, PostEntity::getPublishTime, context.getPublishEndTime())
+            .ge(context.getCreateStartTime() != null, PostEntity::getCreateTime, context.getCreateStartTime())
+            .le(context.getCreateEndTime() != null, PostEntity::getCreateTime, context.getCreateEndTime())
+            .eq(context.getTop() != null, PostEntity::getTop, context.getTop())
+            .eq(context.getEnableComment() != null, PostEntity::getEnableComment, context.getEnableComment())
+            .orderByDesc(PostEntity::getCreateTime);
+        return baseMapper.selectPage(context.getPageable(), queryWrapper);
+    }
 
-	@Override
-	public boolean categoryUsed(Long categoryId) {
-		LambdaQueryWrapper<PostEntity> queryWrapper = Wrappers.lambdaQuery();
-		queryWrapper.eq(PostEntity::getCategoryId, categoryId);
-		return baseMapper.selectCount(queryWrapper) > 0;
-	}
+    @Override
+    public boolean categoryUsed(Long categoryId) {
+        LambdaQueryWrapper<PostEntity> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(PostEntity::getCategoryId, categoryId);
+        return baseMapper.selectCount(queryWrapper) > 0;
+    }
 
-	@Override
-	public List<CategoryPostCountEntity> getCategoryPostCountEntity(Collection<? extends Serializable> categoryIds) {
-		if (CollectionUtils.isEmpty(categoryIds)) {
-			return new ArrayList<>();
-		}
-		return baseMapper.getCategoryPostCountEntity(categoryIds);
-	}
+    @Override
+    public List<CategoryPostCountEntity> getCategoryPostCountEntity(Collection<? extends Serializable> categoryIds) {
+        if (CollectionUtils.isEmpty(categoryIds)) {
+            return new ArrayList<>();
+        }
+        return baseMapper.getCategoryPostCountEntity(categoryIds);
+    }
 
-	@Override
-	public List<PostEntity> findAll() {
-		return list();
-	}
+    @Override
+    public List<PostEntity> findAll() {
+        return list();
+    }
 
-	@Override
-	public Optional<PostEntity> findByTitle(String title) {
-		LambdaQueryWrapper<PostEntity> queryWrapper = Wrappers.lambdaQuery();
-		queryWrapper.eq(PostEntity::getTitle, title);
-		return getOneOpt(queryWrapper);
-	}
+    @Override
+    public Optional<PostEntity> findByTitle(String title) {
+        LambdaQueryWrapper<PostEntity> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(PostEntity::getTitle, title);
+        return getOneOpt(queryWrapper);
+    }
 
 }

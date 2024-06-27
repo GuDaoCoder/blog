@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class UploadImageResponse {
 
-	@Schema(description = "访问url")
-	private String url;
+    @Schema(description = "访问url")
+    private String url;
 
 }

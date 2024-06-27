@@ -17,10 +17,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class LogoutSuccessClearCacheListener implements ApplicationListener<LogoutSuccessEvent> {
 
-	@Override
-	public void onApplicationEvent(LogoutSuccessEvent event) {
-		log.info(">>>>>>>>>>用户登出后清除缓存");
-		RedisUtil.deleteObject(RedisKeyConstant.LOGIN_USER + event.getUserDetail().getUsername());
-	}
+    @Override
+    public void onApplicationEvent(LogoutSuccessEvent event) {
+        log.info(">>>>>>>>>>用户登出后清除缓存");
+        RedisUtil.deleteObject(RedisKeyConstant.LOGIN_USER + event.getUserDetail().getUsername());
+    }
 
 }

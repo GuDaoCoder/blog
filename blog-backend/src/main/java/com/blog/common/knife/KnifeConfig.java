@@ -20,21 +20,21 @@ import org.springframework.http.HttpHeaders;
 @Configuration
 public class KnifeConfig {
 
-	private final ProjectProperties projectProperties;
+    private final ProjectProperties projectProperties;
 
-	@Bean
-	public OpenAPI customOpenAPI() {
-		return new OpenAPI()
-			.info(new Info().title(projectProperties.getTitle())
-				.version(projectProperties.getVersion())
-				.description(projectProperties.getDescription())
-				.termsOfService(projectProperties.getWebsite())
-				.license(new License().name("Apache 2.0").url(projectProperties.getWebsite())))
-			.addSecurityItem(new SecurityRequirement().addList(HttpHeaders.AUTHORIZATION))
-			.components(new Components().addSecuritySchemes(HttpHeaders.AUTHORIZATION,
-					new SecurityScheme().name(HttpHeaders.AUTHORIZATION)
-						.type(SecurityScheme.Type.HTTP)
-						.scheme("Bearer")));
-	}
+    @Bean
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+            .info(new Info().title(projectProperties.getTitle())
+                .version(projectProperties.getVersion())
+                .description(projectProperties.getDescription())
+                .termsOfService(projectProperties.getWebsite())
+                .license(new License().name("Apache 2.0").url(projectProperties.getWebsite())))
+            .addSecurityItem(new SecurityRequirement().addList(HttpHeaders.AUTHORIZATION))
+            .components(new Components().addSecuritySchemes(HttpHeaders.AUTHORIZATION,
+                    new SecurityScheme().name(HttpHeaders.AUTHORIZATION)
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("Bearer")));
+    }
 
 }

@@ -11,16 +11,16 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class QiniuConfig {
 
-	private final OssProperties ossProperties;
+    private final OssProperties ossProperties;
 
-	@Bean
-	public Auth getAuth() {
-		return Auth.create(ossProperties.getAccessKey(), ossProperties.getSecretKey());
-	}
+    @Bean
+    public Auth getAuth() {
+        return Auth.create(ossProperties.getAccessKey(), ossProperties.getSecretKey());
+    }
 
-	@Bean
-	public UploadManager getUploadManager() {
-		return new UploadManager(new com.qiniu.storage.Configuration());
-	}
+    @Bean
+    public UploadManager getUploadManager() {
+        return new UploadManager(new com.qiniu.storage.Configuration());
+    }
 
 }

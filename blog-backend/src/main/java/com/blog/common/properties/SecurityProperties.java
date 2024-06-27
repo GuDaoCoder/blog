@@ -13,29 +13,29 @@ import java.util.Set;
 @ConfigurationProperties(prefix = "security", ignoreInvalidFields = true)
 public class SecurityProperties {
 
-	/**
-	 * rsa配置信息
-	 */
-	private Rsa rsa;
+    /**
+     * rsa配置信息
+     */
+    private Rsa rsa;
 
-	/**
-	 * 白名单
-	 */
-	private Set<String> whiteUrls;
+    /**
+     * 白名单
+     */
+    private Set<String> whiteUrls;
 
-	@Data
-	public static class Rsa {
+    @Data
+    public static class Rsa {
 
-		/**
-		 * 私钥
-		 */
-		private String privateKey;
+        /**
+         * 私钥
+         */
+        private String privateKey;
 
-		/**
-		 * 公钥
-		 */
-		private String publicKey;
+        /**
+         * 公钥
+         */
+        private String publicKey;
 
-	}
+    }
 
 }

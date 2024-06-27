@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Data
 public abstract class CommonRequest implements Serializable {
 
-	@Serial
-	private static final long serialVersionUID = 4910802190284215606L;
+    @Serial
+    private static final long serialVersionUID = 4910802190284215606L;
 
 }

@@ -22,12 +22,12 @@ import java.util.List;
 @RequestMapping("/portal/categories")
 public class CategoryPortalController {
 
-	private final CategoryManagerService categoryManagerService;
+    private final CategoryManagerService categoryManagerService;
 
-	@Operation(summary = "查询文章分类树")
-	@GetMapping
-	public Result<List<CategoryTreeResponse>> tree(@ParameterObject CategoryAdminTreeRequest request) {
-		return Result.success(categoryManagerService.tree(request));
-	}
+    @Operation(summary = "查询文章分类树")
+    @GetMapping
+    public Result<List<CategoryTreeResponse>> tree(@ParameterObject CategoryAdminTreeRequest request) {
+        return Result.success(categoryManagerService.tree(request));
+    }
 
 }

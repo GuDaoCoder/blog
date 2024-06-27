@@ -17,19 +17,19 @@ import java.util.List;
 @RequestMapping("/admin/adminUsers")
 public class AdminUserController {
 
-	private final AdminUserManagerService adminUserManagerService;
+    private final AdminUserManagerService adminUserManagerService;
 
-	@Operation(summary = "查询所有管理员用户")
-	@GetMapping
-	public Result<List<AdminUserResponse>> list() {
-		return Result.success(adminUserManagerService.list());
-	}
+    @Operation(summary = "查询所有管理员用户")
+    @GetMapping
+    public Result<List<AdminUserResponse>> list() {
+        return Result.success(adminUserManagerService.list());
+    }
 
-	@Operation(summary = "新增或更新管理员用户")
-	@PostMapping("/saveOrUpdate")
-	public Result<Void> saveOrUpdate(@RequestBody AdminUserRequest request) {
-		adminUserManagerService.saveOrUpdate(request);
-		return Result.success();
-	}
+    @Operation(summary = "新增或更新管理员用户")
+    @PostMapping("/saveOrUpdate")
+    public Result<Void> saveOrUpdate(@RequestBody AdminUserRequest request) {
+        adminUserManagerService.saveOrUpdate(request);
+        return Result.success();
+    }
 
 }

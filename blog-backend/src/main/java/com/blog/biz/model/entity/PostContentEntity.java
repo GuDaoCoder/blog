@@ -18,24 +18,24 @@ import java.io.Serial;
 @TableName("t_post_content")
 public class PostContentEntity extends BaseEntity {
 
-	@Serial
-	private static final long serialVersionUID = 4915912930033166534L;
+    @Serial
+    private static final long serialVersionUID = 4915912930033166534L;
 
-	/**
-	 * 主键Id
-	 */
-	@TableId(type = IdType.AUTO)
-	private Long postContentId;
+    /**
+     * 主键Id
+     */
+    @TableId(type = IdType.AUTO)
+    private Long postContentId;
 
-	/**
-	 * 文章Id
-	 */
-	private Long postId;
+    /**
+     * 文章Id
+     */
+    private Long postId;
 
-	/**
-	 * 文章内容
-	 */
-	@TableField(updateStrategy = FieldStrategy.ALWAYS)
-	private String content;
+    /**
+     * 文章内容
+     */
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    private String content;
 
 }

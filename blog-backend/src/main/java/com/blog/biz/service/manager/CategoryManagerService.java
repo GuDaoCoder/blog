@@ -14,32 +14,32 @@ import java.util.List;
  */
 public interface CategoryManagerService {
 
-	/**
-	 * 查询文章分类树
-	 * @param request
-	 * @return List<TreeCategoryResponse>
-	 **/
-	List<CategoryTreeResponse> tree(CategoryAdminTreeRequest request);
+    /**
+     * 查询文章分类树
+     * @param request
+     * @return List<TreeCategoryResponse>
+     **/
+    List<CategoryTreeResponse> tree(CategoryAdminTreeRequest request);
 
-	/**
-	 * 新增分类
-	 * @param request
-	 * @return CategoryResponse
-	 **/
-	CategoryResponse create(CreateCategoryRequest request);
+    /**
+     * 新增分类
+     * @param request
+     * @return CategoryResponse
+     **/
+    CategoryResponse create(CreateCategoryRequest request);
 
-	/**
-	 * 更新分类
-	 * @param categoryId
-	 * @param request
-	 * @return CategoryResponse
-	 **/
-	CategoryResponse update(Long categoryId, UpdateCategoryRequest request);
+    /**
+     * 更新分类
+     * @param categoryId
+     * @param request
+     * @return CategoryResponse
+     **/
+    CategoryResponse update(Long categoryId, UpdateCategoryRequest request);
 
-	/**
-	 * 删除分类
-	 * @param categoryId Long
-	 */
-	void delete(Long categoryId);
+    /**
+     * 删除分类
+     * @param categoryId Long
+     */
+    void delete(Long categoryId);
 
 }

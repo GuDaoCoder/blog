@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface TreeNode<Node> {
 
-	void buildChildren(List<Node> children);
+    void buildChildren(List<Node> children);
 
 }

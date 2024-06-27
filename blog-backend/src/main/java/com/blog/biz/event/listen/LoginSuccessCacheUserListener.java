@@ -20,13 +20,13 @@ import java.time.Duration;
 @Component
 public class LoginSuccessCacheUserListener implements ApplicationListener<LoginSuccessEvent> {
 
-	private final SaTokenProperties saTokenProperties;
+    private final SaTokenProperties saTokenProperties;
 
-	@Override
-	public void onApplicationEvent(LoginSuccessEvent event) {
-		log.info(">>>>>>>>>>用户登录后缓存当前用户信息");
-		RedisUtil.setCacheObject(RedisKeyConstant.LOGIN_USER + event.getUserDetail().getUsername(),
-				event.getUserDetail(), Duration.ofSeconds(saTokenProperties.getTimeout()));
-	}
+    @Override
+    public void onApplicationEvent(LoginSuccessEvent event) {
+        log.info(">>>>>>>>>>用户登录后缓存当前用户信息");
+        RedisUtil.setCacheObject(RedisKeyConstant.LOGIN_USER + event.getUserDetail().getUsername(),
+                event.getUserDetail(), Duration.ofSeconds(saTokenProperties.getTimeout()));
+    }
 
 }
