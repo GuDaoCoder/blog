@@ -18,8 +18,7 @@ public class MybatisPlusGenerator {
         String url = System.getenv().get("url");
         String username = System.getenv().get("username");
         String password = System.getenv().get("password");
-        FastAutoGenerator.create(url, username, password)
-                .globalConfig(builder -> {
+        FastAutoGenerator.create(url, username, password).globalConfig(builder -> {
                     // 作者
                     builder.author("zane.zou")
                             // 开启Springdoc
@@ -28,20 +27,11 @@ public class MybatisPlusGenerator {
                             .outputDir("/Users/zane.zou/Projects/blog/blog-backend/src/main/java")
                             // 禁止自动打开输出目录
                             .disableOpenDir();
-                })
-                .packageConfig(builder ->
-                        builder.parent("com.blog.biz")
-                                .controller("controller.admin")
-                                .entity("model.entity")
-                                .mapper("mapper")
-                                .service("service.crud")
-                                .serviceImpl("service.crud.impl")
-                                // 不输出mapper.xml
-                                .pathInfo(Collections.singletonMap(OutputFile.xml, null)))
-                .strategyConfig(builder ->
+                }).packageConfig(builder -> builder.parent("com.blog.biz").controller("controller.admin").entity("model.entity").mapper("mapper").service("service.crud").serviceImpl("service.crud.impl")
+                        // 不输出mapper.xml
+                        .pathInfo(Collections.singletonMap(OutputFile.xml, null))).strategyConfig(builder ->
                         // 设置需要生成的表名
-                        builder.addInclude(tables)
-                                .addTablePrefix("t_")
+                        builder.addInclude(tables).addTablePrefix("t_")
                                 // Controller 策略配置
                                 .controllerBuilder()
                                 // 格式化文件名称
@@ -78,9 +68,16 @@ public class MybatisPlusGenerator {
                                 .superServiceImplClass(BaseCrudServiceImpl.class)
                                 // 格式化文件名称
                                 .formatServiceImplFileName("%sCrudServiceImpl"))
+                .injectionConfig(builder -> builder.customFile(customFile -> customFile.packageName("model.request").fileName("Request.java").formatNameFunction(tableInfo -> {
+                            String entityName = tableInfo.getEntityName();
+                            return entityName.replace("Entity", "");
+                        }).templatePath("/templates/entityRequest.java.ftl"))
+                        .customFile(customFile -> customFile.packageName("model.response").fileName("Response.java").formatNameFunction(tableInfo -> {
+                            String entityName = tableInfo.getEntityName();
+                            return entityName.replace("Entity", "");
+                        }).templatePath("/templates/entityResponse.java.ftl")))
                 // 使用Freemarker引擎模板，默认的是Velocity引擎模板
-                .templateEngine(new FreemarkerTemplateEngine())
-                .execute();
+                .templateEngine(new FreemarkerTemplateEngine()).execute();
         ;
     }
 }
