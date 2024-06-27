@@ -89,6 +89,15 @@ spring:
         max-idle: 10
         # 连接池中的最小空闲连接
         min-idle: 0
+  # flyway配置
+  flyway:
+    enabled: true
+    encoding: UTF-8
+    locations: classpath:db/migration
+    # 是否关闭要清除已有库下的表功能,生产环境必须为true,否则会删库
+    clean-disabled: true
+    # 当迁移发现数据库非空且存在没有元数据的表时，自动执行基准迁移，新建schema_version表
+    baseline-on-migrate: true
 
 redisson:
   # redis key前缀
