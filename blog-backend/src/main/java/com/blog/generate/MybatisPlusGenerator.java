@@ -1,11 +1,14 @@
 package com.blog.generate;
 
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
+import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.blog.common.base.entity.BaseEntity;
 import com.blog.common.base.mapper.IBaseMapper;
 import com.blog.common.base.service.IBaseCrudService;
 import com.blog.common.base.service.impl.BaseCrudServiceImpl;
+
+import java.util.Collections;
 
 public class MybatisPlusGenerator {
 
@@ -27,44 +30,54 @@ public class MybatisPlusGenerator {
                             .disableOpenDir();
                 })
                 .packageConfig(builder ->
-                        // 父包名
                         builder.parent("com.blog.biz")
+                                .controller("controller.admin")
                                 .entity("model.entity")
                                 .mapper("mapper")
                                 .service("service.crud")
-                                .serviceImpl("service.crud.impl"))
+                                .serviceImpl("service.crud.impl")
+                                // 不输出mapper.xml
+                                .pathInfo(Collections.singletonMap(OutputFile.xml, null)))
                 .strategyConfig(builder ->
                         // 设置需要生成的表名
                         builder.addInclude(tables)
                                 .addTablePrefix("t_")
+                                // Controller 策略配置
+                                .controllerBuilder()
+                                // 格式化文件名称
+                                .formatFileName("%sAdminController")
+                                // 开启生成@RestController 控制器
+                                .enableRestStyle()
                                 // 实体策略配置
                                 .entityBuilder()
-                                // 修改实体类文件名
-                                .convertFileName(tableName -> tableName + "Entity")
+                                // 格式化文件名称
+                                .formatFileName("%sEntity")
                                 // 使用lombok
                                 .enableLombok()
+                                // 开启链式模型
+                                .enableChainModel()
                                 // 设置父类
                                 .superClass(BaseEntity.class)
                                 // 开启 Boolean 类型字段移除 is 前缀
                                 .enableRemoveIsPrefix()
-                                // 添加父类公共字段
-                                .addSuperEntityColumns("createBy", "createTime", "updateBy", "updateTime")
+                                // 添加忽略字段
+                                .addIgnoreColumns("create_by", "create_time", "update_by", "update_time")
                                 // Mapper策略配置
                                 .mapperBuilder()
-                                // 修改mapper文件名
-                                .convertMapperFileName(tableName -> tableName + "Mapper")
+                                // 格式化文件名称
+                                .formatMapperFileName("%sMapper")
                                 // 设置父类
                                 .superClass(IBaseMapper.class)
                                 // Service 策略配置
                                 .serviceBuilder()
                                 // 设置 Service 接口父类
                                 .superServiceClass(IBaseCrudService.class)
-                                // 转换 Service 接口文件名称
-                                .convertServiceFileName(tableName -> tableName + "CrudService")
+                                // 格式化文件名称
+                                .formatServiceFileName("%sCrudService")
                                 // 设置 Service 实现类父类
                                 .superServiceImplClass(BaseCrudServiceImpl.class)
-                                // 转换 Service 实现类文件名称
-                                .convertServiceImplFileName(tableName -> tableName + "CrudServiceImpl"))
+                                // 格式化文件名称
+                                .formatServiceImplFileName("%sCrudServiceImpl"))
                 // 使用Freemarker引擎模板，默认的是Velocity引擎模板
                 .templateEngine(new FreemarkerTemplateEngine())
                 .execute();
