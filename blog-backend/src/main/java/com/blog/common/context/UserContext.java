@@ -9,17 +9,18 @@ import com.blog.common.domain.UserDetail;
  */
 public class UserContext {
 
-    private static final TransmittableThreadLocal<UserDetail> local = new TransmittableThreadLocal<>();
+	private static final TransmittableThreadLocal<UserDetail> local = new TransmittableThreadLocal<>();
 
-    public static void set(UserDetail userDetail) {
-        local.set(userDetail);
-    }
+	public static void set(UserDetail userDetail) {
+		local.set(userDetail);
+	}
 
-    public static UserDetail get() {
-        return local.get();
-    }
+	public static UserDetail get() {
+		return local.get();
+	}
 
-    public static void remove() {
-        local.remove();
-    }
+	public static void remove() {
+		local.remove();
+	}
+
 }

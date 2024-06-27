@@ -24,34 +24,34 @@ import java.util.Optional;
 @Service
 public class TagCrudServiceImpl extends BaseCrudServiceImpl<TagMapper, TagEntity> implements TagCrudService {
 
-    @Override
-    public Optional<TagEntity> findByTagName(String tagName) {
-        LambdaQueryWrapper<TagEntity> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.eq(TagEntity::getTagName, tagName);
-        return Optional.ofNullable(baseMapper.selectOne(queryWrapper));
-    }
+	@Override
+	public Optional<TagEntity> findByTagName(String tagName) {
+		LambdaQueryWrapper<TagEntity> queryWrapper = Wrappers.lambdaQuery();
+		queryWrapper.eq(TagEntity::getTagName, tagName);
+		return Optional.ofNullable(baseMapper.selectOne(queryWrapper));
+	}
 
-    @Override
-    public IPage<TagEntity> page(String tagName, IPage<TagEntity> pageable) {
-        LambdaQueryWrapper<TagEntity> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.like(StringUtils.isNotBlank(tagName), TagEntity::getTagName, tagName)
-                .orderByDesc(TagEntity::getUpdateTime);
-        return baseMapper.selectPage(pageable, queryWrapper);
-    }
+	@Override
+	public IPage<TagEntity> page(String tagName, IPage<TagEntity> pageable) {
+		LambdaQueryWrapper<TagEntity> queryWrapper = Wrappers.lambdaQuery();
+		queryWrapper.like(StringUtils.isNotBlank(tagName), TagEntity::getTagName, tagName)
+			.orderByDesc(TagEntity::getUpdateTime);
+		return baseMapper.selectPage(pageable, queryWrapper);
+	}
 
-    @Override
-    public List<TagEntity> findAllByTagNames(List<String> tagNames) {
-        if (CollectionUtils.isEmpty(tagNames)) {
-            return new ArrayList<>();
-        }
-        LambdaQueryWrapper<TagEntity> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.in(TagEntity::getTagName, tagNames);
-        return baseMapper.selectList(queryWrapper);
-    }
+	@Override
+	public List<TagEntity> findAllByTagNames(List<String> tagNames) {
+		if (CollectionUtils.isEmpty(tagNames)) {
+			return new ArrayList<>();
+		}
+		LambdaQueryWrapper<TagEntity> queryWrapper = Wrappers.lambdaQuery();
+		queryWrapper.in(TagEntity::getTagName, tagNames);
+		return baseMapper.selectList(queryWrapper);
+	}
 
-    @Override
-    public List<TagEntity> findAll() {
-        return list();
-    }
+	@Override
+	public List<TagEntity> findAll() {
+		return list();
+	}
 
 }

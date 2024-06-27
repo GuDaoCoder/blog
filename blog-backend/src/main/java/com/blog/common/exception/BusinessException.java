@@ -10,8 +10,8 @@ import org.slf4j.helpers.MessageFormatter;
 @Getter
 public class BusinessException extends RuntimeException {
 
-    public BusinessException(String errorMsg, Object... arguments) {
-        super(MessageFormatter.arrayFormat(errorMsg, arguments).getMessage());
-    }
+	public BusinessException(String errorMsg, Object... arguments) {
+		super(MessageFormatter.arrayFormat(errorMsg, arguments).getMessage());
+	}
 
 }

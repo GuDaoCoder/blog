@@ -14,9 +14,11 @@ import java.io.Serial;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class TagSearchRequest extends PageRequest {
-    @Serial
-    private static final long serialVersionUID = -5932485187665352003L;
 
-    @Schema(description = "标签名称")
-    private String tagName;
+	@Serial
+	private static final long serialVersionUID = -5932485187665352003L;
+
+	@Schema(description = "标签名称")
+	private String tagName;
+
 }

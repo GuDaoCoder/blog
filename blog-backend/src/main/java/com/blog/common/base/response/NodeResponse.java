@@ -12,18 +12,19 @@ import java.util.List;
 @Data
 public class NodeResponse<T> extends CommonResponse {
 
-    @Schema(description = "Id")
-    private Long id;
+	@Schema(description = "Id")
+	private Long id;
 
-    @Schema(description = "显示值")
-    private String label;
+	@Schema(description = "显示值")
+	private String label;
 
-    @Schema(description = "上级Id")
-    private Long parentId;
+	@Schema(description = "上级Id")
+	private Long parentId;
 
-    @Schema(description = "业务数据")
-    private T data;
+	@Schema(description = "业务数据")
+	private T data;
 
-    @Schema(description = "子集数据")
-    private List<NodeResponse<T>> children;
+	@Schema(description = "子集数据")
+	private List<NodeResponse<T>> children;
+
 }

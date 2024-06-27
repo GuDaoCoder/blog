@@ -13,29 +13,30 @@ import java.io.InputStream;
 
 public class QiniuOssApiServiceImpl implements OssApiService {
 
-    private final OssProperties ossProperties;
+	private final OssProperties ossProperties;
 
-    private final UploadManager uploadManager;
+	private final UploadManager uploadManager;
 
-    private final Auth auth;
+	private final Auth auth;
 
-    public QiniuOssApiServiceImpl(OssProperties ossProperties, UploadManager uploadManager, Auth auth) {
-        this.ossProperties = ossProperties;
-        this.uploadManager = uploadManager;
-        this.auth = auth;
-    }
+	public QiniuOssApiServiceImpl(OssProperties ossProperties, UploadManager uploadManager, Auth auth) {
+		this.ossProperties = ossProperties;
+		this.uploadManager = uploadManager;
+		this.auth = auth;
+	}
 
-    @SneakyThrows
-    @Override
-    public String uploadFile(InputStream is, String directory, String fileName) {
-        String token = auth.uploadToken(ossProperties.getBucketName());
-        if (StringUtils.isNotBlank(directory)) {
-            fileName = directory + "/" + fileName;
-        }
-        Response res = uploadManager.put(is, fileName, token, null, null);
-        if (!res.isOK()) {
-            throw new BusinessException("文件上传OSS失败：{}", res.error);
-        }
-        return ossProperties.getDomain() + "/" + fileName;
-    }
+	@SneakyThrows
+	@Override
+	public String uploadFile(InputStream is, String directory, String fileName) {
+		String token = auth.uploadToken(ossProperties.getBucketName());
+		if (StringUtils.isNotBlank(directory)) {
+			fileName = directory + "/" + fileName;
+		}
+		Response res = uploadManager.put(is, fileName, token, null, null);
+		if (!res.isOK()) {
+			throw new BusinessException("文件上传OSS失败：{}", res.error);
+		}
+		return ossProperties.getDomain() + "/" + fileName;
+	}
+
 }

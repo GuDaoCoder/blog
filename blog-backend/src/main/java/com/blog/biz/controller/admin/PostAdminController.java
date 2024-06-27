@@ -29,51 +29,52 @@ import java.util.concurrent.Executor;
 @RequestMapping("/admin/posts")
 public class PostAdminController {
 
-    private final PostManagerService postManagerService;
+	private final PostManagerService postManagerService;
 
-    private final BlogSyncService blogSyncService;
+	private final BlogSyncService blogSyncService;
 
-    @Qualifier("threadPoolTaskExecutor")
-    private final Executor executor;
+	@Qualifier("threadPoolTaskExecutor")
+	private final Executor executor;
 
-    @Operation(summary = "查询文章列表")
-    @GetMapping
-    public Result<PageResponse<PostResponse>> search(@ParameterObject @Validated PostSearchRequest request) {
-        return Result.success(postManagerService.search(request));
-    }
+	@Operation(summary = "查询文章列表")
+	@GetMapping
+	public Result<PageResponse<PostResponse>> search(@ParameterObject @Validated PostSearchRequest request) {
+		return Result.success(postManagerService.search(request));
+	}
 
-    @Operation(summary = "查询文章内容")
-    @GetMapping("/{postId}/content")
-    public Result<String> getPostContent(@Parameter(description = "文章Id") @PathVariable Long postId) {
-        return Result.success(postManagerService.getContent(postId));
-    }
+	@Operation(summary = "查询文章内容")
+	@GetMapping("/{postId}/content")
+	public Result<String> getPostContent(@Parameter(description = "文章Id") @PathVariable Long postId) {
+		return Result.success(postManagerService.getContent(postId));
+	}
 
-    @Operation(summary = "发布文章")
-    @PatchMapping("/{postId}/publish")
-    public Result<Void> publish(@Parameter(description = "文章Id") @PathVariable Long postId) {
-        postManagerService.publish(postId);
-        return Result.success();
-    }
+	@Operation(summary = "发布文章")
+	@PatchMapping("/{postId}/publish")
+	public Result<Void> publish(@Parameter(description = "文章Id") @PathVariable Long postId) {
+		postManagerService.publish(postId);
+		return Result.success();
+	}
 
-    @Operation(summary = "下架文章")
-    @PatchMapping("/{postId}/remove")
-    public Result<Void> remove(@Parameter(description = "文章Id") @PathVariable Long postId) {
-        postManagerService.remove(postId);
-        return Result.success();
-    }
+	@Operation(summary = "下架文章")
+	@PatchMapping("/{postId}/remove")
+	public Result<Void> remove(@Parameter(description = "文章Id") @PathVariable Long postId) {
+		postManagerService.remove(postId);
+		return Result.success();
+	}
 
-    @Operation(summary = "设置封面图片")
-    @PatchMapping("/{postId}/updateCoverPicture")
-    public Result<Void> updateCoverPicture(@Parameter(description = "文章Id") @PathVariable Long postId,
-                                           @RequestBody UpdateCoverPictureRequest request) {
-        postManagerService.updateCoverPicture(postId, request.getCoverPictureUrl());
-        return Result.success();
-    }
+	@Operation(summary = "设置封面图片")
+	@PatchMapping("/{postId}/updateCoverPicture")
+	public Result<Void> updateCoverPicture(@Parameter(description = "文章Id") @PathVariable Long postId,
+			@RequestBody UpdateCoverPictureRequest request) {
+		postManagerService.updateCoverPicture(postId, request.getCoverPictureUrl());
+		return Result.success();
+	}
 
-    @Operation(summary = "同步文章")
-    @GetMapping("/sync")
-    public Result<Void> sync() {
-        CompletableFuture.runAsync(blogSyncService::sync, executor);
-        return Result.success();
-    }
+	@Operation(summary = "同步文章")
+	@GetMapping("/sync")
+	public Result<Void> sync() {
+		CompletableFuture.runAsync(blogSyncService::sync, executor);
+		return Result.success();
+	}
+
 }

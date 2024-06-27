@@ -8,4 +8,5 @@ import com.blog.common.base.mapper.IBaseMapper;
  * @desc
  */
 public interface AdminUserMapper extends IBaseMapper<AdminUserEntity> {
+
 }

@@ -19,21 +19,22 @@ import java.util.Objects;
 @Service
 public class GitRepositoryManagerServiceImpl implements GitRepositoryManagerService {
 
-    private final GitRepositoryCrudService gitRepositoryCrudService;
+	private final GitRepositoryCrudService gitRepositoryCrudService;
 
-    @Override
-    public List<GitRepositoryResponse> list() {
-        return gitRepositoryCrudService.list().stream().map(GitRepositoryConverter.INSTANCE::toResponse).toList();
-    }
+	@Override
+	public List<GitRepositoryResponse> list() {
+		return gitRepositoryCrudService.list().stream().map(GitRepositoryConverter.INSTANCE::toResponse).toList();
+	}
 
-    @Override
-    public Long save(GitRepositoryRequest request) {
-        if (Objects.isNull(request.getGitRepositoryId()) && gitRepositoryCrudService.count() > 0) {
-            throw new BusinessException("Git仓库信息已存在");
-        }
-        GitRepositoryEntity gitRepositoryEntity = GitRepositoryConverter.INSTANCE.toEntity(request);
-        gitRepositoryCrudService.saveOrUpdate(gitRepositoryEntity);
+	@Override
+	public Long save(GitRepositoryRequest request) {
+		if (Objects.isNull(request.getGitRepositoryId()) && gitRepositoryCrudService.count() > 0) {
+			throw new BusinessException("Git仓库信息已存在");
+		}
+		GitRepositoryEntity gitRepositoryEntity = GitRepositoryConverter.INSTANCE.toEntity(request);
+		gitRepositoryCrudService.saveOrUpdate(gitRepositoryEntity);
 
-        return gitRepositoryEntity.getGitRepositoryId();
-    }
+		return gitRepositoryEntity.getGitRepositoryId();
+	}
+
 }

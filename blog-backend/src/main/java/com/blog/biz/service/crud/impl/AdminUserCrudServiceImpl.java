@@ -19,12 +19,14 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class AdminUserCrudServiceImpl extends BaseCrudServiceImpl<AdminUserMapper, AdminUserEntity> implements AdminUserCrudService {
+public class AdminUserCrudServiceImpl extends BaseCrudServiceImpl<AdminUserMapper, AdminUserEntity>
+		implements AdminUserCrudService {
 
-    @Override
-    public Optional<AdminUserEntity> findByUsername(String username) {
-        LambdaQueryWrapper<AdminUserEntity> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.eq(AdminUserEntity::getUsername, username);
-        return Optional.ofNullable(baseMapper.selectOne(queryWrapper));
-    }
+	@Override
+	public Optional<AdminUserEntity> findByUsername(String username) {
+		LambdaQueryWrapper<AdminUserEntity> queryWrapper = Wrappers.lambdaQuery();
+		queryWrapper.eq(AdminUserEntity::getUsername, username);
+		return Optional.ofNullable(baseMapper.selectOne(queryWrapper));
+	}
+
 }

@@ -20,23 +20,23 @@ import java.io.Serial;
 @TableName("t_tag")
 public class TagEntity extends BaseEntity {
 
-    @Serial
-    private static final long serialVersionUID = 5214190302074473126L;
+	@Serial
+	private static final long serialVersionUID = 5214190302074473126L;
 
-    /**
-     * 用户Id
-     */
-    @TableId(type = IdType.AUTO)
-    private Long tagId;
+	/**
+	 * 用户Id
+	 */
+	@TableId(type = IdType.AUTO)
+	private Long tagId;
 
-    /**
-     * 标签名称
-     */
-    private String tagName;
+	/**
+	 * 标签名称
+	 */
+	private String tagName;
 
-    /**
-     * 颜色
-     */
-    private String color;
+	/**
+	 * 颜色
+	 */
+	private String color;
 
 }

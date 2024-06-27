@@ -6,9 +6,9 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class PostDetailResponse extends PostResponse{
+public class PostDetailResponse extends PostResponse {
 
-    @Schema(description = "文章内容")
-    private String content;
+	@Schema(description = "文章内容")
+	private String content;
 
 }

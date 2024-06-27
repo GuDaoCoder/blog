@@ -8,7 +8,8 @@ import org.slf4j.helpers.MessageFormatter;
  */
 public class StrUtil {
 
-    public static String format(String template,Object... args){
-        return MessageFormatter.arrayFormat(template,args).getMessage();
-    }
+	public static String format(String template, Object... args) {
+		return MessageFormatter.arrayFormat(template, args).getMessage();
+	}
+
 }

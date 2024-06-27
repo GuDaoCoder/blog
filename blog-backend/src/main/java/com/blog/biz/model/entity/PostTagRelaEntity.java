@@ -20,23 +20,23 @@ import java.io.Serial;
 @TableName("t_post_tag_rela")
 public class PostTagRelaEntity extends BaseEntity {
 
-    @Serial
-    private static final long serialVersionUID = -7442565056566303901L;
+	@Serial
+	private static final long serialVersionUID = -7442565056566303901L;
 
-    /**
-     * 主键
-     */
-    @TableId(type = IdType.AUTO)
-    private Long postTagRelaId;
+	/**
+	 * 主键
+	 */
+	@TableId(type = IdType.AUTO)
+	private Long postTagRelaId;
 
-    /**
-     * 文章Id
-     */
-    private Long postId;
+	/**
+	 * 文章Id
+	 */
+	private Long postId;
 
-    /**
-     * 标签Id
-     */
-    private Long tagId;
+	/**
+	 * 标签Id
+	 */
+	private Long tagId;
 
 }

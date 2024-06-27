@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CustomErrorController implements ErrorController {
 
-    @RequestMapping("/error")
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Result<Void> handleNotFound() {
-        return Result.fail("资源不存在或已被删除");
-    }
+	@RequestMapping("/error")
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public Result<Void> handleNotFound() {
+		return Result.fail("资源不存在或已被删除");
+	}
 
 }

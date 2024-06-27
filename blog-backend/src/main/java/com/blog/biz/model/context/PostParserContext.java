@@ -10,30 +10,30 @@ import java.util.List;
 @Data
 public class PostParserContext {
 
-    private String title;
+	private String title;
 
-    private List<Category> categories;
+	private List<Category> categories;
 
-    private String coverPictureUrl;
+	private String coverPictureUrl;
 
-    private String summary;
+	private String summary;
 
-    private String content;
+	private String content;
 
-    private List<String> tags;
+	private List<String> tags;
 
-    private LocalDateTime fileLastUpdate;
+	private LocalDateTime fileLastUpdate;
 
-    @Accessors(chain = true)
-    @Data
-    public static class Category {
+	@Accessors(chain = true)
+	@Data
+	public static class Category {
 
-        private String categoryName;
+		private String categoryName;
 
-        private Integer orderNo;
+		private Integer orderNo;
 
-        private Integer level;
+		private Integer level;
 
-    }
+	}
 
 }

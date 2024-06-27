@@ -7,4 +7,6 @@ import com.blog.biz.model.entity.PostContentEntity;
  * @author zouzhangpeng
  * @desc
  */
-public interface PostContentMapper extends BaseMapper<PostContentEntity> {}
+public interface PostContentMapper extends BaseMapper<PostContentEntity> {
+
+}

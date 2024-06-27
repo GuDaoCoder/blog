@@ -8,11 +8,11 @@ import com.blog.common.domain.UserDetail;
  */
 public interface UserDetailLoadService {
 
-    /**
-     * 根据用户名称查询用户详情
-     * 
-     * @param username String
-     * @return com.blog.common.domain.UserDetail
-     */
-    UserDetail load(String username);
+	/**
+	 * 根据用户名称查询用户详情
+	 * @param username String
+	 * @return com.blog.common.domain.UserDetail
+	 */
+	UserDetail load(String username);
+
 }

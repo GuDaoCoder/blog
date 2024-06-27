@@ -7,15 +7,16 @@ import java.util.function.Consumer;
 
 public class HeadingVisitor extends AbstractVisitor {
 
-    private Consumer<Heading> consumer;
+	private Consumer<Heading> consumer;
 
-    public HeadingVisitor(Consumer<Heading> consumer) {
-        this.consumer = consumer;
-    }
+	public HeadingVisitor(Consumer<Heading> consumer) {
+		this.consumer = consumer;
+	}
 
-    @Override
-    public void visit(Heading heading) {
-        super.visit(heading);
-        consumer.accept(heading);
-    }
+	@Override
+	public void visit(Heading heading) {
+		super.visit(heading);
+		consumer.accept(heading);
+	}
+
 }

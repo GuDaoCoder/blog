@@ -15,14 +15,14 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface TagConverter {
 
-    TagConverter INSTANCE = Mappers.getMapper(TagConverter.class);
+	TagConverter INSTANCE = Mappers.getMapper(TagConverter.class);
 
-    TagEntity toEntity(CreateTagRequest request);
+	TagEntity toEntity(CreateTagRequest request);
 
-    TagEntity toEntity(UpdateTagRequest request);
+	TagEntity toEntity(UpdateTagRequest request);
 
-    TagResponse toResponse(TagEntity entity);
+	TagResponse toResponse(TagEntity entity);
 
-    TagDetailResponse toDetailResponse(TagEntity entity);
+	TagDetailResponse toDetailResponse(TagEntity entity);
 
 }

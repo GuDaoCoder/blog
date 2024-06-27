@@ -20,17 +20,18 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class UserInterceptor implements HandlerInterceptor {
 
-    private final UserDetailLoadService userDetailLoadService;
+	private final UserDetailLoadService userDetailLoadService;
 
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        UserContext.set(userDetailLoadService.load((String)StpUtil.getLoginId()));
-        return true;
-    }
+	@Override
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+		UserContext.set(userDetailLoadService.load((String) StpUtil.getLoginId()));
+		return true;
+	}
 
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler,
-        Exception ex) {
-        UserContext.remove();
-    }
+	@Override
+	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler,
+			Exception ex) {
+		UserContext.remove();
+	}
+
 }

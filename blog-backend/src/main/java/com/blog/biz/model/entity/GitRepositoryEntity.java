@@ -14,42 +14,43 @@ import java.io.Serial;
 @TableName("t_git_repository")
 public class GitRepositoryEntity extends BaseEntity {
 
-    @Serial
-    private static final long serialVersionUID = -596804980214255293L;
+	@Serial
+	private static final long serialVersionUID = -596804980214255293L;
 
-    /**
-     * 主键
-     */
-    @TableId(type = IdType.AUTO)
-    private Long gitRepositoryId;
+	/**
+	 * 主键
+	 */
+	@TableId(type = IdType.AUTO)
+	private Long gitRepositoryId;
 
-    /**
-     * 仓库地址
-     */
-    @TableField(updateStrategy = FieldStrategy.ALWAYS)
-    private String url;
+	/**
+	 * 仓库地址
+	 */
+	@TableField(updateStrategy = FieldStrategy.ALWAYS)
+	private String url;
 
-    /**
-     * 本地下载路径
-     */
-    @TableField(updateStrategy = FieldStrategy.ALWAYS)
-    private String localPath;
+	/**
+	 * 本地下载路径
+	 */
+	@TableField(updateStrategy = FieldStrategy.ALWAYS)
+	private String localPath;
 
-    /**
-     * 用户名
-     */
-    @TableField(updateStrategy = FieldStrategy.ALWAYS)
-    private String username;
+	/**
+	 * 用户名
+	 */
+	@TableField(updateStrategy = FieldStrategy.ALWAYS)
+	private String username;
 
-    /**
-     * 密码
-     */
-    @TableField(updateStrategy = FieldStrategy.ALWAYS)
-    private String password;
+	/**
+	 * 密码
+	 */
+	@TableField(updateStrategy = FieldStrategy.ALWAYS)
+	private String password;
 
-    /**
-     * 分支
-     */
-    @TableField(updateStrategy = FieldStrategy.ALWAYS)
-    private String branch;
+	/**
+	 * 分支
+	 */
+	@TableField(updateStrategy = FieldStrategy.ALWAYS)
+	private String branch;
+
 }

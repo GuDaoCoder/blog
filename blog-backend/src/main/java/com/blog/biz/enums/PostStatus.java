@@ -11,17 +11,17 @@ import lombok.Getter;
 @Getter
 public enum PostStatus {
 
-    DRAFT("草稿"),
+	DRAFT("草稿"),
 
-    PUBLISHED("已发布"),
+	PUBLISHED("已发布"),
 
-    REMOVED("已下架"),
-    ;
+	REMOVED("已下架"),;
 
-    private String label;
+	private String label;
 
-    @Override
-    public String toString() {
-        return this.name() + "-" + this.label;
-    }
+	@Override
+	public String toString() {
+		return this.name() + "-" + this.label;
+	}
+
 }

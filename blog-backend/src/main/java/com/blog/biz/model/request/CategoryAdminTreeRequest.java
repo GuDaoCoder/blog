@@ -9,9 +9,10 @@ import java.io.Serializable;
 @Data
 public class CategoryAdminTreeRequest implements Serializable {
 
-    @Serial
-    private static final long serialVersionUID = -47502554648611268L;
+	@Serial
+	private static final long serialVersionUID = -47502554648611268L;
 
-    @Schema(description = "分类名称")
-    private String categoryName;
+	@Schema(description = "分类名称")
+	private String categoryName;
+
 }

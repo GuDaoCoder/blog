@@ -23,42 +23,47 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class CategoryCrudServiceImpl extends BaseCrudServiceImpl<CategoryMapper, CategoryEntity>
-        implements CategoryCrudService {
+		implements CategoryCrudService {
 
-    @Override
-    public Optional<CategoryEntity> findByCategoryName(String categoryName) {
-        LambdaQueryWrapper<CategoryEntity> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.eq(CategoryEntity::getCategoryName, categoryName);
-        return Optional.ofNullable(baseMapper.selectOne(queryWrapper));
-    }
+	@Override
+	public Optional<CategoryEntity> findByCategoryName(String categoryName) {
+		LambdaQueryWrapper<CategoryEntity> queryWrapper = Wrappers.lambdaQuery();
+		queryWrapper.eq(CategoryEntity::getCategoryName, categoryName);
+		return Optional.ofNullable(baseMapper.selectOne(queryWrapper));
+	}
 
-    @Override
-    public Optional<CategoryEntity> findLatest(Long parentId) {
-        LambdaQueryWrapper<CategoryEntity> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.eq(CategoryEntity::getParentCategoryId, parentId).orderByDesc(CategoryEntity::getOrderNo)
-                .last("limit 1");
-        return Optional.ofNullable(baseMapper.selectOne(queryWrapper));
-    }
+	@Override
+	public Optional<CategoryEntity> findLatest(Long parentId) {
+		LambdaQueryWrapper<CategoryEntity> queryWrapper = Wrappers.lambdaQuery();
+		queryWrapper.eq(CategoryEntity::getParentCategoryId, parentId)
+			.orderByDesc(CategoryEntity::getOrderNo)
+			.last("limit 1");
+		return Optional.ofNullable(baseMapper.selectOne(queryWrapper));
+	}
 
-    @Override
-    public List<String> findAllByCategoryNames(List<String> categoryNames) {
-        if (CollectionUtils.isEmpty(categoryNames)) {
-            return new ArrayList<>();
-        }
-        LambdaQueryWrapper<CategoryEntity> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.in(CategoryEntity::getCategoryName, categoryNames);
-        return baseMapper.selectList(queryWrapper).stream().map(CategoryEntity::getCategoryName).collect(Collectors.toList());
-    }
+	@Override
+	public List<String> findAllByCategoryNames(List<String> categoryNames) {
+		if (CollectionUtils.isEmpty(categoryNames)) {
+			return new ArrayList<>();
+		}
+		LambdaQueryWrapper<CategoryEntity> queryWrapper = Wrappers.lambdaQuery();
+		queryWrapper.in(CategoryEntity::getCategoryName, categoryNames);
+		return baseMapper.selectList(queryWrapper)
+			.stream()
+			.map(CategoryEntity::getCategoryName)
+			.collect(Collectors.toList());
+	}
 
-    @Override
-    public List<CategoryEntity> findAll() {
-        return list();
-    }
+	@Override
+	public List<CategoryEntity> findAll() {
+		return list();
+	}
 
-    @Override
-    public List<CategoryEntity> findAllByCondition(String categoryName) {
-        LambdaQueryWrapper<CategoryEntity> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.like(StringUtils.isNotBlank(categoryName), CategoryEntity::getCategoryName, categoryName);
-        return baseMapper.selectList(queryWrapper);
-    }
+	@Override
+	public List<CategoryEntity> findAllByCondition(String categoryName) {
+		LambdaQueryWrapper<CategoryEntity> queryWrapper = Wrappers.lambdaQuery();
+		queryWrapper.like(StringUtils.isNotBlank(categoryName), CategoryEntity::getCategoryName, categoryName);
+		return baseMapper.selectList(queryWrapper);
+	}
+
 }

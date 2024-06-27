@@ -17,9 +17,10 @@ import java.io.Serial;
 @Data
 public class LoginResponse extends CommonResponse {
 
-    @Serial
-    private static final long serialVersionUID = 2576053190868440582L;
+	@Serial
+	private static final long serialVersionUID = 2576053190868440582L;
 
-    @Schema(description = "token")
-    private String token;
+	@Schema(description = "token")
+	private String token;
+
 }

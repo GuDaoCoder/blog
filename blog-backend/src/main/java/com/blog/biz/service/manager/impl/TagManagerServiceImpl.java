@@ -33,42 +33,41 @@ import java.util.stream.Collectors;
 @Service
 public class TagManagerServiceImpl implements TagManagerService, OverviewStatisticService {
 
-    private final TagCrudService tagCrudService;
+	private final TagCrudService tagCrudService;
 
-    private final PostTagRelaCrudService postTagRelaCrudService;
+	private final PostTagRelaCrudService postTagRelaCrudService;
 
-    @Override
-    public PageResponse<TagDetailResponse> search(TagSearchRequest request) {
-        IPage<TagEntity> page = tagCrudService.page(request.getTagName(), PageUtil.pageable(request));
-        return PageUtil.result(page, toDetailResponses(page.getRecords()));
-    }
+	@Override
+	public PageResponse<TagDetailResponse> search(TagSearchRequest request) {
+		IPage<TagEntity> page = tagCrudService.page(request.getTagName(), PageUtil.pageable(request));
+		return PageUtil.result(page, toDetailResponses(page.getRecords()));
+	}
 
-    private List<TagDetailResponse> toDetailResponses(List<TagEntity> tagEntities) {
-        if (CollectionUtils.isEmpty(tagEntities)) {
-            return new ArrayList<>();
-        }
-        List<Long> tagIds = StreamUtil.mapField(tagEntities, TagEntity::getTagId);
+	private List<TagDetailResponse> toDetailResponses(List<TagEntity> tagEntities) {
+		if (CollectionUtils.isEmpty(tagEntities)) {
+			return new ArrayList<>();
+		}
+		List<Long> tagIds = StreamUtil.mapField(tagEntities, TagEntity::getTagId);
 
-        Map<Long, Long> tagPostCountMap = postTagRelaCrudService.getTagPostCountEntity(tagIds)
-                .stream()
-                .collect(Collectors.toMap(TagPostCountEntity::getTagId, TagPostCountEntity::getPostCount));
+		Map<Long, Long> tagPostCountMap = postTagRelaCrudService.getTagPostCountEntity(tagIds)
+			.stream()
+			.collect(Collectors.toMap(TagPostCountEntity::getTagId, TagPostCountEntity::getPostCount));
 
-        return tagEntities
-                .stream()
-                .map(tagEntity -> {
-                    TagDetailResponse tagDetailResponse = TagConverter.INSTANCE.toDetailResponse(tagEntity);
-                    tagDetailResponse.setPostCount(tagPostCountMap.getOrDefault(tagEntity.getTagId(), 0L));
-                    return tagDetailResponse;
-                }).toList();
-    }
+		return tagEntities.stream().map(tagEntity -> {
+			TagDetailResponse tagDetailResponse = TagConverter.INSTANCE.toDetailResponse(tagEntity);
+			tagDetailResponse.setPostCount(tagPostCountMap.getOrDefault(tagEntity.getTagId(), 0L));
+			return tagDetailResponse;
+		}).toList();
+	}
 
-    @Override
-    public OverviewType overviewType() {
-        return OverviewType.TAG;
-    }
+	@Override
+	public OverviewType overviewType() {
+		return OverviewType.TAG;
+	}
 
-    @Override
-    public Long overviewCount() {
-        return tagCrudService.count();
-    }
+	@Override
+	public Long overviewCount() {
+		return tagCrudService.count();
+	}
+
 }

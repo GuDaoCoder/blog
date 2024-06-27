@@ -15,8 +15,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class LogoutSuccessSaveLogListener implements ApplicationListener<LogoutSuccessEvent> {
 
-    @Override
-    public void onApplicationEvent(LogoutSuccessEvent event) {
-        log.info(">>>>>>>>>>用户登出后记录日志");
-    }
+	@Override
+	public void onApplicationEvent(LogoutSuccessEvent event) {
+		log.info(">>>>>>>>>>用户登出后记录日志");
+	}
+
 }

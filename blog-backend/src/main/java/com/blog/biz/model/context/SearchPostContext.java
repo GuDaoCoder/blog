@@ -18,62 +18,63 @@ import java.time.LocalDateTime;
 @Setter
 public class SearchPostContext extends BasePageContext<PostEntity> {
 
-    /**
-     * 标题
-     */
-    private String title;
+	/**
+	 * 标题
+	 */
+	private String title;
 
-    /**
-     * 状态
-     */
-    private PostStatus status;
+	/**
+	 * 状态
+	 */
+	private PostStatus status;
 
-    /**
-     * 文章来源
-     */
-    private PostSource source;
+	/**
+	 * 文章来源
+	 */
+	private PostSource source;
 
-    /**
-     * 所属分类Id
-     */
-    private Long categoryId;
+	/**
+	 * 所属分类Id
+	 */
+	private Long categoryId;
 
-    /**
-     * 发布开始时间
-     */
-    private LocalDateTime publishStartTime;
+	/**
+	 * 发布开始时间
+	 */
+	private LocalDateTime publishStartTime;
 
-    /**
-     * 发布结束时间
-     */
-    private LocalDateTime publishEndTime;
+	/**
+	 * 发布结束时间
+	 */
+	private LocalDateTime publishEndTime;
 
-    /**
-     * 创建开始时间
-     */
-    private LocalDateTime createStartTime;
+	/**
+	 * 创建开始时间
+	 */
+	private LocalDateTime createStartTime;
 
-    /**
-     * 创建结束时间
-     */
-    private LocalDateTime createEndTime;
+	/**
+	 * 创建结束时间
+	 */
+	private LocalDateTime createEndTime;
 
-    /**
-     * 是否加密
-     */
-    private Boolean encrypt;
+	/**
+	 * 是否加密
+	 */
+	private Boolean encrypt;
 
-    /**
-     * 是否置顶
-     */
-    private Boolean top;
+	/**
+	 * 是否置顶
+	 */
+	private Boolean top;
 
-    /**
-     * 是否开启评论
-     */
-    private Boolean enableComment;
+	/**
+	 * 是否开启评论
+	 */
+	private Boolean enableComment;
 
-    public SearchPostContext(IPage<PostEntity> pageable) {
-        super(pageable);
-    }
+	public SearchPostContext(IPage<PostEntity> pageable) {
+		super(pageable);
+	}
+
 }

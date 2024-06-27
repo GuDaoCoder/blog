@@ -13,12 +13,12 @@ import java.util.Optional;
  */
 public interface IBaseCrudService<Entity extends BaseEntity> extends IService<Entity> {
 
-    Entity getOneOrThrow(Long id);
+	Entity getOneOrThrow(Long id);
 
-    <T> Optional<Entity> getByField(SFunction<Entity, T> function, T value);
+	<T> Optional<Entity> getByField(SFunction<Entity, T> function, T value);
 
-    <T> void removeByField(SFunction<Entity, T> function, T value);
+	<T> void removeByField(SFunction<Entity, T> function, T value);
 
-    <T> List<Entity> listByFields(SFunction<Entity, T> function, List<T> values);
+	<T> List<Entity> listByFields(SFunction<Entity, T> function, List<T> values);
 
 }

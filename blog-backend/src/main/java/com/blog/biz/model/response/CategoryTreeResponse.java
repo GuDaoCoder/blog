@@ -16,14 +16,15 @@ import java.util.List;
 @Data
 public class CategoryTreeResponse extends CategoryResponse implements TreeNode<CategoryTreeResponse> {
 
-    @Serial
-    private static final long serialVersionUID = -5751674634148658873L;
+	@Serial
+	private static final long serialVersionUID = -5751674634148658873L;
 
-    @Schema(description = "子级数据")
-    private List<CategoryTreeResponse> children;
+	@Schema(description = "子级数据")
+	private List<CategoryTreeResponse> children;
 
-    @Override
-    public void buildChildren(List<CategoryTreeResponse> children) {
-        this.children = children;
-    }
+	@Override
+	public void buildChildren(List<CategoryTreeResponse> children) {
+		this.children = children;
+	}
+
 }

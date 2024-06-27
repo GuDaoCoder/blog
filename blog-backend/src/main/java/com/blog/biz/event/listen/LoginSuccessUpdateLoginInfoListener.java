@@ -15,8 +15,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoginSuccessUpdateLoginInfoListener implements ApplicationListener<LoginSuccessEvent> {
 
-    @Override
-    public void onApplicationEvent(LoginSuccessEvent event) {
-        log.info(">>>>>>>>>>用户登录后更新登录信息");
-    }
+	@Override
+	public void onApplicationEvent(LoginSuccessEvent event) {
+		log.info(">>>>>>>>>>用户登录后更新登录信息");
+	}
+
 }

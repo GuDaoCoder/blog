@@ -7,4 +7,6 @@ import com.blog.common.base.mapper.IBaseMapper;
  * @author zouzhangpeng
  * @desc
  */
-public interface TagMapper extends IBaseMapper<TagEntity> {}
+public interface TagMapper extends IBaseMapper<TagEntity> {
+
+}

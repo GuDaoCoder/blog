@@ -11,16 +11,18 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum PostSource {
 
-    ADD("正常新增"),
+	ADD("正常新增"),
 
-    MD_IMPORT("markdown导入"),
+	MD_IMPORT("markdown导入"),
 
-    MD_SYNC("markdown同步");;
+	MD_SYNC("markdown同步");
+	;
 
-    private String label;
+	private String label;
 
-    @Override
-    public String toString() {
-        return this.name() + "-" + this.label;
-    }
+	@Override
+	public String toString() {
+		return this.name() + "-" + this.label;
+	}
+
 }

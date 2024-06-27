@@ -17,15 +17,16 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class RequestIdInterceptor implements HandlerInterceptor {
 
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        RequestIdContext.set(ServletUtil.getRequestId(request));
-        return true;
-    }
+	@Override
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+		RequestIdContext.set(ServletUtil.getRequestId(request));
+		return true;
+	}
 
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler,
-        Exception ex) {
-        RequestIdContext.remove();
-    }
+	@Override
+	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler,
+			Exception ex) {
+		RequestIdContext.remove();
+	}
+
 }

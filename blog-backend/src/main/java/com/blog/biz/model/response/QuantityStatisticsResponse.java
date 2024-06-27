@@ -13,15 +13,16 @@ import java.io.Serial;
 @Data
 public class QuantityStatisticsResponse extends CommonResponse {
 
-    @Serial
-    private static final long serialVersionUID = -809500293879766952L;
+	@Serial
+	private static final long serialVersionUID = -809500293879766952L;
 
-    @Schema(description = "名称")
-    private String name;
+	@Schema(description = "名称")
+	private String name;
 
-    @Schema(description = "显示值")
-    private String label;
+	@Schema(description = "显示值")
+	private String label;
 
-    @Schema(description = "数量")
-    private Long quantity;
+	@Schema(description = "数量")
+	private Long quantity;
+
 }

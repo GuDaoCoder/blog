@@ -23,23 +23,26 @@ import java.io.InputStream;
 @RequestMapping("/admin/oss")
 public class OssAdminController {
 
-    private final OssApiService ossApiService;
+	private final OssApiService ossApiService;
 
-    private final OssProperties ossProperties;
+	private final OssProperties ossProperties;
 
-    @Operation(summary = "上传文件")
-    @PostMapping("/upload")
-    public Result<UploadImageResponse> upload(@RequestParam("file") MultipartFile file) throws IOException {
-        String url;
-        InputStream inputStream = null;
-        try {
-            inputStream = file.getInputStream();
-            url = ossApiService.uploadFile(inputStream, ossProperties.getDirectory(), FileUtil.uuidFileName(file.getOriginalFilename()));
-        } finally {
-            if (inputStream != null) {
-                inputStream.close();
-            }
-        }
-        return Result.success(new UploadImageResponse(url));
-    }
+	@Operation(summary = "上传文件")
+	@PostMapping("/upload")
+	public Result<UploadImageResponse> upload(@RequestParam("file") MultipartFile file) throws IOException {
+		String url;
+		InputStream inputStream = null;
+		try {
+			inputStream = file.getInputStream();
+			url = ossApiService.uploadFile(inputStream, ossProperties.getDirectory(),
+					FileUtil.uuidFileName(file.getOriginalFilename()));
+		}
+		finally {
+			if (inputStream != null) {
+				inputStream.close();
+			}
+		}
+		return Result.success(new UploadImageResponse(url));
+	}
+
 }

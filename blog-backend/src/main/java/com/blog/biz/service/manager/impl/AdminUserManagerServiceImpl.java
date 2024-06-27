@@ -27,30 +27,32 @@ import java.util.Objects;
 @Service
 public class AdminUserManagerServiceImpl implements AdminUserManagerService, UserDetailLoadService {
 
-    private final AdminUserCrudService adminUserCrudService;
+	private final AdminUserCrudService adminUserCrudService;
 
-    @Override
-    public UserDetail load(String username) {
-        UserDetail userDetail = RedisUtil.getCacheObject(RedisKeyConstant.LOGIN_USER + username);
-        if (Objects.isNull(userDetail)) {
-            userDetail = adminUserCrudService.findByUsername(username).map(AdminUserConverter.INSTANCE::toUserDetail)
-                    .orElseThrow(() -> new BusinessException("获取用户信息失败"));
-        }
-        return userDetail;
-    }
+	@Override
+	public UserDetail load(String username) {
+		UserDetail userDetail = RedisUtil.getCacheObject(RedisKeyConstant.LOGIN_USER + username);
+		if (Objects.isNull(userDetail)) {
+			userDetail = adminUserCrudService.findByUsername(username)
+				.map(AdminUserConverter.INSTANCE::toUserDetail)
+				.orElseThrow(() -> new BusinessException("获取用户信息失败"));
+		}
+		return userDetail;
+	}
 
-    @Override
-    public List<AdminUserResponse> list() {
-        return adminUserCrudService.list().stream().map(AdminUserConverter.INSTANCE::toUserResponse).toList();
-    }
+	@Override
+	public List<AdminUserResponse> list() {
+		return adminUserCrudService.list().stream().map(AdminUserConverter.INSTANCE::toUserResponse).toList();
+	}
 
-    @Override
-    public void saveOrUpdate(AdminUserRequest request) {
-        if (Objects.isNull(request.getUserId()) && adminUserCrudService.count() > 0) {
-            throw new BusinessException("系统只能有一个管理员用户");
-        }
+	@Override
+	public void saveOrUpdate(AdminUserRequest request) {
+		if (Objects.isNull(request.getUserId()) && adminUserCrudService.count() > 0) {
+			throw new BusinessException("系统只能有一个管理员用户");
+		}
 
-        AdminUserEntity adminUserEntity = AdminUserConverter.INSTANCE.toEntity(request);
-        adminUserCrudService.saveOrUpdate(adminUserEntity);
-    }
+		AdminUserEntity adminUserEntity = AdminUserConverter.INSTANCE.toEntity(request);
+		adminUserCrudService.saveOrUpdate(adminUserEntity);
+	}
+
 }

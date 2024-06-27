@@ -13,14 +13,15 @@ import org.springframework.context.ApplicationEvent;
 @Getter
 public class LogoutSuccessEvent extends ApplicationEvent {
 
-    private UserDetail userDetail;
+	private UserDetail userDetail;
 
-    public LogoutSuccessEvent(Object source) {
-        super(source);
-    }
+	public LogoutSuccessEvent(Object source) {
+		super(source);
+	}
 
-    public LogoutSuccessEvent(Object source, UserDetail userDetail)    {
-        super(source);
-        this.userDetail = userDetail;
-    }
+	public LogoutSuccessEvent(Object source, UserDetail userDetail) {
+		super(source);
+		this.userDetail = userDetail;
+	}
+
 }

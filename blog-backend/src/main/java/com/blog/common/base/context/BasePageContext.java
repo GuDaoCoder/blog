@@ -10,10 +10,11 @@ import lombok.Data;
  */
 @AllArgsConstructor
 @Data
-public class BasePageContext<Entity>{
+public class BasePageContext<Entity> {
 
-    /**
-     * 分页信息
-     */
-    private IPage<Entity> pageable;
+	/**
+	 * 分页信息
+	 */
+	private IPage<Entity> pageable;
+
 }

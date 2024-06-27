@@ -15,8 +15,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoginSuccessSaveLogListener implements ApplicationListener<LoginSuccessEvent> {
 
-    @Override
-    public void onApplicationEvent(LoginSuccessEvent event) {
-        log.info(">>>>>>>>>>用户登录后记录审计日志");
-    }
+	@Override
+	public void onApplicationEvent(LoginSuccessEvent event) {
+		log.info(">>>>>>>>>>用户登录后记录审计日志");
+	}
+
 }

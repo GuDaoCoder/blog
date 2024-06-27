@@ -6,8 +6,9 @@ package com.blog.biz.constant;
  */
 public class RedisKeyConstant {
 
-    /**
-     * 当前登录人信息
-     */
-    public static final String LOGIN_USER = "loginUser:";
+	/**
+	 * 当前登录人信息
+	 */
+	public static final String LOGIN_USER = "loginUser:";
+
 }

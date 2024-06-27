@@ -9,18 +9,18 @@ import com.alibaba.ttl.TransmittableThreadLocal;
  */
 public class RequestIdContext {
 
-    private static final TransmittableThreadLocal<String> local = new TransmittableThreadLocal<>();
+	private static final TransmittableThreadLocal<String> local = new TransmittableThreadLocal<>();
 
-    public static void set(String requestId) {
-        local.set(requestId);
-    }
+	public static void set(String requestId) {
+		local.set(requestId);
+	}
 
-    public static String get() {
-        return local.get();
-    }
+	public static String get() {
+		return local.get();
+	}
 
-    public static void remove() {
-        local.remove();
-    }
+	public static void remove() {
+		local.remove();
+	}
 
 }

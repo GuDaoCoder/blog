@@ -17,30 +17,31 @@ import java.time.LocalDateTime;
 @Data
 public abstract class BaseEntity implements Serializable {
 
-    @Serial
-    private static final long serialVersionUID = -3102393059220666166L;
+	@Serial
+	private static final long serialVersionUID = -3102393059220666166L;
 
-    /**
-     * 创建用户Id
-     */
-    @TableField(fill = FieldFill.INSERT)
-    private Long createBy;
+	/**
+	 * 创建用户Id
+	 */
+	@TableField(fill = FieldFill.INSERT)
+	private Long createBy;
 
-    /**
-     * 创建时间
-     */
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
+	/**
+	 * 创建时间
+	 */
+	@TableField(fill = FieldFill.INSERT)
+	private LocalDateTime createTime;
 
-    /**
-     * 更新用户Id
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Long updateBy;
+	/**
+	 * 更新用户Id
+	 */
+	@TableField(fill = FieldFill.INSERT_UPDATE)
+	private Long updateBy;
 
-    /**
-     * 更新时间
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateTime;
+	/**
+	 * 更新时间
+	 */
+	@TableField(fill = FieldFill.INSERT_UPDATE)
+	private LocalDateTime updateTime;
+
 }

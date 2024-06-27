@@ -11,18 +11,19 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "sa-token", ignoreInvalidFields = true)
 public class SaTokenProperties {
 
-    /**
-     * token 名称
-     */
-    private String tokenName;
+	/**
+	 * token 名称
+	 */
+	private String tokenName;
 
-    /**
-     * token 有效期
-     */
-    private Integer timeout;
+	/**
+	 * token 有效期
+	 */
+	private Integer timeout;
 
-    /**
-     * token 最低活跃频率
-     */
-    private Integer activeTimeout;
+	/**
+	 * token 最低活跃频率
+	 */
+	private Integer activeTimeout;
+
 }

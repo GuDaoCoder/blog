@@ -7,4 +7,6 @@ import com.blog.common.base.entity.BaseEntity;
  * @author zouzhangpeng
  * @desc
  */
-public interface IBaseMapper<Entity extends BaseEntity> extends BaseMapper<Entity> {}
+public interface IBaseMapper<Entity extends BaseEntity> extends BaseMapper<Entity> {
+
+}

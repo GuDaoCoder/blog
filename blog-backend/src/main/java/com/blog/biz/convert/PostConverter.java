@@ -16,14 +16,14 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface PostConverter {
 
-    PostConverter INSTANCE = Mappers.getMapper(PostConverter.class);
+	PostConverter INSTANCE = Mappers.getMapper(PostConverter.class);
 
-    PostResponse toResponse(PostEntity entity);
+	PostResponse toResponse(PostEntity entity);
 
-    PostDetailResponse toDetailResponse(PostResponse postResponse);
+	PostDetailResponse toDetailResponse(PostResponse postResponse);
 
-    SearchPostContext toPageContext(PostSearchRequest request);
+	SearchPostContext toPageContext(PostSearchRequest request);
 
-    SearchPostContext toPageContext(PostPortalSearchRequest request);
+	SearchPostContext toPageContext(PostPortalSearchRequest request);
 
 }

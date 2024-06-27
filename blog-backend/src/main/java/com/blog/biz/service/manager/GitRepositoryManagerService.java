@@ -7,7 +7,8 @@ import java.util.List;
 
 public interface GitRepositoryManagerService {
 
-    List<GitRepositoryResponse> list();
+	List<GitRepositoryResponse> list();
 
-    Long save(GitRepositoryRequest request);
+	Long save(GitRepositoryRequest request);
+
 }

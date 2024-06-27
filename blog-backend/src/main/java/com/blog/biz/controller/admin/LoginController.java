@@ -21,19 +21,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class LoginController {
 
-    private final AuthManagerService authManagerService;
+	private final AuthManagerService authManagerService;
 
-    @Operation(summary = "登录")
-    @PostMapping("/login")
-    public Result<LoginResponse> login(@Validated @RequestBody LoginRequest request) {
-        return Result.success(authManagerService.login(request));
-    }
+	@Operation(summary = "登录")
+	@PostMapping("/login")
+	public Result<LoginResponse> login(@Validated @RequestBody LoginRequest request) {
+		return Result.success(authManagerService.login(request));
+	}
 
-    @Operation(summary = "登出")
-    @PostMapping("/logout")
-    public Result<Void> logout() {
-        authManagerService.logout();
-        return Result.success();
-    }
+	@Operation(summary = "登出")
+	@PostMapping("/logout")
+	public Result<Void> logout() {
+		authManagerService.logout();
+		return Result.success();
+	}
 
 }

@@ -10,11 +10,11 @@ import com.blog.common.base.response.PageResponse;
  */
 public interface TagManagerService {
 
-    /**
-     * 查询标签
-     *
-     * @param request
-     * @return PageResponse<TagDetailResponse>
-     **/
-    PageResponse<TagDetailResponse> search(TagSearchRequest request);
+	/**
+	 * 查询标签
+	 * @param request
+	 * @return PageResponse<TagDetailResponse>
+	 **/
+	PageResponse<TagDetailResponse> search(TagSearchRequest request);
+
 }

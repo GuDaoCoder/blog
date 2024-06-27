@@ -14,9 +14,10 @@ import java.io.Serial;
 @Data
 public class TagDetailResponse extends TagResponse {
 
-    @Serial
-    private static final long serialVersionUID = 9023790080780055793L;
+	@Serial
+	private static final long serialVersionUID = 9023790080780055793L;
 
-    @Schema(description = "文章数")
-    private Long postCount;
+	@Schema(description = "文章数")
+	private Long postCount;
+
 }
