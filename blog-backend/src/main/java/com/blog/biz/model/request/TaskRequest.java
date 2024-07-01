@@ -50,4 +50,5 @@ public class TaskRequest extends CommonRequest {
 
     @Schema(description = "任务结束时间")
     private LocalDateTime endDateTime;
+
 }

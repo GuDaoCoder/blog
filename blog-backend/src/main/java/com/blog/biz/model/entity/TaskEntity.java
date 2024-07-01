@@ -64,4 +64,5 @@ public class TaskEntity extends BaseEntity {
      * 任务结束时间
      */
     private LocalDateTime endDateTime;
+
 }

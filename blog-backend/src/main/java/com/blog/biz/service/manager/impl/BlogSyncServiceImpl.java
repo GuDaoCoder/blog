@@ -55,7 +55,8 @@ public class BlogSyncServiceImpl implements BlogSyncService {
             doSync();
             log.info("同步博客文章完成");
             taskManagerService.recordEndTask(taskId, "同步博客文章完成");
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             log.error("同步博客文章发生异常", ex);
             taskManagerService.recordFailTask(taskId, ex, "博客文章同步失败");
         }
@@ -68,8 +69,7 @@ public class BlogSyncServiceImpl implements BlogSyncService {
         syncNoteProject(gitRepository);
         log.info("从git上同步最新博客文章成功");
 
-        List<File> files = FileUtil.loopFiles(gitRepository.getLocalPath(),
-                file -> file.getName().endsWith(".md"));
+        List<File> files = FileUtil.loopFiles(gitRepository.getLocalPath(), file -> file.getName().endsWith(".md"));
         log.info("Markdown文章数量：{}", files.size());
         if (CollectionUtils.isEmpty(files)) {
             return;
@@ -81,8 +81,7 @@ public class BlogSyncServiceImpl implements BlogSyncService {
         List<TagEntity> allTagEntities = tagCrudService.findAll();
 
         for (File file : files) {
-            PostParserContext postParserContext = MarkdownParser.parse(file,
-                    gitRepository.getLocalPath());
+            PostParserContext postParserContext = MarkdownParser.parse(file, gitRepository.getLocalPath());
 
             // 同步分类
             CategoryEntity categoryEntity = syncCategory(postParserContext, allCategoryEntities);
@@ -97,25 +96,23 @@ public class BlogSyncServiceImpl implements BlogSyncService {
 
     /**
      * 同步git项目
-     *
      * @param
      * @return void
      **/
     private void syncNoteProject(GitRepositoryEntity gitRepository) {
-        GitHelper gitHelper = new GitHelper(gitRepository.getUrl(),
-                gitRepository.getLocalPath(), gitRepository.getUsername(),
-                gitRepository.getPassword());
+        GitHelper gitHelper = new GitHelper(gitRepository.getUrl(), gitRepository.getLocalPath(),
+                gitRepository.getUsername(), gitRepository.getPassword());
         try {
             gitHelper.checkout(gitRepository.getBranch());
             gitHelper.pull();
-        } finally {
+        }
+        finally {
             gitHelper.close();
         }
     }
 
     /**
      * 同步分类
-     *
      * @param postParserContext
      * @param allCategoryEntities
      * @return CategoryEntity
@@ -125,22 +122,23 @@ public class BlogSyncServiceImpl implements BlogSyncService {
         CategoryEntity parentCategoryEntity = null;
         if (CollectionUtils.isNotEmpty(postParserContext.getCategories())) {
             Map<String, CategoryEntity> existsCategoryMap = allCategoryEntities.stream()
-                    .collect(Collectors.toMap(CategoryEntity::getCategoryName, Function.identity()));
+                .collect(Collectors.toMap(CategoryEntity::getCategoryName, Function.identity()));
             for (int index = 0, size = postParserContext.getCategories().size(); index < size; index++) {
                 PostParserContext.Category category = postParserContext.getCategories().get(index);
                 CategoryEntity categoryEntity;
                 if (existsCategoryMap.containsKey(category.getCategoryName())) {
                     categoryEntity = existsCategoryMap.get(category.getCategoryName());
-                } else {
+                }
+                else {
                     categoryEntity = new CategoryEntity();
                     categoryEntity
-                            .setParentCategoryId(
-                                    Objects.isNull(parentCategoryEntity) ? 0L : parentCategoryEntity.getCategoryId())
-                            .setCategoryName(category.getCategoryName())
-                            .setFullId(Objects.isNull(parentCategoryEntity) ? "0"
-                                    : (parentCategoryEntity.getFullId() + parentCategoryEntity.getCategoryId()))
-                            .setOrderNo(category.getOrderNo())
-                            .setLevel(category.getLevel());
+                        .setParentCategoryId(
+                                Objects.isNull(parentCategoryEntity) ? 0L : parentCategoryEntity.getCategoryId())
+                        .setCategoryName(category.getCategoryName())
+                        .setFullId(Objects.isNull(parentCategoryEntity) ? "0"
+                                : (parentCategoryEntity.getFullId() + parentCategoryEntity.getCategoryId()))
+                        .setOrderNo(category.getOrderNo())
+                        .setLevel(category.getLevel());
                     categoryCrudService.save(categoryEntity);
                     allCategoryEntities.add(categoryEntity);
                 }
@@ -152,7 +150,6 @@ public class BlogSyncServiceImpl implements BlogSyncService {
 
     /**
      * 同步文章
-     *
      * @param postParserContext
      * @param categoryEntity
      * @return PostEntity
@@ -167,27 +164,28 @@ public class BlogSyncServiceImpl implements BlogSyncService {
 
         PostContentEntity postContentEntity = add ? new PostContentEntity()
                 : postContentCrudService.getByField(PostContentEntity::getPostId, postEntity.getPostId())
-                .orElse(new PostContentEntity());
+                    .orElse(new PostContentEntity());
 
         if (add) {
             postEntity = new PostEntity();
             postEntity.setTitle(postParserContext.getTitle())
-                    .setSummary(postParserContext.getSummary())
-                    .setSource(PostSource.MD_SYNC)
-                    .setStatus(PostStatus.DRAFT)
-                    .setEnableComment(Boolean.TRUE)
-                    .setTop(Boolean.FALSE)
-                    .setCoverPictureUrl(postParserContext.getCoverPictureUrl())
-                    .setFileLastUpdateTime(postParserContext.getFileLastUpdate());
+                .setSummary(postParserContext.getSummary())
+                .setSource(PostSource.MD_SYNC)
+                .setStatus(PostStatus.DRAFT)
+                .setEnableComment(Boolean.TRUE)
+                .setTop(Boolean.FALSE)
+                .setCoverPictureUrl(postParserContext.getCoverPictureUrl())
+                .setFileLastUpdateTime(postParserContext.getFileLastUpdate());
             if (Objects.nonNull(categoryEntity)) {
                 postEntity.setCategoryId(categoryEntity.getCategoryId());
             }
             postCrudService.save(postEntity);
-        } else {
+        }
+        else {
             if (postParserContext.getFileLastUpdate().isAfter(postEntity.getFileLastUpdateTime())) {
                 postEntity.setTitle(postParserContext.getTitle())
-                        .setSummary(postParserContext.getSummary())
-                        .setFileLastUpdateTime(postParserContext.getFileLastUpdate());
+                    .setSummary(postParserContext.getSummary())
+                    .setFileLastUpdateTime(postParserContext.getFileLastUpdate());
                 if (Objects.nonNull(categoryEntity)) {
                     postEntity.setCategoryId(categoryEntity.getCategoryId());
                 }
@@ -206,7 +204,6 @@ public class BlogSyncServiceImpl implements BlogSyncService {
 
     /**
      * 同步标签
-     *
      * @param postParserContext
      * @param postEntity
      * @param allTagEntities
@@ -215,28 +212,28 @@ public class BlogSyncServiceImpl implements BlogSyncService {
     private void syncTag(PostParserContext postParserContext, PostEntity postEntity, List<TagEntity> allTagEntities) {
         if (CollectionUtils.isNotEmpty(postParserContext.getTags())) {
             List<TagEntity> toCreateTagEntities = postParserContext.getTags()
-                    .stream()
-                    .filter(tagName -> allTagEntities.stream()
-                            .filter(tag -> tag.getTagName().equals(tagName))
-                            .findFirst()
-                            .isEmpty())
-                    .map(tagName -> {
-                        TagEntity tagEntity = new TagEntity();
-                        tagEntity.setTagName(tagName).setColor(ColorUtil.generateHexColor());
-                        return tagEntity;
-                    })
-                    .collect(Collectors.toList());
+                .stream()
+                .filter(tagName -> allTagEntities.stream()
+                    .filter(tag -> tag.getTagName().equals(tagName))
+                    .findFirst()
+                    .isEmpty())
+                .map(tagName -> {
+                    TagEntity tagEntity = new TagEntity();
+                    tagEntity.setTagName(tagName).setColor(ColorUtil.generateHexColor());
+                    return tagEntity;
+                })
+                .collect(Collectors.toList());
             tagCrudService.saveBatch(toCreateTagEntities);
             allTagEntities.addAll(toCreateTagEntities);
 
             List<PostTagRelaEntity> postTagRelaEntities = allTagEntities.stream()
-                    .filter(entity -> postParserContext.getTags().contains(entity.getTagName()))
-                    .map(entity -> {
-                        PostTagRelaEntity postTagRelaEntity = new PostTagRelaEntity();
-                        postTagRelaEntity.setPostId(postEntity.getPostId()).setTagId(entity.getTagId());
-                        return postTagRelaEntity;
-                    })
-                    .collect(Collectors.toList());
+                .filter(entity -> postParserContext.getTags().contains(entity.getTagName()))
+                .map(entity -> {
+                    PostTagRelaEntity postTagRelaEntity = new PostTagRelaEntity();
+                    postTagRelaEntity.setPostId(postEntity.getPostId()).setTagId(entity.getTagId());
+                    return postTagRelaEntity;
+                })
+                .collect(Collectors.toList());
             postTagRelaCrudService.removeByField(PostTagRelaEntity::getPostId, postEntity.getPostId());
             if (CollectionUtils.isNotEmpty(postTagRelaEntities)) {
                 postTagRelaCrudService.saveBatch(postTagRelaEntities);
@@ -245,6 +242,10 @@ public class BlogSyncServiceImpl implements BlogSyncService {
     }
 
     private GitRepositoryEntity getGitRepositoryEntity() {
-        return gitRepositoryCrudService.list().stream().findFirst().orElseThrow(() -> new BlogSyncException("Git仓库信息未配置"));
+        return gitRepositoryCrudService.list()
+            .stream()
+            .findFirst()
+            .orElseThrow(() -> new BlogSyncException("Git仓库信息未配置"));
     }
+
 }

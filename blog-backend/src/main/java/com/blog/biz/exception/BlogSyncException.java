@@ -12,4 +12,5 @@ public class BlogSyncException extends BusinessException {
     public BlogSyncException(String errorMsg, Object... arguments) {
         super(errorMsg, arguments);
     }
+
 }

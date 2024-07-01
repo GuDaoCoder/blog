@@ -6,12 +6,12 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum TaskStatus {
+
     RUNNING("运行中"),
 
     SUCCESS("成功"),
 
-    FAIL("失败"),
-    ;
+    FAIL("失败"),;
 
     private String label;
 
