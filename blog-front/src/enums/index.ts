@@ -17,3 +17,9 @@ export enum Gender {
 
     UNKNOWN = "未知",
 }
+
+export enum TaskStatus {
+    RUNNING = "运行中",
+    SUCCESS = "成功",
+    FAIL = "失败"
+}

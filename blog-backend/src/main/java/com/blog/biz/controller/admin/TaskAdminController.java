@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "任务信息管理")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/admin/taskEntity")
+@RequestMapping("/admin/tasks")
 public class TaskAdminController {
 
     private final TaskManagerService taskManagerService;

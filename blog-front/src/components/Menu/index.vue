@@ -52,6 +52,10 @@ const menuData = reactive<Array<Menu>>([
     icon: "setting",
     children: [
       {
+        code: "admin-task",
+        title: "任务管理"
+      },
+      {
         code: "blog-setting",
         title: "博客设置"
       }
