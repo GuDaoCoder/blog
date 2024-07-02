@@ -11,7 +11,6 @@ import com.blog.biz.service.manager.BlogSyncService;
 import com.blog.biz.service.manager.TaskManagerService;
 import com.blog.biz.support.GitHelper;
 import com.blog.biz.support.MarkdownParser;
-import com.blog.common.properties.GitProjectProperties;
 import com.blog.common.util.ColorUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +28,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class BlogSyncServiceImpl implements BlogSyncService {
-
-    private final GitProjectProperties gitProjectProperties;
 
     private final CategoryCrudService categoryCrudService;
 
