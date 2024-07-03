@@ -30,7 +30,8 @@ public class TaskCrudServiceImpl extends BaseCrudServiceImpl<TaskMapper, TaskEnt
     public IPage<TaskEntity> page(TaskSearchContext context) {
         LambdaQueryWrapper<TaskEntity> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.like(StringUtils.isNotBlank(context.getTaskName()), TaskEntity::getTaskName, context.getTaskName())
-            .eq(Objects.nonNull(context.getStatus()), TaskEntity::getStatus, context.getStatus());
+            .eq(Objects.nonNull(context.getStatus()), TaskEntity::getStatus, context.getStatus())
+                .orderByDesc(TaskEntity::getBeginDateTime);
         return baseMapper.selectPage(context.getPageable(), queryWrapper);
     }
 
