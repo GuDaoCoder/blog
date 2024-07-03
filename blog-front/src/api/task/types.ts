@@ -12,8 +12,7 @@ export interface TaskResponse {
     taskId: number,
     taskName: string,
     status: string,
-    description?: string;
-    errorMsg?: string,
+    log?: string;
     beginDateTime?: string;
     endDateTime?: string;
 }

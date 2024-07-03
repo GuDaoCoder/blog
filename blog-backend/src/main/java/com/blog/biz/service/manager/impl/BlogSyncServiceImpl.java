@@ -3,27 +3,38 @@ package com.blog.biz.service.manager.impl;
 import cn.hutool.core.io.FileUtil;
 import com.blog.biz.enums.PostSource;
 import com.blog.biz.enums.PostStatus;
+import com.blog.biz.enums.TaskStatus;
 import com.blog.biz.exception.BlogSyncException;
 import com.blog.biz.model.context.PostParserContext;
 import com.blog.biz.model.entity.*;
 import com.blog.biz.service.crud.*;
 import com.blog.biz.service.manager.BlogSyncService;
 import com.blog.biz.service.manager.TaskManagerService;
-import com.blog.biz.support.GitHelper;
 import com.blog.biz.support.MarkdownParser;
+import com.blog.biz.sync.TaskSyncProgressSender;
+import com.blog.biz.sync.WebSocketSyncProgressSender;
+import com.blog.common.support.GitOperation;
 import com.blog.common.util.ColorUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.slf4j.helpers.MessageFormatter;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.WebSocketSession;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@Scope("prototype")
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -43,31 +54,51 @@ public class BlogSyncServiceImpl implements BlogSyncService {
 
     private final TaskManagerService taskManagerService;
 
+    private final List<GitOperation.GitOperationLogSender> syncProgressSenders = new ArrayList<>();
+
+    private Long taskId = null;
+
     @Override
     public void sync() {
-        Long taskId = null;
+        sync(null);
+    }
+
+    @Override
+    public void sync(WebSocketSession session) {
+        syncProgressSenders.add(new TaskSyncProgressSender());
+        if (session != null) {
+            syncProgressSenders.add(new WebSocketSyncProgressSender(session));
+        }
+
+        TaskStatus taskStatus = TaskStatus.SUCCESS;
         try {
-            taskId = taskManagerService.recordRunTask("blog-sync", "开始同步博客文章");
-            log.info("开始同步博客文章");
+            taskId = taskManagerService.startNewTask("blog-sync");
+            syncTaskMonitor(">>>>>>>>>>>>>>>>>>>>开始同步文章");
             doSync();
-            log.info("同步博客文章完成");
-            taskManagerService.recordEndTask(taskId, "同步博客文章完成");
+            syncTaskMonitor(">>>>>>>>>>>>>>>>>>>>同步文章结束");
         }
         catch (Exception ex) {
-            log.error("同步博客文章发生异常", ex);
-            taskManagerService.recordFailTask(taskId, ex, "博客文章同步失败");
+            taskStatus = TaskStatus.FAIL;
+            syncTaskMonitor(ex, ">>>>>>>>>>>>>>>>>>>>同步文章发生异常");
+        }
+        finally {
+            TaskSyncProgressSender taskSyncProgressSender = (TaskSyncProgressSender) syncProgressSenders.get(0);
+            taskManagerService.endTask(taskId, taskStatus, taskSyncProgressSender.getLog().toString());
+
         }
     }
 
-    private void doSync() {
+    private void doSync() throws GitAPIException, IOException {
         GitRepositoryEntity gitRepository = getGitRepositoryEntity();
+        syncTaskMonitor(">>>>>>>>>>>>>>>>>>>>获取git信息成功");
 
-        log.info("开始从git上同步最新博客文章：{}", gitRepository.getUrl());
+        syncTaskMonitor(">>>>>>>>>>>>>>>>>>>>开始从git上同步最新博客文章：{}", gitRepository.getUrl());
         syncNoteProject(gitRepository);
-        log.info("从git上同步最新博客文章成功");
+        syncTaskMonitor(">>>>>>>>>>>>>>>>>>>>从git上同步最新博客文章成功");
 
         List<File> files = FileUtil.loopFiles(gitRepository.getLocalPath(), file -> file.getName().endsWith(".md"));
-        log.info("Markdown文章数量：{}", files.size());
+        syncTaskMonitor(">>>>>>>>>>>>>>>>>>>>git仓库中共计{}篇文章", files.size());
+
         if (CollectionUtils.isEmpty(files)) {
             return;
         }
@@ -96,16 +127,15 @@ public class BlogSyncServiceImpl implements BlogSyncService {
      * @param
      * @return void
      **/
-    private void syncNoteProject(GitRepositoryEntity gitRepository) {
-        GitHelper gitHelper = new GitHelper(gitRepository.getUrl(), gitRepository.getLocalPath(),
-                gitRepository.getUsername(), gitRepository.getPassword());
-        try {
-            gitHelper.checkout(gitRepository.getBranch());
-            gitHelper.pull();
-        }
-        finally {
-            gitHelper.close();
-        }
+    private void syncNoteProject(GitRepositoryEntity gitRepository) throws GitAPIException, IOException {
+        new GitOperation.Builder().gitRepositoryUrl(gitRepository.getUrl())
+            .localRepositoryPath(gitRepository.getLocalPath())
+            .branch(gitRepository.getBranch())
+            .username(gitRepository.getUsername())
+            .password(gitRepository.getPassword())
+            .operationLogSenders(syncProgressSenders)
+            .build()
+            .cloneOrUpdateRepository();
     }
 
     /**
@@ -238,11 +268,37 @@ public class BlogSyncServiceImpl implements BlogSyncService {
         }
     }
 
+    // todo:缓存优化
     private GitRepositoryEntity getGitRepositoryEntity() {
         return gitRepositoryCrudService.list()
             .stream()
             .findFirst()
             .orElseThrow(() -> new BlogSyncException("Git仓库信息未配置"));
+    }
+
+    private void syncTaskMonitor(String message, Object... ars) {
+        log.info(message, ars);
+        syncProgressSenders.forEach(sender -> {
+            try {
+                sender.send(MessageFormatter.arrayFormat(message, ars).getMessage() + "\n");
+            }
+            catch (Exception e) {
+                log.warn("{} send blog sync monitor info error", sender.getClass().getName(), e);
+            }
+        });
+    }
+
+    private void syncTaskMonitor(Throwable ex, String message, Object... ars) {
+        log.error(message, ars, ex);
+        syncProgressSenders.forEach(sender -> {
+            try {
+                sender.send(MessageFormatter.arrayFormat(message, ars).getMessage() + "\n"
+                        + ExceptionUtils.getRootCauseMessage(ex) + "\n");
+            }
+            catch (Exception e) {
+                log.warn("{} send blog sync monitor info error", sender.getClass().getName(), e);
+            }
+        });
     }
 
 }

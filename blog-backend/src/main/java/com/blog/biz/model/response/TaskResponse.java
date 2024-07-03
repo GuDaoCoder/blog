@@ -41,11 +41,8 @@ public class TaskResponse extends CommonResponse {
     @Schema(description = "任务状态")
     private String status;
 
-    @Schema(description = "任务描述")
-    private String description;
-
-    @Schema(description = "异常信息")
-    private String errorMsg;
+    @Schema(description = "日志信息")
+    private String log;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Schema(description = "任务开始时间")

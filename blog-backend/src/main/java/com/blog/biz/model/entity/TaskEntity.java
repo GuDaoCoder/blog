@@ -46,14 +46,9 @@ public class TaskEntity extends BaseEntity {
     private TaskStatus status;
 
     /**
-     * 任务描述
+     * 日志信息
      */
-    private String description;
-
-    /**
-     * 异常信息
-     */
-    private String errorMsg;
+    private String log;
 
     /**
      * 任务开始时间

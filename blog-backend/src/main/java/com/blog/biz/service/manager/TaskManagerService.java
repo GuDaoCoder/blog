@@ -1,5 +1,6 @@
 package com.blog.biz.service.manager;
 
+import com.blog.biz.enums.TaskStatus;
 import com.blog.biz.model.request.TaskSearchRequest;
 import com.blog.biz.model.response.TaskResponse;
 import com.blog.common.base.response.PageResponse;
@@ -14,27 +15,19 @@ public interface TaskManagerService {
     PageResponse<TaskResponse> search(TaskSearchRequest request);
 
     /**
-     * 记录任务开始运行
+     * 启动新的任务
      * @param taskName
-     * @param description
      * @return Long
      **/
-    Long recordRunTask(String taskName, String description);
+    Long startNewTask(String taskName);
 
     /**
-     * 记录任务失败
+     * 结束任务
      * @param taskId
-     * @param ex
-     * @param description
+     * @param status
+     * @param log
      * @return void
      **/
-    void recordFailTask(Long taskId, Throwable ex, String description);
-
-    /**
-     * 记录任务结束
-     * @param taskId
-     * @return void
-     **/
-    void recordEndTask(Long taskId, String description);
+    void endTask(Long taskId, TaskStatus status, String log);
 
 }

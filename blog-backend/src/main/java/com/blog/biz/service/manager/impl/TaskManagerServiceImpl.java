@@ -34,37 +34,20 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     }
 
     @Override
-    public Long recordRunTask(String taskName, String description) {
+    public Long startNewTask(String taskName) {
         TaskEntity taskEntity = new TaskEntity();
-        taskEntity.setTaskName(taskName)
-            .setStatus(TaskStatus.RUNNING)
-            .setDescription(description)
-            .setBeginDateTime(LocalDateTime.now());
+        taskEntity.setTaskName(taskName).setStatus(TaskStatus.RUNNING).setBeginDateTime(LocalDateTime.now());
         taskCrudService.save(taskEntity);
         return taskEntity.getTaskId();
     }
 
     @Override
-    public void recordFailTask(Long taskId, Throwable ex, String description) {
+    public void endTask(Long taskId, TaskStatus status, String log) {
         if (taskId == null) {
             return;
         }
         taskCrudService.getOptById(taskId).ifPresent(taskEntity -> {
-            taskEntity.setEndDateTime(LocalDateTime.now())
-                .setStatus(TaskStatus.FAIL)
-                .setDescription(description)
-                .setErrorMsg(ExceptionUtils.getRootCauseMessage(ex));
-            taskCrudService.updateById(taskEntity);
-        });
-    }
-
-    @Override
-    public void recordEndTask(Long taskId, String description) {
-        if (taskId == null) {
-            return;
-        }
-        taskCrudService.getOptById(taskId).ifPresent(taskEntity -> {
-            taskEntity.setEndDateTime(LocalDateTime.now()).setDescription(description).setStatus(TaskStatus.SUCCESS);
+            taskEntity.setEndDateTime(LocalDateTime.now()).setStatus(status).setLog(log);
             taskCrudService.updateById(taskEntity);
         });
     }

@@ -3,6 +3,7 @@ import ContentCard from "@/components/ContentCard/index.vue";
 import {onMounted, ref} from "vue";
 import type {TaskResponse, TaskSearchForm} from "@/api/task/types";
 import SearchButtonGroup from "@/components/SearchButtonGroup/index.vue";
+import TaskLog from "@/views/admin/task/components/TaskLog/index.vue"
 import {type TableColumnData} from "@arco-design/web-vue";
 import SearchResult from "@/components/SearchResult/index.vue";
 import Pagination from "@/components/Pagination/index.vue";
@@ -47,12 +48,9 @@ const tableColumns = ref<TableColumnData[]>([
     dataIndex: "endDateTime",
   },
   {
-    title: "任务描述",
-    dataIndex: "description",
-  },
-  {
-    title: "异常信息",
-    dataIndex: "errorMsg",
+    title: "日志信息",
+    dataIndex: "log",
+    slotName: "log"
   }
 ])
 
@@ -102,6 +100,18 @@ const handleChangePageSize = (pageSize: number) => {
   pagination.value.pageSize = pageSize
   fetchTableData()
 }
+
+const taskLogVisible = ref<boolean>(false)
+const taskLog = ref()
+
+const handleOpenTaskLog = async (record: TaskResponse) => {
+  taskLogVisible.value = true
+  taskLog.value = record.log
+}
+
+const handleCancelTaskLogDialog = () => {
+  taskLogVisible.value = false
+}
 </script>
 
 <template>
@@ -139,6 +149,9 @@ const handleChangePageSize = (pageSize: number) => {
             <template #status="{record}">
               {{ useDict(TaskStatus, record.status) }}
             </template>
+            <template #log="{record}">
+              <a-link @click="handleOpenTaskLog(record)">查看日志信息</a-link>
+            </template>
           </a-table>
         </template>
 
@@ -148,6 +161,9 @@ const handleChangePageSize = (pageSize: number) => {
       </search-result>
     </content-card>
   </Container>
+
+  <task-log :log="taskLog" :visible="taskLogVisible" @cancel="handleCancelTaskLogDialog"/>
+
 </template>
 
 <style lang="scss" scoped>
