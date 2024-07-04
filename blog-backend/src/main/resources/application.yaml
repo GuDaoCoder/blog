@@ -193,8 +193,8 @@ security:
     public-key: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC/w2Y49BBaaCTSHnTxIdI0MGrhwTxFb2uNiHDjHw/w4bhXEy1X8WcPoqqNwqlHWZvrImvSprh3OtUS4GcWT/6UKQD/VA1iHhZ3m1xQ/CERpivZhOXRznWKGdpufCoYdjFZO7bqm4tGzyPkNGjblIQTRmWrG6lEwmE74EGVl/9q+QIDAQAB
   # 白名单
   white-urls:
-    - /portal/**
-    - /login
+    - /api/portal/**
+    - /api/login
     - /swagger-ui.html
     - /doc.html
     - /v3/api-docs/**

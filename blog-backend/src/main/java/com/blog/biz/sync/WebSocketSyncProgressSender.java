@@ -15,7 +15,9 @@ public class WebSocketSyncProgressSender implements SyncProgressSender {
 
     @Override
     public void send(String message) throws IOException {
-        session.sendMessage(new TextMessage(message));
+        if (session != null && session.isOpen()) {
+            session.sendMessage(new TextMessage(message));
+        }
     }
 
 }

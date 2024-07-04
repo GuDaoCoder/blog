@@ -47,7 +47,10 @@
 
       <search-result>
         <template #toolbar>
-          <a-button type="primary" @click="handleSyncPosts">同步</a-button>
+          <a-popconfirm cancel-text="否" content="是否打开实时日志窗口?" ok-text="是" @cancel="handleSyncPosts"
+                        @ok="handleOpenRealTimeLog">
+            <a-button type="primary">同步</a-button>
+          </a-popconfirm>
         </template>
         <template #table>
           <a-table :columns="tableColumns" :data="postTableData" :loading="tableLoading" :pagination="false"
@@ -95,8 +98,12 @@
   </Container>
 
   <!-- 上传封面图片 -->
-  <upload-cover-picture :post-id="uploadCoverPicturePostId" :visible="uploadCoverPictureVisible"
+  <upload-cover-picture v-if="uploadCoverPicturePostId" :post-id="uploadCoverPicturePostId"
+                        :visible="uploadCoverPictureVisible"
                         @cancel="handleCancelUploadCoverPicture"/>
+
+  <!-- 实时日志 -->
+  <real-time-log v-if="realTimeLogVisible" :visible="realTimeLogVisible" @cancel="handleCancelRealTimeLog"/>
 </template>
 
 <script lang="ts" setup>
@@ -105,6 +112,7 @@ import SearchButtonGroup from "@/components/SearchButtonGroup/index.vue"
 import SearchResult from "@/components/SearchResult/index.vue"
 import CategorySelect from "@/components/CategorySelect/index.vue";
 import UploadCoverPicture from "./components/UploadCoverPicture/index.vue"
+import RealTimeLog from "./components/RealTimeLog/index.vue"
 import {onMounted, ref} from "vue";
 import {PostStatus, Whether} from "@/enums";
 import type {TableColumnData} from "@arco-design/web-vue";
@@ -291,6 +299,15 @@ const handleSetCoverPicture = async (record: PostResponse) => {
 const handleCancelUploadCoverPicture = () => {
   uploadCoverPictureVisible.value = false
   fetchTableData()
+}
+
+const realTimeLogVisible = ref<boolean>(false)
+const handleOpenRealTimeLog = () => {
+  realTimeLogVisible.value = true;
+}
+
+const handleCancelRealTimeLog = () => {
+  realTimeLogVisible.value = false;
 }
 </script>
 
