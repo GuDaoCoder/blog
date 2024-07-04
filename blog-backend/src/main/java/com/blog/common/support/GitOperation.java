@@ -1,5 +1,6 @@
 package com.blog.common.support;
 
+import com.blog.common.util.DateTimeUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -166,6 +167,7 @@ public class GitOperation {
         protected void onUpdate(String taskName, int cmp, int totalWork, int pcnt, Duration duration) {
             StringBuilder s = new StringBuilder();
             format(s, taskName, cmp, totalWork, pcnt, duration);
+            s.append("\n");
             send(s);
         }
 
@@ -179,6 +181,8 @@ public class GitOperation {
 
         private void format(StringBuilder s, String taskName, int workCurr, Duration duration) {
             s.append("\r"); //$NON-NLS-1$
+            s.append(DateTimeUtil.nowStr());
+            s.append(" ");
             s.append(taskName);
             s.append(": "); //$NON-NLS-1$
             while (s.length() < 25)
@@ -189,6 +193,8 @@ public class GitOperation {
 
         private void format(StringBuilder s, String taskName, int cmp, int totalWork, int pcnt, Duration duration) {
             s.append("\r"); //$NON-NLS-1$
+            s.append(DateTimeUtil.nowStr());
+            s.append(" ");
             s.append(taskName);
             s.append(": "); //$NON-NLS-1$
             while (s.length() < 25)

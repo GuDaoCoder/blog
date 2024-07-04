@@ -2,6 +2,7 @@ package com.blog.common.util;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author zouzhangpeng
@@ -20,6 +21,14 @@ public class DateTimeUtil {
      */
     public static Long timestamp() {
         return LocalDateTime.now().atOffset(ZoneOffset.UTC).toEpochSecond();
+    }
+
+    public static String nowStr(String format) {
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern(format));
+    }
+
+    public static String nowStr() {
+        return nowStr(STANDARD_FORMAT);
     }
 
 }

@@ -15,6 +15,7 @@ import com.blog.biz.sync.TaskSyncProgressSender;
 import com.blog.biz.sync.WebSocketSyncProgressSender;
 import com.blog.common.support.GitOperation;
 import com.blog.common.util.ColorUtil;
+import com.blog.common.util.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -34,7 +35,6 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Scope("prototype")
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -54,10 +54,6 @@ public class BlogSyncServiceImpl implements BlogSyncService {
 
     private final TaskManagerService taskManagerService;
 
-    private final List<GitOperation.GitOperationLogSender> syncProgressSenders = new ArrayList<>();
-
-    private Long taskId = null;
-
     @Override
     public void sync() {
         sync(null);
@@ -65,21 +61,23 @@ public class BlogSyncServiceImpl implements BlogSyncService {
 
     @Override
     public void sync(WebSocketSession session) {
+        List<GitOperation.GitOperationLogSender> syncProgressSenders = new ArrayList<>();
         syncProgressSenders.add(new TaskSyncProgressSender());
         if (session != null) {
             syncProgressSenders.add(new WebSocketSyncProgressSender(session));
         }
 
+        Long taskId = null;
         TaskStatus taskStatus = TaskStatus.SUCCESS;
         try {
             taskId = taskManagerService.startNewTask("blog-sync");
-            syncTaskMonitor(">>>>>>>>>>>>>>>>>>>>开始同步文章");
-            doSync();
-            syncTaskMonitor(">>>>>>>>>>>>>>>>>>>>同步文章结束");
+            syncTaskMonitor(syncProgressSenders, ">>>>>>>>>>>>>>>>>>>>开始同步文章");
+            doSync(syncProgressSenders);
+            syncTaskMonitor(syncProgressSenders, ">>>>>>>>>>>>>>>>>>>>同步文章结束");
         }
         catch (Exception ex) {
             taskStatus = TaskStatus.FAIL;
-            syncTaskMonitor(ex, ">>>>>>>>>>>>>>>>>>>>同步文章发生异常");
+            syncTaskMonitor(syncProgressSenders, ex, ">>>>>>>>>>>>>>>>>>>>同步文章发生异常");
         }
         finally {
             TaskSyncProgressSender taskSyncProgressSender = (TaskSyncProgressSender) syncProgressSenders.get(0);
@@ -88,16 +86,17 @@ public class BlogSyncServiceImpl implements BlogSyncService {
         }
     }
 
-    private void doSync() throws GitAPIException, IOException {
+    private void doSync(List<GitOperation.GitOperationLogSender> syncProgressSenders)
+            throws GitAPIException, IOException {
         GitRepositoryEntity gitRepository = getGitRepositoryEntity();
-        syncTaskMonitor(">>>>>>>>>>>>>>>>>>>>获取git信息成功");
+        syncTaskMonitor(syncProgressSenders, ">>>>>>>>>>>>>>>>>>>>获取git信息成功");
 
-        syncTaskMonitor(">>>>>>>>>>>>>>>>>>>>开始从git上同步最新博客文章：{}", gitRepository.getUrl());
-        syncNoteProject(gitRepository);
-        syncTaskMonitor(">>>>>>>>>>>>>>>>>>>>从git上同步最新博客文章成功");
+        syncTaskMonitor(syncProgressSenders, ">>>>>>>>>>>>>>>>>>>>开始从git上同步最新博客文章：{}", gitRepository.getUrl());
+        syncNoteProject(syncProgressSenders, gitRepository);
+        syncTaskMonitor(syncProgressSenders, ">>>>>>>>>>>>>>>>>>>>从git上同步最新博客文章成功");
 
         List<File> files = FileUtil.loopFiles(gitRepository.getLocalPath(), file -> file.getName().endsWith(".md"));
-        syncTaskMonitor(">>>>>>>>>>>>>>>>>>>>git仓库中共计{}篇文章", files.size());
+        syncTaskMonitor(syncProgressSenders, ">>>>>>>>>>>>>>>>>>>>git仓库中共计{}篇文章", files.size());
 
         if (CollectionUtils.isEmpty(files)) {
             return;
@@ -127,7 +126,8 @@ public class BlogSyncServiceImpl implements BlogSyncService {
      * @param
      * @return void
      **/
-    private void syncNoteProject(GitRepositoryEntity gitRepository) throws GitAPIException, IOException {
+    private void syncNoteProject(List<GitOperation.GitOperationLogSender> syncProgressSenders,
+            GitRepositoryEntity gitRepository) throws GitAPIException, IOException {
         new GitOperation.Builder().gitRepositoryUrl(gitRepository.getUrl())
             .localRepositoryPath(gitRepository.getLocalPath())
             .branch(gitRepository.getBranch())
@@ -276,11 +276,14 @@ public class BlogSyncServiceImpl implements BlogSyncService {
             .orElseThrow(() -> new BlogSyncException("Git仓库信息未配置"));
     }
 
-    private void syncTaskMonitor(String message, Object... ars) {
+    private void syncTaskMonitor(List<GitOperation.GitOperationLogSender> syncProgressSenders, String message,
+            Object... ars) {
         log.info(message, ars);
+        String fullMessage = String.format("%s %s%s", DateTimeUtil.nowStr(),
+                MessageFormatter.arrayFormat(message, ars).getMessage(), "\n");
         syncProgressSenders.forEach(sender -> {
             try {
-                sender.send(MessageFormatter.arrayFormat(message, ars).getMessage() + "\n");
+                sender.send(fullMessage);
             }
             catch (Exception e) {
                 log.warn("{} send blog sync monitor info error", sender.getClass().getName(), e);
@@ -288,12 +291,15 @@ public class BlogSyncServiceImpl implements BlogSyncService {
         });
     }
 
-    private void syncTaskMonitor(Throwable ex, String message, Object... ars) {
+    private void syncTaskMonitor(List<GitOperation.GitOperationLogSender> syncProgressSenders, Throwable ex,
+            String message, Object... ars) {
         log.error(message, ars, ex);
+        String fullMessage = String.format("%s %s%s%s%s", DateTimeUtil.nowStr(),
+                MessageFormatter.arrayFormat(message, ars).getMessage(), "\n", ExceptionUtils.getRootCauseMessage(ex),
+                "\n");
         syncProgressSenders.forEach(sender -> {
             try {
-                sender.send(MessageFormatter.arrayFormat(message, ars).getMessage() + "\n"
-                        + ExceptionUtils.getRootCauseMessage(ex) + "\n");
+                sender.send(fullMessage);
             }
             catch (Exception e) {
                 log.warn("{} send blog sync monitor info error", sender.getClass().getName(), e);
