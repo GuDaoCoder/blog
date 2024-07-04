@@ -56,6 +56,14 @@ const menuData = reactive<Array<Menu>>([
         title: "任务管理"
       },
       {
+        code: "admin-user",
+        title: "管理员设置"
+      },
+      {
+        code: "admin-git",
+        title: "Git仓库设置"
+      },
+      {
         code: "blog-setting",
         title: "博客设置"
       }

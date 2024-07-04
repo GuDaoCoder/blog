@@ -20,9 +20,25 @@ const SYSTEM_SETTING: RouteRaw = {
             }
         },
         {
+            name: "admin-user",
+            path: "/admin/admin-user",
+            component: () => import(/* webpackChunkName: "admin-user" */ "@/views/admin/admin-user/index.vue"),
+            meta: {
+                title: "管理员设置"
+            }
+        },
+        {
+            name: "admin-git",
+            path: "/admin/git",
+            component: () => import(/* webpackChunkName: "git" */ "@/views/admin/git/index.vue"),
+            meta: {
+                title: "Git仓库设置"
+            }
+        },
+        {
             name: 'blog-setting',
             path: "/admin/blog-setting",
-            component: () => import(/* webpackChunkName: "site" */ "@/views/admin/blog-setting/index.vue"),
+            component: () => import(/* webpackChunkName: "blog-setting" */ "@/views/admin/blog-setting/index.vue"),
             meta: {
                 title: "博客设置"
             }
