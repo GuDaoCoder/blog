@@ -1,9 +1,9 @@
 import axios from "axios";
 import type {CategoryTreeResponse, PortalQueryCategoryTreeRequest, QueryCategoryTreeRequest} from "@/api/category/types"
 
-const ADMIN_PREFIX = "/admin/categories";
+const ADMIN_PREFIX = "/api/admin/categories";
 
-const PORTAL_PREFIX = "/portal/categories";
+const PORTAL_PREFIX = "/api/portal/categories";
 
 export const queryCategoryTree = (params: QueryCategoryTreeRequest) => {
     return axios.get<CategoryTreeResponse[]>(ADMIN_PREFIX, {params})

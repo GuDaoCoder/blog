@@ -1,9 +1,9 @@
 import axios from "axios";
 import type {PortalQueryPostRequest, PostDetailResponse, PostQueryRequest, PostResponse} from "@/api/post/types";
 
-const ADMIN_PREFIX = "/admin/posts";
+const ADMIN_PREFIX = "/api/admin/posts";
 
-const PORTAL_PREFIX = "/portal/posts";
+const PORTAL_PREFIX = "/api/portal/posts";
 
 export const queryPost = (params: PostQueryRequest) => {
     return axios.get<PageResponse<PostResponse>>(ADMIN_PREFIX, {params})

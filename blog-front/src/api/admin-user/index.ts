@@ -1,7 +1,7 @@
 import axios from "axios";
 import type {AdminUserRequest, AdminUserResponse} from "@/api/admin-user/types";
 
-const ADMIN_PREFIX = "/admin/adminUsers";
+const ADMIN_PREFIX = "/api/admin/adminUsers";
 
 export const list = () => {
     return axios.get<AdminUserResponse[]>(ADMIN_PREFIX)
