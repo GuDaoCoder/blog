@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "登录认证")
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api")
 public class LoginController {
 
     private final AuthManagerService authManagerService;

@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Tag(name = "文章管理")
 @RestController
-@RequestMapping("/portal/posts")
+@RequestMapping("/api/portal/posts")
 public class PostPortalController {
 
     private final PostManagerService postManagerService;

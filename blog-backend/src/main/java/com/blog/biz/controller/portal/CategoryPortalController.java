@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "分类管理")
 @RestController
-@RequestMapping("/portal/categories")
+@RequestMapping("/api/portal/categories")
 public class CategoryPortalController {
 
     private final CategoryManagerService categoryManagerService;

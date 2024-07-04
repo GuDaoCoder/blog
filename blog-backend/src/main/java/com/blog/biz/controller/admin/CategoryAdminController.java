@@ -24,7 +24,7 @@ import java.util.List;
 @Tag(name = "文章分类管理")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/admin/categories")
+@RequestMapping("/api/admin/categories")
 public class CategoryAdminController {
 
     private final CategoryManagerService categoryManagerService;

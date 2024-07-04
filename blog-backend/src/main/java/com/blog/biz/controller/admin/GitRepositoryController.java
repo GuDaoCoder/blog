@@ -14,7 +14,7 @@ import java.util.List;
 @Tag(name = "Git仓库管理")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/admin/gitRepositories")
+@RequestMapping("/api/admin/gitRepositories")
 public class GitRepositoryController {
 
     private final GitRepositoryManagerService gitRepositoryManagerService;

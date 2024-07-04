@@ -15,7 +15,7 @@ import java.util.List;
 @Tag(name = "数据统计")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/admin/statistics")
+@RequestMapping("/api/admin/statistics")
 public class StatisticsController {
 
     private final StatisticManagerService statisticManagerService;

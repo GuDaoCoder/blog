@@ -20,7 +20,7 @@ import java.io.InputStream;
 @Tag(name = "OSS管理")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/admin/oss")
+@RequestMapping("/api/admin/oss")
 public class OssAdminController {
 
     private final OssApiService ossApiService;

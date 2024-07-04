@@ -1,9 +1,13 @@
 package com.blog.common.util;
 
+import lombok.Getter;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
+
+import java.lang.annotation.Annotation;
+import java.util.Map;
 
 /**
  * @author zouzhangpeng
@@ -12,6 +16,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class SpringUtil implements ApplicationContextAware {
 
+    /**
+     * -- GETTER -- 获取applicationContext
+     * @return org.springframework.context.ApplicationContext
+     */
+    @Getter
     private static ApplicationContext applicationContext;
 
     @Override
@@ -19,15 +28,6 @@ public class SpringUtil implements ApplicationContextAware {
         if (SpringUtil.applicationContext == null) {
             SpringUtil.applicationContext = applicationContext;
         }
-    }
-
-    /**
-     * 获取applicationContext
-     * @param
-     * @return org.springframework.context.ApplicationContext
-     */
-    public static ApplicationContext getApplicationContext() {
-        return applicationContext;
     }
 
     /**
@@ -47,6 +47,15 @@ public class SpringUtil implements ApplicationContextAware {
      */
     public static <T> T getBean(Class<T> clazz) {
         return getApplicationContext().getBean(clazz);
+    }
+
+    /**
+     * 通过注解获取bean
+     * @param clazz
+     * @return Map<String,Object>
+     **/
+    public static Map<String, Object> getBeansWithAnnotation(Class<? extends Annotation> clazz) {
+        return getApplicationContext().getBeansWithAnnotation(clazz);
     }
 
     /**

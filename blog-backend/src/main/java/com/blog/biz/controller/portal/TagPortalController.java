@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Tag(name = "标签管理")
 @RestController
-@RequestMapping("/portal/tags")
+@RequestMapping("/api/portal/tags")
 public class TagPortalController {
 
     private final TagManagerService tagManagerService;

@@ -26,7 +26,7 @@ import java.util.concurrent.Executor;
 @Tag(name = "文章管理")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/admin/posts")
+@RequestMapping("/api/admin/posts")
 public class PostAdminController {
 
     private final PostManagerService postManagerService;

@@ -14,7 +14,7 @@ import java.util.List;
 @Tag(name = "管理员用户管理")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/admin/adminUsers")
+@RequestMapping("/api/admin/adminUsers")
 public class AdminUserController {
 
     private final AdminUserManagerService adminUserManagerService;
