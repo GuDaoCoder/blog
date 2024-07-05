@@ -32,7 +32,7 @@ const handleCancel = () => {
 <style lang="scss" scoped>
 .console {
   width: 100%;
-  height: 70%;
+  height: 600px;
   background-color: #000;
   color: #fff;
   padding: 10px;
