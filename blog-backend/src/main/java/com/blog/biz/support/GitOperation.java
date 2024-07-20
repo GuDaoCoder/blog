@@ -10,6 +10,7 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public final class GitOperation {
@@ -39,15 +40,53 @@ public final class GitOperation {
      */
     private final Git git;
 
+    /**
+     * 执行的操作
+     */
+    private final List<Runnable> operates = new ArrayList<>();
+
     private GitOperation(Builder builder) throws GitAPIException {
         this.url = builder.url;
         this.localPath = builder.localPath;
         this.username = builder.username;
         this.password = builder.password;
-        this.git = init();
-        if (StringUtils.isNotBlank(builder.branch)) {
-            checkout(builder.branch);
+        try (Git localGit = init()) {
+            this.git = localGit;
+            if (StringUtils.isNotBlank(builder.branch)) {
+                checkout(builder.branch);
+            }
         }
+    }
+
+    public GitOperation thenCheckout(String branch) {
+        operates.add(() -> {
+            try {
+                checkout(branch);
+            }
+            catch (GitAPIException e) {
+                throw new RuntimeException("failed to checkout branch: " + branch, e);
+            }
+        });
+        return this;
+    }
+
+    public GitOperation thenPull() {
+        operates.add(() -> {
+            try {
+                pull();
+            }
+            catch (GitAPIException e) {
+                throw new RuntimeException("failed to pull changes", e);
+            }
+        });
+        return this;
+    }
+
+    /**
+     * 真正执行
+     */
+    public void execute() {
+        operates.forEach(Runnable::run);
     }
 
     /**
@@ -55,7 +94,7 @@ public final class GitOperation {
      * @param branch
      * @return void
      **/
-    public GitOperation checkout(String branch) throws GitAPIException {
+    private void checkout(String branch) throws GitAPIException {
         if (localExistsBranch(branch)) {
             // 如果分支在本地已存在，直接checkout
             git.checkout().setCreateBranch(false).setName(branch).call();
@@ -64,7 +103,6 @@ public final class GitOperation {
             // 如果分支在本地不存在，需要从远程分支上面checkout。
             git.checkout().setCreateBranch(true).setName(branch).setStartPoint("origin/" + branch).call();
         }
-        return this;
     }
 
     /**
@@ -72,18 +110,8 @@ public final class GitOperation {
      * @param
      * @return void
      **/
-    public GitOperation pull() throws GitAPIException {
+    private void pull() throws GitAPIException {
         git.pull().call();
-        return this;
-    }
-
-    /**
-     * 关闭git
-     */
-    public void close() {
-        if (git != null) {
-            git.close();
-        }
     }
 
     /**
@@ -154,7 +182,7 @@ public final class GitOperation {
         }
 
         public Builder branch(String branch) {
-            if (branch == null) {
+            if (StringUtils.isBlank(branch)) {
                 throw new IllegalArgumentException("branch is null");
             }
             this.branch = branch;
